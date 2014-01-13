@@ -1,0 +1,144 @@
+<div class="navbar navbar-default navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">kulturalna AGENDA <span class="wroclawia">Wrocławia</span></a>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Start</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#facebook">F</a></li>
+        <li><a href="#about">O nas</a></li>        
+      </ul>      
+    </div><!-- /.nav-collapse -->
+  </div><!-- /.container -->
+</div><!-- /.navbar -->
+
+<div class="container">
+
+  <div class="row row-offcanvas {{leftPanel}} {{rightPanel}}">
+
+	<div class="col-xs-6 col-sm-2 sidebar-offcanvas left" id="sidebarLeft" role="navigation">
+      <p>Kategorie:</p>
+      <div class="list-group">
+        <a href="#" class="list-group-item active">Wszystko <span class="badge">42</span></a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+      </div>
+      <p>Organizatorzy:</p>
+      <div class="list-group">
+        <a href="#" class="list-group-item">Wszyscy</span></a>
+        <a href="#" class="list-group-item active">Teatr Polski <span class="badge">17</span></a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+      </div>
+    </div><!--/span-->
+
+    <div class="middle-panel col-xs-12 col-sm-7">
+      <p class="pull-left visible-xs">
+        <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas" 
+        	ng-click="toggleLeftPanel()">Filtry</button>   
+      </p>
+      <p class="pull-right visible-xs">    
+        <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas" 
+        	ng-click="toggleRightPanel()">Zapowiedzi</button>
+      </p>
+      <p class="add-event-offcanvas">
+        <a href="#">Zgłoś wydarzenie >></a>
+      </p>
+      
+      <div>
+        <div class="nav-by-day">
+      	    <ul class="nav nav-tabs">
+              <li><a href="#"><br/>Wszystkie</a></li>
+              <li class="active"><a href="#"><abbr>PN</abbr><br/>DZIŚ</a></li>
+              <li><a href="#"><abbr>WT</abbr><br/>2</a></li>
+              <li><a href="#"><abbr>ŚR</abbr><br/>3</a></li>
+              <li><a href="#"><abbr>CZW</abbr><br/>4</a></li>
+              <li><a href="#"><abbr>PT</abbr><br/>5</a></li>
+              <li><a href="#"><abbr>SOB</abbr><br/>6</a></li>
+              <li><a href="#"><abbr>NIEDZ</abbr><br/>7</a></li>
+              <li><a href="#"><br/>Przyszłe</a></li>
+            </ul>
+        </div>
+        <p>
+          Sortuj: 
+        </p>
+      </div>
+      <div class="row">
+        <div>
+          <div class="col-xs-10">
+            <p><a href="#">Mayday</a>, <a href="#">Teatr Polski</a></p>
+            <p>
+              <img style="float:left;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKsAAAC0CAYAAADraNxXAAAFBUlEQVR4nO3Y7U4aXRiF4Z7/oWxQRuFFxLGi+IHGVKBWTasCFSwOM3MKqz9m+hFjg6bp2672/nElZtw7Y/Bm8zCv8jwX4ODV7/4DgOciVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtj4h2JN9bG/q81GTSEEhRC0djRWWv4+HR8pKq8/1jr/pGzJ/p+9f56nml31tP1fTZXy95VaQ3HvUrO0WJMlYw33W4qqQSFUFbW66o8flP321/b/8Q/FmuhDp671jbZa0ROxTofa22qr3S616mU0K+p8SJbu/9n75/MrxdXiev31oXqHr1UPQSFUFF/OlWf3Ot+uFqGvb+n1Vr34uRrr7Sz7A15fYv0FFrreXV0SW6b55baqISis9TROl+3PdH8eF+sbxxovcqV3b9QKQaHS0tlduvz+ybW6taAQIu2dj/Rx9E7dKCiEmvauE6V3p2qEoBA21J9lyrN7DVtl3CeTF7xpfBHrU2vSqc6a5QjQnz5a84P92Sdd7KwohKDG8YVOWxWFUFV78Mz9ea7FpK949fsRZFXx2USLPNf8cqu4Fh1olObK81Sjw6i4tvlO8+x3v66/HrE+sWZxe1jMrys7upo//oj98f5sfqVO7Vts1fjt13lz6f50otON4mO/uf9Gw7N9NStBITR1OlnoftgqR4BjTcpYJyflKNDsa0asf6MlsWZzXZaz4drRSIsX7U81OS4DCjV1r5Nn3//rF7xaVzeLct1esS46HOmek5VYH8eaTs/U/DIbTtMX7U+nfW1Wv/sYb5xovHje/nR0UJ7mu7pOcuV5ovedYqyI9m/18N3MOmBm/duluhsearfTUbv8Nh7WY3U6e+pdzMp/9kK35Wm1snP16LRasj+901k5p24NbnRezq/13q2S5+x/+KDdcl6N4gP1DuLyUdqqdt8/FE8D4uLEr9RjdeJG8bSiuqXh7Kk31d/nH4r124n22JcTLptfarsaFMKajkaLF+y/0ei0Wcyp7YGmaa7s04V2VoJCWNfRTfKM+2dKxgPtb64XTxVCUHVtU93BWEn5psmSsQbdlqJKMdtGG3vqj3jOCvxxiBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2PgPc53zu9+xgsAAAAABJRU5ErkJggg==" width="95" height="84">
+            </p>
+            <p>Miejsce: Scena na Świebodzkim</p>
+            <p>Cena: 24 ulg., 32 nor.</p>
+            <p>Zapowiedź: <a href="http://www.teatrpolski.wroc.pl/przedstawienia/mayday">http://www.teatrpolski.wroc.pl/przedstawienia/mayday</a></p>
+            <p>Jedna z najlepszych na świecie komedii. Historia londyńskiego taksówkarza bigamisty, któremu przez lata udaje się bezkolizyjnie lawirować między dwiema kochającymi go żonami. Na skutek wypadku ulicznego jego tajemnica wychodzi na jaw, wywołując lawinę komplikacji. Bohater miota się, usiłując ukryć podwójne życie przed małżonkami, mediami i policją. Znakomity komizm sytuacji fabularnych i języka sprawia, że Mayday od 21 lat rozśmiesza do łez wrocławską publiczność.</p>
+          </div>
+          <div class="col-xs-2">
+            <p><a href="#">Teatr</a></p>
+            <p>18:00</p>
+          </div> 
+        </div>
+        <div> 
+  	      <div class="col-xs-10">
+            <p><a href="#">Mayday</a>, <a href="#">Teatr Polski</a></p>
+            <p>Miejsce: Scena na Świebodzkim</p>
+            <p>Cena: 24 ulg., 32 nor.</p>
+            <p>Zapowiedź: <a href="http://www.teatrpolski.wroc.pl/przedstawienia/mayday">http://www.teatrpolski.wroc.pl/przedstawienia/mayday</a></p>
+            <p>Jedna z najlepszych na świecie komedii. Historia londyńskiego taksówkarza bigamisty, któremu przez lata udaje się bezkolizyjnie lawirować między dwiema kochającymi go żonami. Na skutek wypadku ulicznego jego tajemnica wychodzi na jaw, wywołując lawinę komplikacji. Bohater miota się, usiłując ukryć podwójne życie przed małżonkami, mediami i policją. Znakomity komizm sytuacji fabularnych i języka sprawia, że Mayday od 21 lat rozśmiesza do łez wrocławską publiczność.</p>
+          </div>
+          <div class="col-xs-2">
+            <p><a href="#">Teatr</a></p>
+            <p>18:00</p>
+          </div>
+        </div>       
+      </div>
+    </div>
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas right" id="sidebarRight" role="navigation">
+      <p>Najnowsze:</p>
+      <div class="list-group">
+        <a href="#" class="list-group-item">[22-01, Teatr] Najnowsze przedstawienie Demirskiego i Strzępki</a>
+        <a href="#" class="list-group-item">[02-02, Performance] Sztuka to kłamstwo odsłaniające prawdę</a>
+        <a href="#" class="list-group-item">[07-03, Koncert] Koncert Neurosis</a>
+      </div>
+      <p>Wkrótce:</p>
+      <div class="list-group">
+        <a href="#" class="list-group-item">[22-01, Kino] Festiwal Nowe Horyzonty</a>
+        <a href="#" class="list-group-item">[02-02, Dla dzieci] Warsztaty - zabawa ciastoliną</a>
+        <a href="#" class="list-group-item">[07-03, Sztuka] Wystawa Aliny Szapocznikow w Muzeum Narodowym</a>
+      </div>      
+    </div><!--/span-->
+  </div><!--/row-->
+
+  <hr>
+
+  <footer>
+    <p>&copy; Company 2013</p>
+  </footer>
+
+</div><!--/.container-->
