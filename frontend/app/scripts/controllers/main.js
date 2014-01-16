@@ -9,9 +9,10 @@ angular.module('frontendApp')
       'SitePoint'
     ];
     $scope.toggleRightPanel = function () {
-    	$scope.rightPanel = ($scope.rightPanel === "activeRight") ? "" : "activeRight";
+      $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
     };
     $scope.toggleLeftPanel = function () {
-    	$scope.leftPanel = ($scope.leftPanel === "activeLeft") ? "" : "activeLeft";
-    };    
+      $scope.leftPanel = ($scope.leftPanel === 'activeLeft') ? '' : 'activeLeft';
+    };
+    $scope.event = {id:6};
   });
