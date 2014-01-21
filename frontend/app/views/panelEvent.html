@@ -1,0 +1,82 @@
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="eventTitle" class="col-sm-2 control-label">Tytuł *</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="eventTitle" ng-required="true"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="eventPic" class="col-sm-2 control-label">Zdjęcie</label>
+    <div class="col-sm-10">
+      <input type="file" id="eventPic"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="eventMore" class="col-sm-2 control-label">Link do opisu</label>
+    <div class="col-sm-4">
+      <input type="url" class="form-control" id="eventMore"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="eventDesc" class="col-sm-2 control-label">Opis</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" id="eventDesc" rows="5"/>
+    </div>
+  </div> 
+  <div class="form-group">
+    <label for="eventCategory" class="col-sm-2 control-label">Kategoria *</label>
+    <div class="col-sm-4">
+      <select class="form-control" id="eventCategory">
+        <option></option>
+        <option>Teatr</option>
+        <option>Taniec</option>
+        <option>Performance</option>
+      </select>
+    </div>
+  </div>
+  <div class="event-when" ng-repeat="when in placeDate">
+    <div class="form-group">
+      <label for="eventPlace" class="col-sm-2 control-label">Miejsce *</label>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" id="eventPlace" ng-required="true"/>
+      </div>
+      <label for="eventDate" class="col-sm-2 control-label">Data *</label>
+      <div class="col-sm-4 input-group">
+        <input type="text" class="form-control" id="eventDate"
+          datepicker-popup="dd-MMMM-yyyy" ng-model="dt" is-open="opened"
+          min="minDate" max="'2015-06-22'"
+          datepicker-options="dateOptions"
+          date-disabled="disabled(date, mode)" ng-required="true"
+          close-text="Close" /> 
+        <span class="input-group-btn">
+          <button class="btn btn-default" ng-click="open($event)">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </button>
+        </span>
+      </div>    
+    </div> 
+    <div class="form-group">
+      <label for="eventTime" class="col-sm-2 control-label">Czas *</label>
+      <div class="col-sm-4">
+        <input type="time" class="form-control" id="eventTime" ng-required="true"/>
+      </div>
+      <label for="eventPrice" class="col-sm-2 control-label">Cena *</label>
+      <div class="col-sm-4">
+        <input type="time" class="form-control" id="eventPrice"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <a class="next" href ng-click="addPlaceDate()">Następne miejsce / data / czas / cena >></a>
+        <a class="next pull-right" href ng-click="removePlaceDate()" 
+          ng-show="isRemovePlaceDateShown()">Usuń</a>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Zapisz</button>
+      <a class="btn btn-default" ng-click="loadIssuedEvents()">Anuluj</a>
+    </div>
+  </div>       
+</form>

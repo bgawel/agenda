@@ -17,6 +17,14 @@ angular.module('frontendApp', [
         templateUrl: 'views/event.html',
         controller: 'EventCtrl'
       })
+      .when('/panel', {
+        templateUrl: 'views/panel.html',
+        controller: 'PanelCtrl'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <ol class="breadcrumb">
+      <li><a href="#">Wydarzenia</a></li>
+      <li class="active">Panel administracyjny - Teatr Polski</li>
+    </ol>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="well">
+        <div class="panel-side-navigation">
+          <ul class="nav nav-list">
+            <li class="active">
+              <a href ng-click="loadPanelDetails()">Date instytucji</a>
+            </li>
+            <li><a href ng-click="loadNewEvent()">Nowe wydarzenie</a></li>
+            <li><a href ng-click="loadIssuedEvents()">Zgłoszone wydarzenia</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div ng-include="'views/' + partial"></div>
+    </div>
+  </div>
+</div>
