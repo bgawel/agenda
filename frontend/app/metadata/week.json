@@ -1,0 +1,47 @@
+[
+    {
+        "name": "wszystkie", 
+        "abbr": "", 
+        "key": "all"
+    }, 
+    {
+        "name": "dziś", 
+        "abbr": "SOB", 
+        "key": "01-02-2014"
+    }, 
+    {
+        "name": "2", 
+        "abbr": "NIEDZ", 
+        "key": "02-02-2014"
+    }, 
+    {
+        "name": "3", 
+        "abbr": "PN", 
+        "key": "03-02-2014"
+    }, 
+    {
+        "name": "4", 
+        "abbr": "WT", 
+        "key": "04-02-2014"
+    }, 
+    {
+        "name": "5", 
+        "abbr": "ŚR", 
+        "key": "05-02-2014"
+    },
+    {
+        "name": "6", 
+        "abbr": "CZW", 
+        "key": "06-02-2014"
+    },
+    {
+        "name": "7", 
+        "abbr": "PT", 
+        "key": "07-02-2014"
+    },
+    {
+        "name": "przyszłe", 
+        "abbr": "", 
+        "key": "future"
+    }
+]

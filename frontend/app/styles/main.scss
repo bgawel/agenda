@@ -36,10 +36,14 @@ footer {
 
 .nav-by-day a {
   font-size: 1.3em;  
+  
+  &:focus {
+  	outline: none;  
+	}
 }
 
-.nav-by-day a.general {
-  line-height: 300%;
+.nav-by-day a.not-day {
+  line-height: 285%;
 }
 
 .nav-by-day a abbr {
@@ -150,7 +154,7 @@ footer {
 
 @media screen and (max-width: 397px) {
 
-  .nav-by-day a.general { 
+  .nav-by-day a.not-day { 
     line-height: normal; 
   }
 }

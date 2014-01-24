@@ -70,15 +70,10 @@
       <div>
         <div class="nav-by-day">
       	    <ul class="nav nav-tabs">
-              <li><a href="#" class="general">wszystkie</a></li>
-              <li class="active"><a href="#"><abbr>PN</abbr><br/>dziś</a></li>
-              <li><a href="#"><abbr>WT</abbr><br/>2</a></li>
-              <li><a href="#"><abbr>ŚR</abbr><br/>3</a></li>
-              <li><a href="#"><abbr>CZW</abbr><br/>4</a></li>
-              <li><a href="#"><abbr>PT</abbr><br/>5</a></li>
-              <li><a href="#"><abbr>SOB</abbr><br/>6</a></li>
-              <li><a href="#"><abbr>NIEDZ</abbr><br/>7</a></li>
-              <li><a href="#" class="general">przyszłe</a></li>
+              <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch on="day.abbr">
+                <a ng-switch-when="" ng-click="changeEventsDay($index)" href class="not-day">{{day.name}}</a>
+                <a ng-switch-default ng-click="changeEventsDay($index)" href><abbr>{{day.abbr}}</abbr><br/>{{day.name}}</a>
+              </li>
             </ul>
         </div>
         <div class="nav-sort clearfix">
