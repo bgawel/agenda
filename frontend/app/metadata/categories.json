@@ -1,0 +1,18 @@
+{
+	"entries":
+		[
+		    {
+		        "name": "Wszystko", 
+		        "id": "all"
+		    }, 
+		    {
+		        "name": "Teatr", 
+		        "id": "1"
+		    }, 
+		    {
+		        "name": "Taniec", 
+		        "id": "2"
+		    }
+		],
+	"activeIndex": 0
+}

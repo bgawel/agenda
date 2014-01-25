@@ -400,7 +400,7 @@ module.exports = function (grunt) {
     'autoprefixer',
     'connect:livereload',
     'karma:e2e'
-  ]);  
+  ]);
 
   grunt.registerTask('build', [
     'clean:dist',

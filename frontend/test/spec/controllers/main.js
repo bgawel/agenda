@@ -9,13 +9,21 @@ describe('Controller: MainCtrl', function () {
 
   var MainCtrl, scope, $httpBackend;
   
-  var DAY_MENU_RESPONSE = [{name: 'all', abbr:'', key:'all'}, {name: 'today', abbr:'MON', key:'03-02-2014'}];
+  var DAY_MENU_RESPONSE = {
+      entries: [{name: 'all', abbr:'', id:'all'}, {name: 'today', abbr:'MON', id:'03-02-2014'}],
+      activeIndex: 1
+    };
+  var CATEGORY_FILTER_RESPONSE = {
+      entries: [{name: 'all', id:'all'}, {name: 'Theater', id:1}],
+      activeIndex: 0
+    };
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, _$httpBackend_) {
     $httpBackend = _$httpBackend_;
     scope = $rootScope.$new();
     $httpBackend.expectGET('metadata/week.json').respond(DAY_MENU_RESPONSE);
+    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORY_FILTER_RESPONSE);
     MainCtrl = $controller('MainCtrl', {$scope: scope});
   }));
 
@@ -23,18 +31,35 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
      
     expect(scope.weekMenu.length).toEqual(2);
-    expect(JSON.stringify(scope.weekMenu[0])).toEqual(JSON.stringify(DAY_MENU_RESPONSE[0]));
+    expect(JSON.stringify(scope.weekMenu[0])).toEqual(JSON.stringify(DAY_MENU_RESPONSE.entries[0]));
     expect(scope.weekMenu.activeIndex).toEqual(1);
     expect(scope.weekMenu[1].ngClass).toEqual('active');
   });
   
   it('should change events day', function () {
     $httpBackend.flush();
-     
     scope.changeEventsDay(0);
     
     expect(scope.weekMenu.activeIndex).toEqual(0);
     expect(scope.weekMenu[1].ngClass).toEqual('');
     expect(scope.weekMenu[0].ngClass).toEqual('active');
+  });
+  
+  it('should create "category filter" model with 2 entries fetched from xhr', function () {
+    $httpBackend.flush();
+     
+    expect(scope.categoryFilter.length).toEqual(2);
+    expect(JSON.stringify(scope.categoryFilter[1])).toEqual(JSON.stringify(CATEGORY_FILTER_RESPONSE.entries[1]));
+    expect(scope.categoryFilter.activeIndex).toEqual(0);
+    expect(scope.categoryFilter[0].ngClass).toEqual('active');
+  });
+  
+  it('should change events day', function () {
+    $httpBackend.flush();
+    scope.changeCategory(1);
+    
+    expect(scope.categoryFilter.activeIndex).toEqual(1);
+    expect(scope.categoryFilter[0].ngClass).toEqual('');
+    expect(scope.categoryFilter[1].ngClass).toEqual('active');
   });
 });
