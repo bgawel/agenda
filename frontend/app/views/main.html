@@ -27,7 +27,7 @@
 	<div class="col-xs-6 col-sm-2 sidebar-offcanvas left" id="sidebarLeft" role="navigation">
       <p>Kategorie:</p>
       <div class="list-group">
-        <a ng-repeat="category in categoryFilter" href class="list-group-item {{category.ngClass}}"
+        <a ng-repeat="category in categories" href class="list-group-item {{category.ngClass}}"
             ng-click="changeCategory($index)">
           {{category.name}} <span class="badge">{{category.badge}}</span>
         </a>
@@ -75,51 +75,35 @@
             Sortuj wg:
           </p>
           <ul class="nav nav-pills">
-            <li class="active"><a href="#">czasu</a></li>
-            <li><a href="#">tytułu</a></li>
+            <li ng-class="{active:(orderEventsBy=='time')}"><a href ng-click="orderEventsBy='time'">czasu</a></li>
+            <li ng-class="{active:(orderEventsBy=='title')}"><a href ng-click="orderEventsBy='title'">tytułu</a></li>
           </ul>
         </div>
       </div>
       <div class="row">
-        <div class="event clearfix">
+        <div ng-repeat="event in events | filter:{catName: categories.filter.name}:true | orderBy:orderEventsBy" 
+            class="event clearfix">
           <div class="col-xs-10">
-            <h4><a href="#/event/{{event.id}}">Mayday</a>, 
+            <h4><a href="#/event/{{event.id}}">{{event.title}}</a>, 
               <small>
-                <a href class="who" popover-placement="bottom" popover="ul. G. Zapolskiej 3, 50-032 Wrocław, http://www.teatrpolski.wroc.pl, (+48) 71 316 07 00">Teatr Polski</a>
+                <a href class="who" popover-placement="bottom" popover="{{event.who.about}}">{{event.who.name}}</a>
               </small>
             </h4>
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKsAAAC0CAYAAADraNxXAAAFBUlEQVR4nO3Y7U4aXRiF4Z7/oWxQRuFFxLGi+IHGVKBWTasCFSwOM3MKqz9m+hFjg6bp2672/nElZtw7Y/Bm8zCv8jwX4ODV7/4DgOciVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtggVtj4h2JN9bG/q81GTSEEhRC0djRWWv4+HR8pKq8/1jr/pGzJ/p+9f56nml31tP1fTZXy95VaQ3HvUrO0WJMlYw33W4qqQSFUFbW66o8flP321/b/8Q/FmuhDp671jbZa0ROxTofa22qr3S616mU0K+p8SJbu/9n75/MrxdXiev31oXqHr1UPQSFUFF/OlWf3Ot+uFqGvb+n1Vr34uRrr7Sz7A15fYv0FFrreXV0SW6b55baqISis9TROl+3PdH8eF+sbxxovcqV3b9QKQaHS0tlduvz+ybW6taAQIu2dj/Rx9E7dKCiEmvauE6V3p2qEoBA21J9lyrN7DVtl3CeTF7xpfBHrU2vSqc6a5QjQnz5a84P92Sdd7KwohKDG8YVOWxWFUFV78Mz9ea7FpK949fsRZFXx2USLPNf8cqu4Fh1olObK81Sjw6i4tvlO8+x3v66/HrE+sWZxe1jMrys7upo//oj98f5sfqVO7Vts1fjt13lz6f50otON4mO/uf9Gw7N9NStBITR1OlnoftgqR4BjTcpYJyflKNDsa0asf6MlsWZzXZaz4drRSIsX7U81OS4DCjV1r5Nn3//rF7xaVzeLct1esS46HOmek5VYH8eaTs/U/DIbTtMX7U+nfW1Wv/sYb5xovHje/nR0UJ7mu7pOcuV5ovedYqyI9m/18N3MOmBm/duluhsearfTUbv8Nh7WY3U6e+pdzMp/9kK35Wm1snP16LRasj+901k5p24NbnRezq/13q2S5+x/+KDdcl6N4gP1DuLyUdqqdt8/FE8D4uLEr9RjdeJG8bSiuqXh7Kk31d/nH4r124n22JcTLptfarsaFMKajkaLF+y/0ei0Wcyp7YGmaa7s04V2VoJCWNfRTfKM+2dKxgPtb64XTxVCUHVtU93BWEn5psmSsQbdlqJKMdtGG3vqj3jOCvxxiBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2iBU2PgPc53zu9+xgsAAAAABJRU5ErkJggg==" width="95" height="84">
-            <div class="basic-info img">
-              <p>Miejsce: Scena na Świebodzkim</p>
-              <p>Cena: 24 ulg., 32 nor.</p>
-              <p>Więcej: <a href="http://www.teatrpolski.wroc.pl/przedstawienia/mayday">http://www.teatrpolski.wroc.pl/przedstawienia/mayday</a></p>
-            </div>
-            <div class="description">
-              <p>Jedna z najlepszych na świecie komedii. Historia londyńskiego taksówkarza bigamisty, któremu przez lata udaje się bezkolizyjnie lawirować między dwiema kochającymi go żonami. Na skutek wypadku ulicznego jego tajemnica wychodzi na jaw, wywołując lawinę komplikacji. Bohater miota się, usiłując ukryć podwójne życie przed małżonkami, mediami i policją. Znakomity komizm sytuacji fabularnych i języka sprawia, że Mayday od 21 lat rozśmiesza do łez wrocławską publiczność.</p>
-            </div>
-          </div>
-          <div class="col-xs-2">
-            <p class="category">Teatr</p>
-            <p class="time"><b>18:00</b></p>
-          </div>
-        </div>
-        <div class="event clearfix">
-          <div class="col-xs-10">
-            <h4><a href="#">Mayday</a>, <small><a href="#">Teatr Polski</a></small></h4>
+            <img ng-if="event.pic" ng-src="{{event.pic}}" width="95" height="84">
             <div class="basic-info">
-              <p>Miejsce: Scena na Świebodzkim</p>
-              <p>Cena: 24 ulg., 32 nor.</p>
-              <p>Więcej: <a href="http://www.teatrpolski.wroc.pl/przedstawienia/mayday">http://www.teatrpolski.wroc.pl/przedstawienia/mayday</a></p>
+              <p>Miejsce: {{event.place}}</p>
+              <p>Cena: {{event.price}}</p>
+              <p ng-if="event.more">Więcej: <a ng-href="event.more">{{event.more}}</a></p>
             </div>
             <div class="description">
-              <p>Jedna z najlepszych na świecie komedii. Historia londyńskiego taksówkarza bigamisty, któremu przez lata udaje się bezkolizyjnie lawirować między dwiema kochającymi go żonami. Na skutek wypadku ulicznego jego tajemnica wychodzi na jaw, wywołując lawinę komplikacji. Bohater miota się, usiłując ukryć podwójne życie przed małżonkami, mediami i policją. Znakomity komizm sytuacji fabularnych i języka sprawia, że Mayday od 21 lat rozśmiesza do łez wrocławską publiczność.</p>
+              <p>{{event.desc}}</p>
             </div>
           </div>
           <div class="col-xs-2">
-            <p class="category">Teatr</p>
-            <p class="time"><b>18:00</b></p>
-          </div> 
-        </div>      
+            <p class="category">{{event.catName}}</p>
+            <p class="time"><b>{{event.time}}</b></p>
+          </div>
+        </div>     
       </div>
     </div>
 
@@ -136,7 +120,7 @@
         <a href="#" class="list-group-item">[22-01, Kino] Festiwal Nowe Horyzonty...</a>
         <a href="#" class="list-group-item">[02-02, Dla dzieci] Warsztaty - zabawa ciastoliną...</a>
         <a href="#" class="list-group-item">[07-03, Sztuka] Wystawa Aliny Szapocznikow w Muzeum Narodowym...</a>
-      </div>      
+      </div>
     </div><!--/span-->
   </div><!--/row-->
 

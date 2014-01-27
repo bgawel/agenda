@@ -52,14 +52,20 @@ footer {
 
 .nav-sort {
   margin-top: 4px;
-}
-.nav-sort .caption {
-  float: left;
-  line-height: 300%;
-}
-.nav-sort .nav-pills {
-  float: left;
-  margin-left: 4px;
+  
+  .caption {
+  	float: left;
+  	line-height: 300%;
+	}
+	
+	.nav-pills {
+  	float: left;
+  	margin-left: 4px;
+	}
+	
+	a:focus {
+  	outline: none;  
+	}
 }
 
 .event {
@@ -84,7 +90,7 @@ footer {
 .event .basic-info p {
   margin: 0
 }
-.event .basic-info.img {
+.event .basic-info {
   float: left;
   padding: 4px;
 }

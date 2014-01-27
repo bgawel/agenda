@@ -48,18 +48,18 @@ describe('Controller: MainCtrl', function () {
   it('should create "category filter" model with 2 entries fetched from xhr', function () {
     $httpBackend.flush();
      
-    expect(scope.categoryFilter.length).toEqual(2);
-    expect(JSON.stringify(scope.categoryFilter[1])).toEqual(JSON.stringify(CATEGORY_FILTER_RESPONSE.entries[1]));
-    expect(scope.categoryFilter.activeIndex).toEqual(0);
-    expect(scope.categoryFilter[0].ngClass).toEqual('active');
+    expect(scope.categories.length).toEqual(2);
+    expect(JSON.stringify(scope.categories[1])).toEqual(JSON.stringify(CATEGORY_FILTER_RESPONSE.entries[1]));
+    expect(scope.categories.activeIndex).toEqual(0);
+    expect(scope.categories[0].ngClass).toEqual('active');
   });
   
   it('should change events day', function () {
     $httpBackend.flush();
     scope.changeCategory(1);
     
-    expect(scope.categoryFilter.activeIndex).toEqual(1);
-    expect(scope.categoryFilter[0].ngClass).toEqual('');
-    expect(scope.categoryFilter[1].ngClass).toEqual('active');
+    expect(scope.categories.activeIndex).toEqual(1);
+    expect(scope.categories[0].ngClass).toEqual('');
+    expect(scope.categories[1].ngClass).toEqual('active');
   });
 });
