@@ -43,8 +43,13 @@
 		    },
 		    {
 		        "name": "przyszłe", 
-		        "abbr": "", 
+		        "abbr": "future", 
 		        "id": "future"
+		    },
+				{
+		        "name": "", 
+		        "abbr": "date", 
+		        "id": "date"
 		    }
 		],
 	"activeIndex": 1

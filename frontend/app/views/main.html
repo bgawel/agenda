@@ -32,19 +32,12 @@
           {{category.name}} <span class="badge">{{category.badge}}</span>
         </a>
       </div>
-      <p>Organizatorzy:</p>
+      <p>Organizatorzy w kategorii w wybranym terminie:</p>
       <div class="list-group">
-        <a href="#" class="list-group-item">Wszyscy</span></a>
-        <a href="#" class="list-group-item active">Teatr Polski <span class="badge">17</span></a>
-        <a href="#" class="list-group-item">Teatr Pieśń Kozła <span class="badge">15</span></a>
-        <a href="#" class="list-group-item">Instytut im. Jerzego Grotowskiego <span class="badge">13</span></a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
+        <a ng-repeat="inst in institutions[categories.active.name]" href class="list-group-item {{inst.ngClass}}"
+            ng-click="changeInstitution($index)">
+          {{inst.name}} <span class="badge">{{inst.badge}}</span>
+        </a>
       </div>
     </div><!--/span-->
 
@@ -65,8 +58,24 @@
         <div class="nav-by-day">
       	    <ul class="nav nav-tabs">
               <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch on="day.abbr">
-                <a ng-switch-when="" ng-click="changeEventsDay($index)" href class="not-day">{{day.name}}</a>
-                <a ng-switch-default ng-click="changeEventsDay($index)" href><abbr>{{day.abbr}}</abbr><br/>{{day.name}}</a>
+                <a ng-switch-when="" ng-click="changeEventsDay($index)" href class="not-day">
+                  {{day.name}}
+                </a>
+                <a ng-switch-when="future" ng-click="changeEventsDay($index)" href class="not-day">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                <a ng-switch-when="date" ng-click="openEventsCalendar($event, $index)"
+                    datepicker-popup="'dd-MMMM-yyyy'" href class="not-day calendar"
+                    ng-model="weekMenu.calendar.value" is-open="weekMenu.calendar.opened" 
+                    min="weekMenu.calendar.minDate" datepicker-options="weekMenu.calendar.dateOptions"
+                    current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść">
+                  <span class="glyphicon glyphicon-calendar">
+                  </span>
+                  {{weekMenu.calendar.value | date:'dd MMM'}}
+                </a>
+                <a ng-switch-default ng-click="changeEventsDay($index)" href>
+                  <abbr>{{day.abbr}}</abbr><br/>{{day.name}}
+                </a>
               </li>
             </ul>
         </div>
@@ -75,18 +84,18 @@
             Sortuj wg:
           </p>
           <ul class="nav nav-pills">
-            <li ng-class="{active:(orderEventsBy=='time')}"><a href ng-click="orderEventsBy='time'">czasu</a></li>
+            <li ng-class="{active:(orderEventsBy=='dateTime')}"><a href ng-click="orderEventsBy='dateTime'">czasu</a></li>
             <li ng-class="{active:(orderEventsBy=='title')}"><a href ng-click="orderEventsBy='title'">tytułu</a></li>
           </ul>
         </div>
       </div>
       <div class="row">
-        <div ng-repeat="event in events | filter:{catName: categories.filter.name}:true | orderBy:orderEventsBy" 
+        <div ng-repeat="event in events | filter:{catName: categories.filter.name, whoName: institutions.filter.name}:true | orderBy:orderEventsBy" 
             class="event clearfix">
           <div class="col-xs-10">
-            <h4><a href="#/event/{{event.id}}">{{event.title}}</a>, 
+            <h4><a href ng-click="displayEvent(event.id)">{{event.title}}</a>, 
               <small>
-                <a href class="who" popover-placement="bottom" popover="{{event.who.about}}">{{event.who.name}}</a>
+                <a href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
               </small>
             </h4>
             <img ng-if="event.pic" ng-src="{{event.pic}}" width="95" height="84">
@@ -101,25 +110,23 @@
           </div>
           <div class="col-xs-2">
             <p class="category">{{event.catName}}</p>
-            <p class="time"><b>{{event.time}}</b></p>
+            <p ng-if="!weekMenu.active.abbr || weekMenu.active.abbr === 'future'" class="date">
+              <b>{{event.dateTime | date:'dd-MM-yyyy'}}</b>
+            </p>
+            <p class="time"><b>{{event.dateTime | date:'HH:mm'}} </b></p>
           </div>
         </div>     
       </div>
     </div>
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas right" id="sidebarRight" role="navigation">
-      <p>Najnowsze:</p>
+      <p ng-show="newest.length > 0">Najnowsze wpisy:</p>
       <div class="list-group announcement">
-        <a href="#" class="list-group-item">[22-01, Teatr] Najnowsze przedstawienie Demirskiego i Strzępki...</a>
-        <a href="#" class="list-group-item">[02-02, Performance] Sztuka to kłamstwo odsłaniające prawdę...</a>
-        <a href="#" class="list-group-item">[07-03, Koncert] Koncert Neurosis...</a>
-        <a href="#" class="list-group-item">[08-03, Teatr] <b>Mayday</b><br/><span>Jedna z najlepszych na świecie komedii...</span></a>
+        <a ng-repeat="event in newest" href ng-click="displayEvent(event.id)" class="list-group-item">{{event.text}}</a>
       </div>
-      <p>Wkrótce:</p>
+      <p ng-show="soon.length > 0">Wkrótce:</p>
       <div class="list-group announcement">
-        <a href="#" class="list-group-item">[22-01, Kino] Festiwal Nowe Horyzonty...</a>
-        <a href="#" class="list-group-item">[02-02, Dla dzieci] Warsztaty - zabawa ciastoliną...</a>
-        <a href="#" class="list-group-item">[07-03, Sztuka] Wystawa Aliny Szapocznikow w Muzeum Narodowym...</a>
+        <a ng-repeat="event in soon" href ng-click="displayEvent(event.id)" class="list-group-item">{{event.text}}</a>
       </div>
     </div><!--/span-->
   </div><!--/row-->

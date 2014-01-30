@@ -40,14 +40,18 @@ footer {
   &:focus {
   	outline: none;  
 	}
-}
-
-.nav-by-day a.not-day {
-  line-height: 285%;
-}
-
-.nav-by-day a abbr {
-  font-size: 0.6em;
+	
+	&.not-day {
+  	line-height: 285%;
+	}
+	
+	abbr {
+  	font-size: 0.6em;
+	}
+	
+	&.calendar {
+		cursor: pointer !important;
+	}
 }
 
 .nav-sort {
@@ -102,6 +106,9 @@ footer {
   padding-top: 12px;
 }
 .event .time {
+  font-size: 1.3em;
+}
+.event .date {
   font-size: 1.3em;
 }
 

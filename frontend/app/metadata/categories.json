@@ -12,6 +12,10 @@
 		    {
 		        "name": "Taniec", 
 		        "id": "2"
+		    }, 
+		    {
+		        "name": "Performance", 
+		        "id": "3"
 		    }
 		],
 	"activeIndex": 0

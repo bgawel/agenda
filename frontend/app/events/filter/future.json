@@ -1,0 +1,78 @@
+{
+	"categories":
+		[
+			{
+				"id": "all",
+				"badge": 1,
+				"who" :
+					[
+						{
+							"id": "all",
+							"name": "Wszyscy",
+							"badge": 1
+						},
+						{
+							"id": "2",
+							"name": "Teatr Tańca",
+							"badge": 1
+						}
+					]
+			},
+			{
+				"id": "1",
+				"badge": 0,
+				"who" :
+					[
+						{
+							"id": "all",
+							"name": "Wszyscy",
+							"badge": 0
+						}
+					]
+			},
+			{
+				"id": "2",
+				"badge": 1,
+				"who" :
+					[
+						{
+							"id": "all",
+							"name": "Wszyscy",
+							"badge": 1
+						},							
+						{
+							"id": "2",
+							"name": "Teatr Tańca",
+							"badge": 1
+						}
+					]
+			},
+			{
+				"id": "3",
+				"badge": 0,
+				"who" :
+					[
+					  {
+					  	"id": "all",
+							"name": "Wszyscy",
+							"badge": 0
+						}
+					]
+			}
+		],
+	"events":
+		[
+			{
+			  "id": 2,
+				"title": "aMayday in future",
+				"whoName": "Teatr Tańca",
+				"whoAbout": "ul. G. Zapolskiej 3, 50-032 Wrocław, http://www.teatrpolski.wroc.pl, (+48) 71 316 07 00",
+				"catName": "Taniec",
+				"dateTime": "2014-02-01T18:00:00",
+				"pic": "",
+				"place": "Scena na Świebodzkim",
+				"price": "24 ulg., 32 nor.",
+				"desc": "Jedna z najlepszych na świecie komedii. Historia londyńskiego taksówkarza bigamisty, któremu przez lata udaje się bezkolizyjnie lawirować między dwiema kochającymi go żonami. Na skutek wypadku ulicznego jego tajemnica wychodzi na jaw, wywołując lawinę komplikacji. Bohater miota się, usiłując ukryć podwójne życie przed małżonkami, mediami i policją. Znakomity komizm sytuacji fabularnych i języka sprawia, że Mayday od 21 lat rozśmiesza do łez wrocławską publiczność."
+			}			
+		]
+}
