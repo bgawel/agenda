@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('MainCtrl',  ['$scope', '$location', '$q', '$filter', '$cacheFactory', 'Metadata', 'Events',
-                            function($scope, $location, $q, $filter, $cacheFactory,  Metadata, Events) {
+  .controller('MainCtrl',
+      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', 'Metadata', 'Events',
+      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, Metadata, Events) {
     $scope.toggleRightPanel = function () {
       $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
     };
@@ -19,6 +20,7 @@ angular.module('frontendApp')
     var CACHE_INST_KEY = 'mainCache_INST';
     var CACHE_CALENDAR_KEY = 'mainCache_CALENDAR';
     var CACHE_ORDER_KEY = 'mainCache_ORDER';
+    var CACHE_EVENT_KEY = 'mainCache_EVENT';
     var getCache = function() {
       var cache = $cacheFactory.get(CACHE_NAME);
       if (cache === undefined) {
@@ -60,25 +62,27 @@ angular.module('frontendApp')
         };
       var calendarValue = cache.get(CACHE_CALENDAR_KEY);
       if (calendarValue !== undefined && calendarValue !== null) {
-        $scope.weekMenu.calendar.value = calendarValue;
+        $scope.weekMenu.calendar.value = calendarValue; // no trigger because dayIndex is undefined
       }
       return index;
     };
     
-    $scope.institutions = initializeInstitutions();
-    $scope.orderEventsBy = initializeOrder();
-    
-    $q.all([Metadata.categories().$promise, Metadata.week().$promise]).then(function(results) {
-      $scope.categories = results[0].entries;
-      $scope.changeCategory(initializeCategoryIndex(results[0]));
-      $scope.weekMenu = results[1].entries;
-      $scope.changeEventsDay(initializeWeekMenuIndexAndCalendar(results[1]));
-    });
+    $scope.init = function() {
+      $scope.institutions = initializeInstitutions();
+      $scope.orderEventsBy = initializeOrder();
+      $q.all([Metadata.categories().$promise, Metadata.week().$promise]).then(function(results) {
+        $scope.categories = results[0].entries;
+        $scope.changeCategory(initializeCategoryIndex(results[0]));
+        $scope.weekMenu = results[1].entries;
+        $scope.changeEventsDay(initializeWeekMenuIndexAndCalendar(results[1]));
+      });      
+    }
+    $scope.init();
     
     $scope.changeCategory = function(categoryIndex) {
       var activeCategory = activateCategory(categoryIndex);
       setCategoryFilter(activeCategory);
-      setInstitutionOfGivenCategoryToAll(activeCategory);
+      setInstitutionOfGivenCategoryToAll(activeCategory);// tu jest bug jak init z cache
     };
     var activateCategory = function(categoryIndex) {
       if ($scope.categories.active !== undefined) {
@@ -136,6 +140,7 @@ angular.module('frontendApp')
       $scope.events = [];
       $scope.institutions = {};
       fetchEventsByDay(activeDay, activeCategory, activeInstitution);
+      scrollToEventIfNeeded();
     };
     var activateEventsDay = function(dayIndex) {
       if ($scope.weekMenu.active !== undefined) {
@@ -241,9 +246,30 @@ angular.module('frontendApp')
       cache.put(CACHE_CATEGORY_KEY, $scope.categories.active.index);
       cache.put(CACHE_DAY_KEY, $scope.weekMenu.active.index);
       cache.put(CACHE_CALENDAR_KEY, $scope.weekMenu.calendar.value);
+      return cache;
     };
-    $scope.displayEvent = function(eventId) {
-      cacheUserSettings();
+    $scope.displayEvent = function(eventId, scrollToWhenBack) {
+      var cache = cacheUserSettings();
+      if (scrollToWhenBack !== undefined && scrollToWhenBack) {
+        cache.put(CACHE_EVENT_KEY, eventId);
+      }
       $location.url('event/' + eventId);
+    };
+    
+    var scrollTo = function(hash) {
+      $timeout(function() {
+        var old = $location.hash();
+        $location.hash(hash);
+        $anchorScroll();
+        $location.hash(old);  //reset to old to keep any additional routing logic from kicking in, otherwise it renders twice
+      }, 150);  // wait a little to get events rendered, otherwise it doesn't work
+    };
+    var scrollToEventIfNeeded = function() {
+      var cache = getCache();
+      var eventId = cache.get(CACHE_EVENT_KEY);
+      if (eventId !== undefined) {
+        cache.remove(CACHE_EVENT_KEY);
+        scrollTo('event' + eventId);
+      }
     };
   }]);

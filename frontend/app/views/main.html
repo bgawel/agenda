@@ -93,7 +93,7 @@
         <div ng-repeat="event in events | filter:{catName: categories.filter.name, whoName: institutions.filter.name}:true | orderBy:orderEventsBy" 
             class="event clearfix">
           <div class="col-xs-10">
-            <h4><a href ng-click="displayEvent(event.id)">{{event.title}}</a>, 
+            <h4 id="event{{event.id}}"><a href ng-click="displayEvent(event.id, true)">{{event.title}}</a>, 
               <small>
                 <a href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
               </small>
