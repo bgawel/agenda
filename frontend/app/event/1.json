@@ -1,0 +1,25 @@
+{
+	"id": 1,
+	"title": "Mayday",
+  "titleReadonly": true,
+	"pic": "",
+	"more": "www.teatrpolski.wroc.pl/mayday",
+	"desc": "description description description",
+	"category": 1,
+	"pdp": [
+		{
+			"place": "Scena na Świebodzkim",
+			"date": "2014-02-01T00:00:00",
+			"time": "2014-02-01T18:00:00",
+			"price": "25 ulg., 35 norm.",
+			"readonly": true
+		},
+		{
+			"place": "Scena na Świebodzkim",
+			"date": "2014-05-01T00:00:00",
+			"time": "2014-05-01T18:00:00",
+			"price": "25 ulg., 35 norm.",
+			"readonly": false
+		}
+	]	
+}

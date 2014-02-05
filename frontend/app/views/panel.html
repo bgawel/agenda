@@ -2,19 +2,23 @@
   <div class="row">
     <ol class="breadcrumb">
       <li><a href="#">Wydarzenia</a></li>
-      <li class="active">Panel administracyjny - Teatr Polski</li>
+      <li class="active">Panel administracyjny - {{inst.name}}</li>
     </ol>
   </div>
   <div class="row">
     <div class="col-md-3">
       <div class="well">
         <div class="panel-side-navigation">
-          <ul class="nav nav-list">
-            <li class="active">
-              <a href ng-click="loadPanelDetails()">Date instytucji</a>
+          <ul class="nav nav-list" ng-init="o=1">
+            <li ng-class="{active:(o===1)}">
+              <a href ng-click="o=1; loadInst()">Date instytucji</a>
             </li>
-            <li><a href ng-click="loadNewEvent()">Nowe wydarzenie</a></li>
-            <li><a href ng-click="loadIssuedEvents()">Zgłoszone wydarzenia</a></li>
+            <li ng-class="{active:(o===2)}">
+              <a href ng-click="o=2; loadNewEvent()">Nowe wydarzenie</a>
+            </li>
+            <li ng-class="{active:(o===3)}">
+              <a href ng-click="o=3; loadIssuedEvents()">Zgłoszone wydarzenia</a>
+            </li>
           </ul>
         </div>
       </div>

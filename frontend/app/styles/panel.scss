@@ -1,4 +1,4 @@
-@import 'panelDetails';
+@import 'panelInst';
 @import 'panelEvent';
 @import 'panelIssuedEvents';
 
@@ -6,4 +6,8 @@
   .active {
     font-weight: bold;
   }
+  
+  a:focus {
+  	outline: none;  
+	}
 }

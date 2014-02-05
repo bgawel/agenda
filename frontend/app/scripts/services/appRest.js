@@ -2,24 +2,27 @@
 
 var app = angular.module('frontendApp');
 
-app.factory('Metadata', [ '$resource', function($resource) {
-  return $resource('metadata/:what.json', {}, {
-    week : {
-      method : 'GET',
-      params : {
-        what : 'week'
-      }
+app.factory('Metadata', ['$http', function($http) {
+  return {
+    weekMenu : function() {
+      return $http.get('metadata/weekMenu.json').then(function(result) {
+        return result.data;
+      });
     },
-    categories : {
-      method : 'GET',
-      params : {
-        what : 'categories'
-      }
+    categoriesMenu : function() {
+      return $http.get('metadata/categoriesMenu.json').then(function(result) {
+        return result.data;
+      });
+    },
+    categories : function() {
+      return $http.get('metadata/categories.json').then(function(result) {
+        return result.data;
+      });
     }
-  });
-} ]);
+  };
+}]);
 
-app.factory('Events', function($http) {
+app.factory('Events', ['$http', function($http) {
   return {
     byDate : function(date, category, institution) {
       // since $http.get returns a promise,
@@ -36,9 +39,21 @@ app.factory('Events', function($http) {
       });
     },
     byId : function(eventId) {
-      return $http.get('events/id/' + eventId + '.json', {}).then(function(result) {
+      return $http.get('events/id/' + eventId + '.json').then(function(result) {
+        return result.data;
+      });
+    },
+    issued : function(instId) {
+      return $http.get('events/archv/' + instId + '.json').then(function(result) {
         return result.data;
       });
     }
   };
-});
+}]);
+
+app.factory('Inst', [ '$resource', function($resource) {
+  return $resource('inst/:id.json');
+}]);
+app.factory('Event', [ '$resource', function($resource) {
+  return $resource('event/:id.json');
+}]);

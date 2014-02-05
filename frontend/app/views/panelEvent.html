@@ -1,55 +1,63 @@
+<alert type="evtMsgPanel.type" ng-show="evtMsgPanel.show">
+    <ul>
+      <li ng-repeat="msg in evtMsgPanel.messages">
+        {{msg}}
+      </li>
+    </ul>
+</alert>
 <form class="form-horizontal" role="form">
   <div class="form-group">
     <label for="eventTitle" class="col-sm-2 control-label">Tytuł *</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="eventTitle" ng-required="true"/>
+      <input type="text" class="form-control" id="eventTitle" ng-required="true"
+      maxlength="128" ng-model="event.title" ng-readonly="event.titleReadonly"/>
     </div>
   </div>
   <div class="form-group">
     <label for="eventPic" class="col-sm-2 control-label">Zdjęcie</label>
     <div class="col-sm-10">
-      <input type="file" id="eventPic"/>
+      <input type="file" id="eventPic" ng-model="event.pic"/>
     </div>
   </div>
   <div class="form-group">
     <label for="eventMore" class="col-sm-2 control-label">Link do opisu</label>
     <div class="col-sm-4">
-      <input type="url" class="form-control" id="eventMore"/>
+      <input type="text" class="form-control" id="eventMore"
+      maxlength="64" ng-model="event.more"/>
     </div>
   </div>
   <div class="form-group">
     <label for="eventDesc" class="col-sm-2 control-label">Opis</label>
     <div class="col-sm-10">
-      <textarea class="form-control" id="eventDesc" rows="5"/>
+      <textarea class="form-control" id="eventDesc" rows="5"
+      maxlength="4096" ng-model="event.desc"/>
     </div>
   </div> 
   <div class="form-group">
     <label for="eventCategory" class="col-sm-2 control-label">Kategoria *</label>
     <div class="col-sm-4">
-      <select class="form-control" id="eventCategory">
-        <option></option>
-        <option>Teatr</option>
-        <option>Taniec</option>
-        <option>Performance</option>
+      <select class="form-control" id="eventCategory" ng-model="event.category" 
+        ng-options="c.id as c.name for c in categories">
+         <option value="">-- wybierz kategorię --</option>
       </select>
     </div>
   </div>
-  <div class="event-when" ng-repeat="when in placeDate">
+  <div class="event-when" ng-repeat="pdp in event.pdp">
     <div class="form-group">
       <label for="eventPlace" class="col-sm-2 control-label">Miejsce *</label>
       <div class="col-sm-4">
-        <input type="text" class="form-control" id="eventPlace" ng-required="true"/>
+        <input type="text" class="form-control" id="eventPlace{{$index}}" ng-required="true"
+        maxlength="128" ng-model="pdp.place" ng-readonly="pdp.readonly"/>
       </div>
       <label for="eventDate" class="col-sm-2 control-label">Data *</label>
       <div class="col-sm-4 input-group">
-        <input type="text" class="form-control" id="eventDate"
-          datepicker-popup="dd-MMMM-yyyy" ng-model="dt" is-open="opened"
-          min="minDate" max="'2015-06-22'"
-          datepicker-options="dateOptions"
-          date-disabled="disabled(date, mode)" ng-required="true"
-          close-text="Close" /> 
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="open($event)">
+        <input type="text" class="form-control" id="eventDate{{$index}}"
+          datepicker-popup="dd-MMMM-yyyy" ng-model="pdp.date" is-open="pdp.opened"
+          min="minDate" ng-required="true" datepicker-options="dateOptions"
+          current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"
+          ng-readonly="pdp.readonly"/> 
+        <span class="input-group-btn" ng-hide="pdp.readonly">
+          <button class="btn btn-default" ng-click="openCalendar($event, pdp)">
             <i class="glyphicon glyphicon-calendar"></i>
           </button>
         </span>
@@ -57,26 +65,28 @@
     </div> 
     <div class="form-group">
       <label for="eventTime" class="col-sm-2 control-label">Czas *</label>
-      <div class="col-sm-4">
-        <input type="time" class="form-control" id="eventTime" ng-required="true"/>
+      <div class="col-sm-4" id="eventTime{{$index}}" ng-model="pdp.time" ng-switch on="pdp.readonly">
+        <input ng-switch-when="true" type="time" class="form-control" value="{{pdp.time | date:'HH:mm'}}" readonly />
+        <timepicker ng-switch-default show-meridian="isMeridian" readonly-input="pdp.readonly"/>
       </div>
       <label for="eventPrice" class="col-sm-2 control-label">Cena *</label>
       <div class="col-sm-4">
-        <input type="time" class="form-control" id="eventPrice"/>
+        <input type="text" class="form-control" id="eventPrice{{$index}}"
+         ng-model="pdp.price" ng-required="true" ng-readonly="pdp.readonly"/>
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <a class="next" href ng-click="addPlaceDate()">Następne miejsce / data / czas / cena >></a>
-        <a class="next pull-right" href ng-click="removePlaceDate()" 
-          ng-show="isRemovePlaceDateShown()">Usuń</a>
+        <a class="next" href ng-click="addPdp($index)">Następne miejsce / data / czas / cena >></a>
+        <a class="next pull-right" href ng-click="removePdp($index)" 
+          ng-show="isRemovePdpShown(pdp)">Usuń</a>
       </div>
     </div>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Zapisz</button>
-      <a class="btn btn-default" ng-click="loadIssuedEvents()">Anuluj</a>
+      <button type="submit" class="btn btn-default" ng-click="saveEvent()">Zapisz</button>
+      <a class="btn btn-default" ng-click="cancelClicked()" ng-show="cancelClicked!==undefined">Anuluj</a>
     </div>
   </div>       
 </form>

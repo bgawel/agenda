@@ -1,55 +1,70 @@
+<alert type="instMsgPanel.type" ng-show="instMsgPanel.show">
+    <ul>
+      <li ng-repeat="msg in instMsgPanel.messages">
+        {{msg}}
+      </li>
+    </ul>
+</alert>
 <form class="form-horizontal" role="form">
   <div class="form-group">
     <label for="detailsName" class="col-sm-2 control-label">Nazwa *</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="detailsName" ng-required="true"/>
+      <input type="text" class="form-control" id="detailsName" ng-required="true"
+       maxlength="128" ng-model="inst.name"/>
     </div>
   </div>
   <div class="form-group">
     <label for="detailsEmail" class="col-sm-2 control-label">E-mail *</label>
     <div class="col-sm-5">
-      <input type="email" class="form-control" id="detailsEmail" ng-required="true"/>
+      <input type="email" class="form-control" id="detailsEmail" ng-required="true"
+      maxlength="64" ng-model="inst.email"/>
     </div>
   </div>   
   <div class="form-group">
     <label for="detailsPwd" class="col-sm-2 control-label">Hasło *</label>
     <div class="col-sm-5">
-      <input type="password" class="form-control" id="detailsPwd" ng-required="true"/>
+      <input type="password" class="form-control" id="detailsPwd" ng-required="true"
+      maxlength="64" ng-model="inst.pwd"/>
     </div>
   </div> 
   <div class="form-group">
     <label for="detailsRePwd" class="col-sm-2 control-label">Potwierdź hasło *</label>
     <div class="col-sm-5">
-      <input type="password" class="form-control" id="detailsRePwd" ng-required="true"/>
+      <input type="password" class="form-control" id="detailsRePwd" ng-required="true"
+      maxlength="64" ng-model="inst.repwd"/>
     </div>
   </div>    
   <div class="form-group">
     <label for="detailsAddress" class="col-sm-2 control-label">Adres</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="detailsAddress"/>
+      <input type="text" class="form-control" id="detailsAddress"
+      maxlength="128" ng-model="inst.address"/>
     </div>
   </div>
   <div class="form-group">
     <label for="detailsWeb" class="col-sm-2 control-label">Strona domowa</label>
     <div class="col-sm-5">
-      <input type="url" class="form-control" id="detailsWeb">
+      <input type="text" class="form-control" id="detailsWeb"
+      maxlength="64" ng-model="inst.web"/>
     </div>
   </div>
   <div class="form-group">
     <label for="detailsTel" class="col-sm-2 control-label">Telefon</label>
     <div class="col-sm-5">
-      <input type="tel" class="form-control" id="detailsTel"/>
+      <input type=""text"" class="form-control" id="detailsTel"
+      maxlength="64" ng-model="inst.tel"/>
     </div>
   </div>  
   <div class="form-group">
     <label for="detailsFax" class="col-sm-2 control-label">Fax</label>
     <div class="col-sm-5">
-      <input type="tel" class="form-control" id="detailsFax"/>
+      <input type=""text"" class="form-control" id="detailsFax"
+      maxlength="64" ng-model="inst.fax"/>
     </div>
   </div>   
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Zapisz</button>
+      <button type="submit" class="btn btn-default" ng-click="saveInst()">Zapisz</button>
     </div>
   </div>
 </form>

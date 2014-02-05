@@ -70,13 +70,13 @@ angular.module('frontendApp')
     $scope.init = function() {
       $scope.institutions = initializeInstitutions();
       $scope.orderEventsBy = initializeOrder();
-      $q.all([Metadata.categories().$promise, Metadata.week().$promise]).then(function(results) {
+      $q.all([Metadata.categoriesMenu(), Metadata.weekMenu()]).then(function(results) {
         $scope.categories = results[0].entries;
         $scope.changeCategory(initializeCategoryIndex(results[0]));
         $scope.weekMenu = results[1].entries;
         $scope.changeEventsDay(initializeWeekMenuIndexAndCalendar(results[1]));
-      });      
-    }
+      });
+    };
     $scope.init();
     
     $scope.changeCategory = function(categoryIndex) {

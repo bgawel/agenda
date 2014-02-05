@@ -17,7 +17,7 @@ angular.module('frontendApp', [
         templateUrl: 'views/event.html',
         controller: 'EventCtrl'
       })
-      .when('/panel', {
+      .when('/panel/:instId', {
         templateUrl: 'views/panel.html',
         controller: 'PanelCtrl'
       })
