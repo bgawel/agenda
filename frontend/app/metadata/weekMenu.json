@@ -1,6 +1,11 @@
 {
 	"entries":
 		[
+				{
+		        "name": "", 
+		        "abbr": "date", 
+		        "id": "date"
+		    },
 		    {
 		        "name": "wszystkie", 
 		        "abbr": "", 
@@ -45,12 +50,7 @@
 		        "name": "przyszłe", 
 		        "abbr": "future", 
 		        "id": "future"
-		    },
-				{
-		        "name": "", 
-		        "abbr": "date", 
-		        "id": "date"
 		    }
 		],
-	"activeIndex": 1
+	"activeIndex": 2
 }

@@ -1,22 +1,44 @@
-<alert type="evtMsgPanel.type" ng-show="evtMsgPanel.show">
-    <ul>
+<alert type="evtMsgPanel.type" ng-show="evtMsgPanel.show" ng-switch on="evtMsgPanel.messages.length">
+    <p ng-switch-when="1">{{evtMsgPanel.messages[0]}}</p>
+    <ul ng-switch-default>
       <li ng-repeat="msg in evtMsgPanel.messages">
         {{msg}}
       </li>
     </ul>
 </alert>
-<form class="form-horizontal" role="form">
+<form class="form-horizontal panel-event" role="form" name="form.event">
   <div class="form-group">
     <label for="eventTitle" class="col-sm-2 control-label">Tytuł *</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="eventTitle" ng-required="true"
+      <input type="text" class="form-control" id="eventTitle" required
       maxlength="128" ng-model="event.title" ng-readonly="event.titleReadonly"/>
     </div>
   </div>
   <div class="form-group">
     <label for="eventPic" class="col-sm-2 control-label">Zdjęcie</label>
     <div class="col-sm-10">
-      <input type="file" id="eventPic" ng-model="event.pic"/>
+      <input type="file" id="eventPic" ng-file-select ng-model="event.selectedPic"/>
+      <div ng-if="event.selectedPic" ng-hide="event.isImg" class="not-img">
+        <span class="glyphicon glyphicon-ban-circle"/>
+        Niedozwolnony format, wybierz jpg, png, jpeg, bmp albo gif
+      </div>
+      <div class="files-to-upload" ng-hide="uploader.queue.length > 0 || !event.pic">
+        <img class="img" ng-src="{{event.pic}}" width="95" height="84"/>
+        <div class="remove-img" style="padding-top:32px">
+          <button ng-click="removeImage()" type="button" class="btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-remove-circle"/>
+          </button>
+        </div>
+      </div>
+      <div class="files-to-upload" ng-show="uploader.isHTML5" ng-repeat="item in uploader.queue"
+        ng-show="uploader.queue.length > 0">
+        <div class="img" ng-thumb="{file: item.file, width: 95, height: 84}" />
+        <div class="remove-img" style="padding-top:32px">
+          <button ng-click="removeFromQueue(item)" type="button" class="btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-remove-circle"/>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="form-group">
@@ -32,11 +54,11 @@
       <textarea class="form-control" id="eventDesc" rows="5"
       maxlength="4096" ng-model="event.desc"/>
     </div>
-  </div> 
+  </div>
   <div class="form-group">
     <label for="eventCategory" class="col-sm-2 control-label">Kategoria *</label>
     <div class="col-sm-4">
-      <select class="form-control" id="eventCategory" ng-model="event.category" 
+      <select class="form-control" id="eventCategory" ng-model="event.category" required
         ng-options="c.id as c.name for c in categories">
          <option value="">-- wybierz kategorię --</option>
       </select>
@@ -46,17 +68,17 @@
     <div class="form-group">
       <label for="eventPlace" class="col-sm-2 control-label">Miejsce *</label>
       <div class="col-sm-4">
-        <input type="text" class="form-control" id="eventPlace{{$index}}" ng-required="true"
+        <input type="text" class="form-control" id="eventPlace{{$index}}" required
         maxlength="128" ng-model="pdp.place" ng-readonly="pdp.readonly"/>
       </div>
       <label for="eventDate" class="col-sm-2 control-label">Data *</label>
-      <div class="col-sm-4 input-group">
-        <input type="text" class="form-control" id="eventDate{{$index}}"
+      <div class="col-sm-4 input-group" ng-switch on="pdp.readonly">
+        <input ng-switch-when="true" type="text" class="form-control" value="{{pdp.date | date:'dd-MMMM-yyyy'}}" readonly />
+        <input ng-switch-default type="text" class="form-control" id="eventDate{{$index}}"
           datepicker-popup="dd-MMMM-yyyy" ng-model="pdp.date" is-open="pdp.opened"
-          min="minDate" ng-required="true" datepicker-options="dateOptions"
-          current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"
-          ng-readonly="pdp.readonly"/> 
-        <span class="input-group-btn" ng-hide="pdp.readonly">
+          min="minDate" datepicker-options="dateOptions" required
+          current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"/> 
+        <span ng-switch-default class="input-group-btn">
           <button class="btn btn-default" ng-click="openCalendar($event, pdp)">
             <i class="glyphicon glyphicon-calendar"></i>
           </button>
@@ -66,13 +88,13 @@
     <div class="form-group">
       <label for="eventTime" class="col-sm-2 control-label">Czas *</label>
       <div class="col-sm-4" id="eventTime{{$index}}" ng-model="pdp.time" ng-switch on="pdp.readonly">
-        <input ng-switch-when="true" type="time" class="form-control" value="{{pdp.time | date:'HH:mm'}}" readonly />
-        <timepicker ng-switch-default show-meridian="isMeridian" readonly-input="pdp.readonly"/>
+        <input ng-switch-when="true" type="text" class="form-control" value="{{pdp.time | date:'HH:mm'}}" readonly />
+        <timepicker ng-switch-default show-meridian="isMeridian"/>
       </div>
       <label for="eventPrice" class="col-sm-2 control-label">Cena *</label>
       <div class="col-sm-4">
-        <input type="text" class="form-control" id="eventPrice{{$index}}"
-         ng-model="pdp.price" ng-required="true" ng-readonly="pdp.readonly"/>
+        <input type="text" class="form-control" id="eventPrice{{$index}}" required
+         ng-model="pdp.price" ng-readonly="pdp.readonly"/>
       </div>
     </div>
     <div class="form-group">

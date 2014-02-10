@@ -51,9 +51,22 @@ app.factory('Events', ['$http', function($http) {
   };
 }]);
 
-app.factory('Inst', [ '$resource', function($resource) {
+app.factory('Inst', ['$resource', function($resource) {
   return $resource('inst/:id.json');
 }]);
-app.factory('Event', [ '$resource', function($resource) {
+app.factory('Event', ['$resource', function($resource) {
   return $resource('event/:id.json');
+}]);
+
+app.factory('Uploader', ['$fileUploader', function($fileUploader) {
+  return {
+    create : function(scope, formId) {
+      return $fileUploader.create({
+        scope: scope,
+        url: 'upload',
+        formData: [{formId: formId}],
+        removeAfterUpload: false
+      });
+    }
+  };
 }]);

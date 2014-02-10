@@ -6,3 +6,31 @@
 		text-decoration: none;
   } 
 }
+
+.panel-event {
+	.inc {
+		&.left {
+	  	border-left: none;
+	  }
+	  
+	  &.right {
+	  	border-right: none;
+	  }
+	}
+  
+  .files-to-upload {
+  	margin-top: 5px;
+  	
+  	.img {
+  	  float:left;
+  	}
+  	
+  	.remove-img button {
+  	  margin-left:5px;
+  	}
+  }
+  
+  .not-img {
+  	color: #B94A48;
+  }
+}

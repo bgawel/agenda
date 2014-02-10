@@ -2,7 +2,7 @@
 	"id": 1,
 	"title": "Mayday",
   "titleReadonly": true,
-	"pic": "",
+	"pic": "http://placekitten.com/600/300",
 	"more": "www.teatrpolski.wroc.pl/mayday",
 	"desc": "description description description",
 	"category": 1,

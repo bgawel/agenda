@@ -9,15 +9,24 @@
     <div class="col-md-3">
       <div class="well">
         <div class="panel-side-navigation">
-          <ul class="nav nav-list" ng-init="o=1">
-            <li ng-class="{active:(o===1)}">
-              <a href ng-click="o=1; loadInst()">Date instytucji</a>
+          <ul class="nav nav-list">
+            <li ng-class="{active:(option===1)}">
+              <a href ng-click="option=1; loadInst()">Dane organizatora</a>
             </li>
-            <li ng-class="{active:(o===2)}">
-              <a href ng-click="o=2; loadNewEvent()">Nowe wydarzenie</a>
+            <li ng-class="{active:(option===2)}">
+              <a href ng-click="option=2; loadNewEvent()">Nowe wydarzenie</a>
             </li>
-            <li ng-class="{active:(o===3)}">
-              <a href ng-click="o=3; loadIssuedEvents()">Zgłoszone wydarzenia</a>
+            <li ng-class="{active:(option===3)}">
+              <a href ng-click="option=3; loadIssuedEvents()">Zgłoszone wydarzenia</a>
+              <ul class="nav nav-list" ng-show="option===4">
+                <li class="active">
+                  <a href ng-click="option=4; reloadIssuedEvent()">
+                    <span class="glyphicon glyphicon-edit active">
+                      {{eventTitle}}
+                    </span>
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>

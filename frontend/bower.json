@@ -16,5 +16,8 @@
   "devDependencies": {
     "angular-mocks": "~1.2.0",
     "angular-scenario": "~1.2.0"
+  },
+  "resolutions": {
+    "es5-shim": "~2.3.0"
   }
 }

@@ -2,8 +2,8 @@
 
 angular.module('frontendApp')
   .controller('MainCtrl',
-      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', 'Metadata', 'Events',
-      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, Metadata, Events) {
+      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', 'Metadata', 'Events',
+      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, Metadata, Events) {
     $scope.toggleRightPanel = function () {
       $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
     };
@@ -61,7 +61,7 @@ angular.module('frontendApp')
           }
         };
       var calendarValue = cache.get(CACHE_CALENDAR_KEY);
-      if (calendarValue !== undefined && calendarValue !== null) {
+      if (calendarValue) {
         $scope.weekMenu.calendar.value = calendarValue; // no trigger because dayIndex is undefined
       }
       return index;
@@ -227,9 +227,8 @@ angular.module('frontendApp')
       $scope.weekMenu.calendar.opened = true;
     };
     $scope.$watch('weekMenu.calendar.value', function(newVal, oldVal) {
-      if (newVal !== oldVal && newVal !== undefined && newVal !== null &&
-          $scope.weekMenu.calendar.dayIndex !== undefined) {
-        if (oldVal !== undefined && oldVal !== null) {
+      if (newVal !== oldVal && newVal && $scope.weekMenu.calendar.dayIndex !== undefined) {
+        if (oldVal) {
           if (newVal.getTime() !== oldVal.getTime()) {
             $scope.changeEventsDay($scope.weekMenu.calendar.dayIndex);
           }
@@ -250,10 +249,22 @@ angular.module('frontendApp')
     };
     $scope.displayEvent = function(eventId, scrollToWhenBack) {
       var cache = cacheUserSettings();
-      if (scrollToWhenBack !== undefined && scrollToWhenBack) {
+      if (scrollToWhenBack) {
         cache.put(CACHE_EVENT_KEY, eventId);
       }
       $location.url('event/' + eventId);
+    };
+    $scope.reload = function() {
+      getCache().removeAll();
+      $window.location.reload(); // $route.reload() causes problems in unit tests (unexpected GET views.main.html)
+    };
+    $scope.newEvent = function() {
+      cacheUserSettings();
+      $location.url('login');
+    };
+    $scope.about = function() {
+      cacheUserSettings();
+      $location.url('about');
     };
     
     var scrollTo = function(hash) {

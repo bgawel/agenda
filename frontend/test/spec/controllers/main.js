@@ -4,8 +4,6 @@ describe('Controller: MainCtrl', function () {
 
   // load the controller's module
   beforeEach(module('frontendApp'));
-  // load the BootstrapUI module
-  beforeEach(module('ui.bootstrap'));
 
   var MainCtrl, scope, $httpBackend, $cacheFactory, $location;
   
@@ -97,8 +95,8 @@ describe('Controller: MainCtrl', function () {
     $cacheFactory = _$cacheFactory_;
     $location = _$location_;
     scope = $rootScope.$new();
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORY_FILTER_RESPONSE);
-    $httpBackend.expectGET('metadata/week.json').respond(WEEK_MENU_RESPONSE);
+    $httpBackend.expectGET('metadata/categoriesMenu.json').respond(CATEGORY_FILTER_RESPONSE);
+    $httpBackend.expectGET('metadata/weekMenu.json').respond(WEEK_MENU_RESPONSE);
     $httpBackend.expectGET('events/filter/03-02-2014.json?category=all').respond(EVENTS_RESPONSE);
     MainCtrl = $controller('MainCtrl', {$scope: scope});
   }));
@@ -390,8 +388,8 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
     scope.displayEvent(1, false);
     
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORY_FILTER_RESPONSE);
-    $httpBackend.expectGET('metadata/week.json').respond(WEEK_MENU_RESPONSE);
+    $httpBackend.expectGET('metadata/categoriesMenu.json').respond(CATEGORY_FILTER_RESPONSE);
+    $httpBackend.expectGET('metadata/weekMenu.json').respond(WEEK_MENU_RESPONSE);
     $httpBackend.expectGET('events/filter/16-02-2014.json?category=1&who=1').respond(EVENTS_RESPONSE);
     scope.init();
     $httpBackend.flush();
