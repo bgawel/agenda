@@ -6,6 +6,7 @@ angular.module('frontendApp', [
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap',
+  'ui-templates',
   'angularFileUpload'
 ])
   .config(['$routeProvider', '$provide', function ($routeProvider, $provide) {
@@ -37,6 +38,7 @@ angular.module('frontendApp', [
       .otherwise({
         redirectTo: '/'
       });
+    //TODO bgawel make it optional for testing and serving
     $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
   }])
  .run(function($httpBackend) {

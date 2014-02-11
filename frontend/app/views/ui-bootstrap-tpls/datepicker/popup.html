@@ -1,0 +1,11 @@
+<ul class="dropdown-menu" ng-style="{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}">
+  <li ng-transclude></li>
+  <li class="divider"></li>
+  <li style="padding: 9px;">
+    <span class="btn-group">
+      <button type="button" class="btn btn-sm btn-info" ng-click="today()">{{currentText}}</button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="showWeeks = ! showWeeks" ng-class="{active: showWeeks}">{{toggleWeeksText}}</button>
+    </span>
+    <button type="button" class="btn btn-sm btn-success pull-right" ng-click="isOpen = false">{{closeText}}</button>
+  </li>
+</ul>

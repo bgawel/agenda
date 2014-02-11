@@ -14,6 +14,8 @@ module.exports = function (grunt) {
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
+  
+  grunt.loadNpmTasks('grunt-html2js');
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -302,15 +304,18 @@ module.exports = function (grunt) {
     concurrent: {
       server: [
         'compass:server',
-        'copy:styles'
+        'copy:styles',
+        'html2js'
       ],
       test: [
         'compass',
-        'copy:styles'
+        'copy:styles',
+        'html2js'
       ],
       dist: [
         'compass:dist',
         'copy:styles',
+        'html2js',
         'imagemin',
         'svgmin',
         'htmlmin'
@@ -352,6 +357,21 @@ module.exports = function (grunt) {
       unit: {
         configFile: 'karma.conf.js',
         singleRun: true
+      }
+    },
+    
+    html2js: {
+      options: {
+        base: '.',
+        module: 'ui-templates',
+        rename: function (modulePath) {
+          var moduleName = modulePath.replace('app/views/ui-bootstrap-tpls/', '').replace('.html', '');
+          return 'template' + '/' + moduleName + '.html';
+        }
+      },
+      main: {
+        src: ['app/views/ui-bootstrap-tpls/**/*.html'],
+        dest: '.tmp/ui-templates.js'
       }
     }
   });
