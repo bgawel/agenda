@@ -3,5 +3,7 @@ dist
 .tmp
 .sass-cache
 .project
+.settings
+.classpath
 app/bower_components
 *~
