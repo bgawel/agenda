@@ -34,23 +34,24 @@ app.factory('Events', ['$http', function($http) {
       // and promise.then() also returns a promise
       // that resolves to whatever value is returned in it's
       // callback argument, we can return that.
-      return $http.get('events/filter/' + date + '.json', {
-        params : {
-          category : category,
-          who: institution
-        }
-      }).then(function(result) {
-        return result.data;
+      return $http.get('b/evntPres/byDate/' + date + '.json', {params : {category : category, inst: institution}}).
+        then(function(result) {
+          return result.data;
       });
     },
-    byId : function(eventId) {
-      // TODO bgawel: handle error response if event with given id is gone
-      return $http.get('events/id/' + eventId + '.json').then(function(result) {
-        return result.data;
-      });
+    byId : function(eventId, error410) {
+      return $http({method: 'GET', url: 'b/evntPres/byEvent/' + eventId + '.json'}).
+        error(function(data, status, headers, config) {
+          if (status === 410) {
+            error410(data)
+          }
+        }).
+        then(function(result) {
+          return result.data;
+        });
     },
-    issued : function(instId) {
-      return $http.get('events/archv/' + instId + '.json').then(function(result) {
+    submitted : function(instId) {
+      return $http.get('b/evntPres/submitted/' + instId + '.json').then(function(result) {
         return result.data;
       });
     }

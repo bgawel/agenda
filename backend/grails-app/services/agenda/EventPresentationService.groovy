@@ -24,7 +24,7 @@ class EventPresentationService {
     def pdtpQueryService
     def eventQueryService
 
-    def showByDate(requestedDate) {
+    def showByDate(requestedDate, categoryId, instId) { // TODO bgawel: categoryId, instId currently ignored
         showByDate(currentDateTime, requestedDate)
     }
 

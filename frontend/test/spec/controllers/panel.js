@@ -26,7 +26,7 @@ describe('Controller: PanelCtrl', function () {
          id: 3
      }
   ];
-  var ISSUED_RESPONSE = [
+  var SUBMITTED_RESPONSE = [
      {
        id: 1,
        title: 'Mayday',
@@ -318,20 +318,20 @@ describe('Controller: PanelCtrl', function () {
     expect(scope.evtMsgPanel.messages[0]).toBe('Nie można zapisać zdjęcia');
   });
   
-  it('should initialize model with view of issued events', function () {
+  it('should initialize model with view of submitted events', function () {
     $routeParams.o = '3';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('events/archv/666.json').respond(ISSUED_RESPONSE);
+    $httpBackend.expectGET('b/evntPres/submitted/666.json').respond(SUBMITTED_RESPONSE);
     $httpBackend.flush();
     
     expect(scope.option).toBe(3);
-    expect(scope.partial).toBe('panelIssuedEvents.html');
+    expect(scope.partial).toBe('panelSubmittedEvents.html');
   });
   
   it('should load existing event', function () {
     $routeParams.o = '3';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('events/archv/666.json').respond(ISSUED_RESPONSE);
+    $httpBackend.expectGET('b/evntPres/submitted/666.json').respond(SUBMITTED_RESPONSE);
     $httpBackend.flush();
     
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
@@ -340,7 +340,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     
     expect(scope.partial).toBe('panelEvent.html');
-    expect(scope.reloadIssuedEvent).toBeDefined();
+    expect(scope.reloadSubmittedEvent).toBeDefined();
     expect(scope.cancelClicked).toBeDefined();
     expect(scope.option).toBe(4);
   });
@@ -348,18 +348,18 @@ describe('Controller: PanelCtrl', function () {
   it('should cancel editing an existing event', function () {
     $routeParams.o = '3';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('events/archv/666.json').respond(ISSUED_RESPONSE);
+    $httpBackend.expectGET('b/evntPres/submitted/666.json').respond(SUBMITTED_RESPONSE);
     $httpBackend.flush();
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.expectGET('event/1.json').respond({title:'Mayday'});
     scope.loadExistingEvent(1);
     $httpBackend.flush();
     
-    $httpBackend.expectGET('events/archv/666.json').respond(ISSUED_RESPONSE);
+    $httpBackend.expectGET('b/evntPres/submitted/666.json').respond(SUBMITTED_RESPONSE);
     scope.cancelClicked();
     $httpBackend.flush();
     
-    expect(scope.partial).toBe('panelIssuedEvents.html');
+    expect(scope.partial).toBe('panelSubmittedEvents.html');
     expect(scope.option).toBe(3);
   });
 });

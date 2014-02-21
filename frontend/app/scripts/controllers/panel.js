@@ -138,10 +138,10 @@ angular.module('frontendApp')
       $scope.event.pdtps = [{time: defaultTime}]; // does not work
     };
     
-    $scope.loadIssuedEvents = function() {
-      $scope.partial = 'panelIssuedEvents.html';
-      Events.issued($routeParams.instId).then(function(data) {
-        $scope.issuedEvents = data;
+    $scope.loadSubmittedEvents = function() {
+      $scope.partial = 'panelSubmittedEvents.html';
+      Events.submitted($routeParams.instId).then(function(data) {
+        $scope.submittedEvents = data;
       });
     };
     
@@ -150,12 +150,12 @@ angular.module('frontendApp')
       $scope.event = Event.get({id:eventId}, function() {
         $scope.eventTitle = $scope.event.title;
       });
-      $scope.reloadIssuedEvent = function() {
+      $scope.reloadSubmittedEvent = function() {
         $scope.loadExistingEvent($scope.event.id);
       };
       $scope.cancelClicked = function() {
         $scope.eventTitle = undefined;
-        $scope.loadIssuedEvents();
+        $scope.loadSubmittedEvents();
         $scope.option = 3;
       };
       $scope.option = 4;
@@ -168,7 +168,7 @@ angular.module('frontendApp')
       if ($scope.option === 2) {
         $scope.loadNewEvent();
       } else if ($scope.option === 3) {
-        $scope.loadIssuedEvents();
+        $scope.loadSubmittedEvents();
       } else {
         $scope.option = 1;
       }

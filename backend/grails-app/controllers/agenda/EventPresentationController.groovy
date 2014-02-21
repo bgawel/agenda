@@ -14,7 +14,7 @@ class EventPresentationController {
             render status: UNSUPPORTED_MEDIA_TYPE.value
         } else {
             if (params.date) {
-                render eventPresentationService.showByDate(params.date) as JSON
+                render eventPresentationService.showByDate(params.date, params.category, params.inst) as JSON
             } else {
                 render status: BAD_REQUEST.value
             }

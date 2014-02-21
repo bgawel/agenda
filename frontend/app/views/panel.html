@@ -17,10 +17,10 @@
               <a href ng-click="option=2; loadNewEvent()">Nowe wydarzenie</a>
             </li>
             <li ng-class="{active:(option===3)}">
-              <a href ng-click="option=3; loadIssuedEvents()">Zgłoszone wydarzenia</a>
+              <a href ng-click="option=3; loadSubmittedEvents()">Zgłoszone wydarzenia</a>
               <ul class="nav nav-list" ng-show="option===4">
                 <li class="active">
-                  <a href ng-click="option=4; reloadIssuedEvent()">
+                  <a href ng-click="option=4; reloadSubmittedEvent()">
                     <span class="glyphicon glyphicon-edit active">
                       {{eventTitle}}
                     </span>

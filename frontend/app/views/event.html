@@ -6,7 +6,10 @@
     </ol>
   </div>
   <div class="row">
-    <div class="event clearfix">
+    <alert type="'danger'" ng-show="eventGone">
+      <p>Przepraszamy, ale nie możemy wyświetlić szczegółów tego wydarzenia, ponieważ zostało ono usunięte</p>
+    </alert>
+    <div class="event clearfix" ng-hide="eventGone">
       <div class="col-xs-10">
         <h4><b>{{event.title}}</b>, 
           <small>
