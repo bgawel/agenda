@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('PanelCtrl', ['$scope', '$routeParams', 'Inst', 'Metadata', 'Events', 'Event', 'MsgPanel', 'Uploader',
-              function ($scope, $routeParams, Inst, Metadata, Events, Event, MsgPanel, Uploader) {
+  .controller('PanelCtrl', ['$scope', '$routeParams', 'Inst', 'Category', 'Events', 'Event', 'MsgPanel', 'Uploader',
+              function ($scope, $routeParams, Inst, Category, Events, Event, MsgPanel, Uploader) {
 
     $scope.loadInst = function() {
       $scope.partial = 'panelInst.html';
@@ -39,7 +39,7 @@ angular.module('frontendApp')
           'starting-day': 1,
           'show-weeks': false // doesn't work
         };
-      Metadata.categories().then(function(data) {
+      Category.all().then(function(data) {
         $scope.categories = data;
       });
       
@@ -65,27 +65,27 @@ angular.module('frontendApp')
         $scope.event.pic = null;
       };
       
-      $scope.removePdp = function(index) {
-        $scope.event.pdp.splice(index, 1);
+      $scope.removePdtp = function(index) {
+        $scope.event.pdtps.splice(index, 1);
       };
-      $scope.isRemovePdpShown = function(pdp) {
-        return !pdp.readonly && $scope.event.pdp.length > 1;
+      $scope.isRemovePdtpShown = function(pdtp) {
+        return !pdtp.readonly && $scope.event.pdtps.length > 1;
       };
-      $scope.addPdp = function(index) {
-        var pdp = {};
-        if ($scope.event.pdp.length > 0) {
-          var previousPdp = $scope.event.pdp[index];
-          pdp.time = previousPdp.time;
-          pdp.price = previousPdp.price;
-          pdp.place = previousPdp.place;
+      $scope.addPdtp = function(index) {
+        var pdtp = {};
+        if ($scope.event.pdtps.length > 0) {
+          var previousPdtp = $scope.event.pdtps[index];
+          pdtp.time = previousPdtp.time;
+          pdtp.price = previousPdtp.price;
+          pdtp.place = previousPdtp.place;
         }
-        $scope.event.pdp.splice(index+1, 0, pdp);
+        $scope.event.pdtps.splice(index+1, 0, pdtp);
       };
       
-      $scope.openCalendar = function($event, pdp) {
+      $scope.openCalendar = function($event, pdtp) {
         $event.preventDefault();
         $event.stopPropagation();
-        pdp.opened = true;
+        pdtp.opened = true;
       };
       
       var postEvent = function() {
@@ -135,7 +135,7 @@ angular.module('frontendApp')
       loadEmptyEvent(-(defaultTime.getTime()));
       defaultTime.setHours(19);
       defaultTime.setMinutes(0);
-      $scope.event.pdp = [{time: defaultTime}]; // does not work
+      $scope.event.pdtps = [{time: defaultTime}]; // does not work
     };
     
     $scope.loadIssuedEvents = function() {

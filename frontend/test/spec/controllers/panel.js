@@ -111,7 +111,7 @@ describe('Controller: PanelCtrl', function () {
   it('should initialize model with view of a new event', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     
     expect(scope.option).toBe(2);
@@ -120,82 +120,82 @@ describe('Controller: PanelCtrl', function () {
     expect(scope.event.id).toBeDefined()
     expect(scope.evtMsgPanel.show).toBe(false);
     expect(scope.categories.length).toBe(3);
-    expect(scope.event.pdp[0].time).toBeDefined();
+    expect(scope.event.pdtps[0].time).toBeDefined();
   });
   
   it('should add a new place / date / price section initialized with previous values', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
-    scope.event.pdp[0].place = 'Sky Tower';
-    scope.event.pdp[0].time = new Date();
-    scope.event.pdp[0].date = new Date();
-    scope.event.pdp[0].price = '15 euro'
+    scope.event.pdtps[0].place = 'Sky Tower';
+    scope.event.pdtps[0].time = new Date();
+    scope.event.pdtps[0].date = new Date();
+    scope.event.pdtps[0].price = '15 euro'
     
-    scope.addPdp(0);
+    scope.addPdtp(0);
     
-    expect(scope.event.pdp.length).toBe(2);
-    expect(scope.event.pdp[1].place).toBe(scope.event.pdp[0].place);
-    expect(scope.event.pdp[1].time).toBe(scope.event.pdp[0].time);
-    expect(scope.event.pdp[1].date).toBeUndefined();
-    expect(scope.event.pdp[1].price).toBe(scope.event.pdp[0].price);
+    expect(scope.event.pdtps.length).toBe(2);
+    expect(scope.event.pdtps[1].place).toBe(scope.event.pdtps[0].place);
+    expect(scope.event.pdtps[1].time).toBe(scope.event.pdtps[0].time);
+    expect(scope.event.pdtps[1].date).toBeUndefined();
+    expect(scope.event.pdtps[1].price).toBe(scope.event.pdtps[0].price);
   });
   
   it('should remove a place / date / price section', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
-    scope.event.pdp[0].date = new Date();
-    scope.addPdp(0);
-    var secondSection = scope.event.pdp[1];
+    scope.event.pdtps[0].date = new Date();
+    scope.addPdtp(0);
+    var secondSection = scope.event.pdtps[1];
     
-    scope.removePdp(0);
+    scope.removePdtp(0);
     
-    expect(scope.event.pdp.length).toBe(1);
-    expect(scope.event.pdp[0]).toBe(secondSection);
+    expect(scope.event.pdtps.length).toBe(1);
+    expect(scope.event.pdtps[0]).toBe(secondSection);
   });
   
   it('should allow to remove a place / date / price section', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
-    scope.addPdp(0);
+    scope.addPdtp(0);
     
-    expect(scope.isRemovePdpShown(scope.event.pdp[0])).toBeTruthy();
+    expect(scope.isRemovePdtpShown(scope.event.pdtps[0])).toBeTruthy();
   });
   
   it('should not allow to remove a place / date / price section if it is readonly', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
-    scope.event.pdp[0].readonly = true;
-    scope.addPdp(0);
+    scope.event.pdtps[0].readonly = true;
+    scope.addPdtp(0);
     
-    expect(scope.isRemovePdpShown(scope.event.pdp[0])).toBeFalsy();
+    expect(scope.isRemovePdtpShown(scope.event.pdtps[0])).toBeFalsy();
   });
   
   it('should not allow to remove a place / date / price section if there is only one', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     
-    expect(scope.isRemovePdpShown(scope.event.pdp[0])).toBeFalsy();
+    expect(scope.isRemovePdtpShown(scope.event.pdtps[0])).toBeFalsy();
   });
   
   it('should post event data and handle successful response having clicked save', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
     $httpBackend.expectPOST('event.json').respond({success: true, messages:'Saved', id:2});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.expectGET('event/2.json').respond({title:'Mayday'});
     scope.saveEvent();
     $httpBackend.flush();
@@ -208,7 +208,7 @@ describe('Controller: PanelCtrl', function () {
   it('should post event data and handle unsuccessful response having clicked save', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
@@ -224,7 +224,7 @@ describe('Controller: PanelCtrl', function () {
   it('should post event data and handle unexpected error having clicked save', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
@@ -240,7 +240,7 @@ describe('Controller: PanelCtrl', function () {
   it('should not post event data if form is invalid', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     scope.form.event = {$invalid: true};
     
@@ -267,13 +267,13 @@ describe('Controller: PanelCtrl', function () {
   it('should upload picture and post event data', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     var spiedUploader = spyUploader();
 
     $httpBackend.expectPOST('event.json').respond({success: true, messages:'Saved', id:2});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.expectGET('event/2.json').respond({title:'Mayday'});
     scope.saveEvent();
     scope.uploader.trigger('completeall');
@@ -285,7 +285,7 @@ describe('Controller: PanelCtrl', function () {
   it('should not post event data if could not upload picture, display received response', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     var spiedUploader = spyUploader();
@@ -303,7 +303,7 @@ describe('Controller: PanelCtrl', function () {
   it('should not post event data if could not upload picture, display default response', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     var spiedUploader = spyUploader();
@@ -334,7 +334,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.expectGET('events/archv/666.json').respond(ISSUED_RESPONSE);
     $httpBackend.flush();
     
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.expectGET('event/1.json').respond({title:'Mayday'});
     scope.loadExistingEvent(1);
     $httpBackend.flush();
@@ -350,7 +350,7 @@ describe('Controller: PanelCtrl', function () {
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
     $httpBackend.expectGET('events/archv/666.json').respond(ISSUED_RESPONSE);
     $httpBackend.flush();
-    $httpBackend.expectGET('metadata/categories.json').respond(CATEGORIES_RESPONSE);
+    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.expectGET('event/1.json').respond({title:'Mayday'});
     scope.loadExistingEvent(1);
     $httpBackend.flush();

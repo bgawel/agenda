@@ -1,31 +1,11 @@
 <table class="form-inline">
   <tr>
-    <td class="control-group" ng-class="{'error': invalidHours}">
-      <div class="input-group">       
-        <span class="input-group-btn"> 
-            <button ng-click="incrementHours()" class="btn btn-default inc right" type="button">
-              <span class="glyphicon glyphicon-chevron-up"></span>
-            </button> 
-            <button ng-click="decrementHours()" class="btn btn-default inc left right" type="button">
-              <span class="glyphicon glyphicon-chevron-down"></span>
-            </button> 
-        </span>
-        <input type="text" ng-model="hours" ng-change="updateHours()" class="form-control" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2"/>
-      </div>
+    <td ng-class="{'error': invalidHours}">
+      <input type="text" ng-model="hours" ng-change="updateHours()" class="form-control" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2"/>
     </td>
     <td>:</td>
-    <td class="control-group" ng-class="{'error': invalidMinutes}">
-      <div class="input-group">
-        <input type="text" ng-model="minutes" ng-change="updateMinutes()" class="form-control" ng-mousewheel="incrementMinutes()" ng-readonly="readonlyInput" maxlength="2"/>
-        <span class="input-group-btn"> 
-            <button ng-click="incrementMinutes()" class="btn btn-default inc left right" type="button">
-              <span class="glyphicon glyphicon-chevron-up"></span>
-            </button> 
-            <button ng-click="decrementMinutes()" class="btn btn-default inc left" type="button">
-              <span class="glyphicon glyphicon-chevron-down"></span>
-            </button> 
-        </span>
-      </div>
+    <td ng-class="{'error': invalidMinutes}">
+      <input type="text" ng-model="minutes" ng-change="updateMinutes()" class="form-control" ng-mousewheel="incrementMinutes()" ng-readonly="readonlyInput" maxlength="2"/>
     </td>    
   </tr>
 </table>

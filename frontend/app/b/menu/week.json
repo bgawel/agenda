@@ -1,0 +1,56 @@
+{
+	"entries":
+		[
+				{
+		        "name": "", 
+		        "abbr": "", 
+		        "id": "date"
+		    },
+		    {
+		        "name": "wszystkie", 
+		        "abbr": "", 
+		        "id": "all"
+		    }, 
+		    {
+		        "name": "dziś", 
+		        "abbr": "CZ", 
+		        "id": "01-02-2014"
+		    }, 
+		    {
+		        "name": "2", 
+		        "abbr": "PT", 
+		        "id": "02-02-2014"
+		    }, 
+		    {
+		        "name": "3", 
+		        "abbr": "SO", 
+		        "id": "03-02-2014"
+		    }, 
+		    {
+		        "name": "4", 
+		        "abbr": "N", 
+		        "id": "04-02-2014"
+		    }, 
+		    {
+		        "name": "5", 
+		        "abbr": "PN", 
+		        "id": "05-02-2014"
+		    },
+		    {
+		        "name": "6", 
+		        "abbr": "WT", 
+		        "id": "06-02-2014"
+		    },
+		    {
+		        "name": "7", 
+		        "abbr": "ŚR", 
+		        "id": "07-02-2014"
+		    },
+		    {
+		        "name": "", 
+		        "abbr": "", 
+		        "id": "future"
+		    }
+		],
+	"activeIndex": 2
+}

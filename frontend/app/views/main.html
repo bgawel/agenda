@@ -57,8 +57,8 @@
       <div>
         <div class="nav-by-day">
       	    <ul class="nav nav-tabs">
-              <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch on="day.abbr">
-                <a ng-switch-when="" ng-click="changeEventsDay($index)" href class="not-day">
+              <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch on="day.id">
+                <a ng-switch-when="all" ng-click="changeEventsDay($index)" href class="not-day">
                   {{day.name}}
                 </a>
                 <a ng-switch-when="future" ng-click="changeEventsDay($index)" href class="not-day">
@@ -94,8 +94,9 @@
             class="event clearfix">
           <div class="col-xs-10">
             <h4 id="event{{event.id}}"><a href ng-click="displayEvent(event.id, true)">{{event.title}}</a>, 
-              <small>
-                <a href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
+              <small ng-switch on="event.whoAbout">
+                <a ng-switch-default href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
+                <p ng-switch-when="">{{event.whoName}}</p>
               </small>
             </h4>
             <img ng-if="event.pic" ng-src="{{event.pic}}" width="95" height="84">
@@ -110,7 +111,7 @@
           </div>
           <div class="col-xs-2">
             <p class="category">{{event.catName}}</p>
-            <p ng-if="!weekMenu.active.abbr || weekMenu.active.abbr === 'future'" class="date">
+            <p ng-if="weekMenu.active.id === 'all' || weekMenu.active.abbr === 'future'" class="date">
               <b>{{event.dateTime | date:'dd-MM-yyyy'}}</b>
             </p>
             <p class="time"><b>{{event.dateTime | date:'HH:mm'}} </b></p>

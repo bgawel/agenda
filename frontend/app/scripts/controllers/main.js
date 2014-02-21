@@ -2,8 +2,8 @@
 
 angular.module('frontendApp')
   .controller('MainCtrl',
-      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', 'Metadata', 'Events',
-      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, Metadata, Events) {
+      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', 'Menu', 'Events',
+      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, Menu, Events) {
     $scope.toggleRightPanel = function () {
       $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
     };
@@ -70,7 +70,7 @@ angular.module('frontendApp')
     $scope.init = function() {
       $scope.institutions = initializeInstitutions();
       $scope.orderEventsBy = initializeOrder();
-      $q.all([Metadata.categoriesMenu(), Metadata.weekMenu()]).then(function(results) {
+      $q.all([Menu.categories(), Menu.week()]).then(function(results) {
         $scope.categories = results[0].entries;
         $scope.changeCategory(initializeCategoryIndex(results[0]));
         $scope.weekMenu = results[1].entries;
