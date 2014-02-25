@@ -16,7 +16,7 @@ class Event {
     Date dateCreated
     Date lastUpdated
     
-    Boolean isOneTimeType
+    Boolean oneTimeType
     
     List pdtps = []
     static hasMany = [pdtps: Pdtp]
@@ -28,7 +28,7 @@ class Event {
         more maxSize: 64, nullable: true
         description maxSize: 1800, nullable: true
         category nullable: false
-        isOneTimeType nullable: false
+        oneTimeType nullable: false
         pdtps minSize: 1, lazy: false
     }
     

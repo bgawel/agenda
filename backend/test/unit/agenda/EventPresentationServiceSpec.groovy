@@ -29,9 +29,11 @@ class EventPresentationServiceSpec extends Specification {
         }
 
         when:
-        def events = service.showByDate(now, 'future')
+        def result = service.showByDate(now, 'future')
 
         then:
+        result.categories == ['badgesPerCategory']
+        def events = result.events
         events.size() == 4
         events[0].title == 'title1'
         events[0].pic == 'pic1'
@@ -80,7 +82,7 @@ class EventPresentationServiceSpec extends Specification {
         }
 
         when:
-        def events = service.showByDate(now, 'all')
+        def events = service.showByDate(now, 'all').events
 
         then:
         events.size() == 4
@@ -97,7 +99,7 @@ class EventPresentationServiceSpec extends Specification {
         }
 
         when:
-        def events = service.showByDate(now, '2014-01-02')
+        def events = service.showByDate(now, '2014-01-02').events
 
         then:
         events.size() == 1
@@ -124,7 +126,7 @@ class EventPresentationServiceSpec extends Specification {
         }
 
         when:
-        def events = service.showByDate(now, '2014-01-03')
+        def events = service.showByDate(now, '2014-01-03').events
 
         then:
         events.size() == 1
@@ -138,7 +140,7 @@ class EventPresentationServiceSpec extends Specification {
         0 * service.pdtpQueryService.findAllFor(_)
 
         when:
-        def events = service.showByDate(now, '2014-01-01')
+        def events = service.showByDate(now, '2014-01-01').events
 
         then:
         !events
@@ -211,41 +213,43 @@ class EventPresentationServiceSpec extends Specification {
         def futureDate = dateTimeToDateOnly(now.plusDays(10))
         def time = dateTimeToTimeOnly(now)
         def event1 = new Event(title: 'title1', pic: 'pic1', more: 'more1', description: 'desc1', category: cat,
-            institution: inst1, isOneTimeType: true)
+            institution: inst1, oneTimeType: true)
         def fd = futureDate
         (1..4).each { index -> // place, time, price the same, only first 3 will be displayed
             event1.addToPdtps(new Pdtp(place: '1-place1', fromDate: fd.toDate(), toDate: fd.toDate(),
-                time: time.toDate(), price: '1-price1'))
+                startTime: time.toDate(), price: '1-price1'))
             fd = futureDate.plusDays(index)
         }
         event1.save()
         def event2 = new Event(title: 'title2', pic: 'pic2', more: 'more2', description: 'desc2', category: cat,
-            institution: inst1, isOneTimeType: false)
+            institution: inst1, oneTimeType: false)
         fd = futureDate
         (1..2).each { index ->  // place, time, price different, only first one will be displayed
             event2.addToPdtps(new Pdtp(place: "2-place$index", fromDate: now.minusDays(5).toDate(), toDate: fd.toDate(),
-                time: time.plusHours(index).toDate(), price: "2-price$index", timeDescription: "timeDescription$index"))
+                startTime: time.plusHours(index).toDate(), price: "2-price$index", timeDescription: "timeDescription$index"))
             fd = futureDate.plusDays(index)
         }
         event2.save()
         def event3 = new Event(title: 'title3', pic: 'pic3', more: 'more3', description: 'desc3', category: cat,
-            institution: inst1, isOneTimeType: true)
+            institution: inst1, oneTimeType: true)
         fd = futureDate
         (1..3).each { index -> // different time, all will be displayed
             event3.addToPdtps(new Pdtp(place: '3-place1', fromDate: fd.toDate(), toDate: fd.toDate(),
-                time: index == 3 ? time.minusHours(1).toDate() : time.toDate(), price: '3-price1'))
+                startTime: index == 3 ? time.minusHours(1).toDate() : time.toDate(), price: '3-price1'))
             fd = futureDate.plusDays(index)
         }
         event3.save()
         def event4 = new Event(id:4, title: 'title4', pic: 'pic4', more: 'more4', description: 'desc4', category: cat,
-            institution: inst1, isOneTimeType: false)
+            institution: inst1, oneTimeType: false)
         // fromDate = toDate for tmp event
         event4.addToPdtps(new Pdtp(place: '4-place1', fromDate: futureDate.toDate(), toDate: futureDate.toDate(),
-            time: time.toDate(), price: '4-price1', timeDescription: 'timeDescription'))
+            startTime: time.toDate(), price: '4-price1', timeDescription: 'timeDescription'))
         event4.save()
         events = [event1, event2, event3, event4]
         service.pdtpQueryService = Mock(PdtpQueryService)
         service.eventQueryService = Mock(EventQueryService)
         service.weekMenuService = new WeekMenuService()
+        service.institutionMenuService = Mock(InstitutionMenuService)
+        service.institutionMenuService.calculateBadgesPerCategory(_) >> ['badgesPerCategory']
     }
 }

@@ -7,14 +7,14 @@ import grails.converters.JSON
 
 class EventPresentationController {
 
-    def eventPresentationService
+    def eventPresentationFacadeService
 
     def byDate() {
         if (params.format != 'json') {
             render status: UNSUPPORTED_MEDIA_TYPE.value
         } else {
             if (params.date) {
-                render eventPresentationService.showByDate(params.date, params.category, params.inst) as JSON
+                render eventPresentationFacadeService.showByDate(params.date, params.category, params.inst) as JSON
             } else {
                 render status: BAD_REQUEST.value
             }
@@ -26,7 +26,7 @@ class EventPresentationController {
             render status: UNSUPPORTED_MEDIA_TYPE.value
         } else {
             if (params.id) {
-                def event = eventPresentationService.showByPdtp(params.long(id))
+                def event = eventPresentationFacadeService.showByPdtp(params.id as long)
                 if (event) {
                     render event as JSON
                 } else {
@@ -43,7 +43,7 @@ class EventPresentationController {
             render status: UNSUPPORTED_MEDIA_TYPE.value
         } else {
             if (params.id) {
-                render eventPresentationService.submittedEvents(params.long(params.id)) as JSON
+                render eventPresentationFacadeService.submittedEvents(params.id as long) as JSON
             } else {
                 render status: BAD_REQUEST.value
             }

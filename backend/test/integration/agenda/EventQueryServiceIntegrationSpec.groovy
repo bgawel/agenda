@@ -21,9 +21,9 @@ class EventQueryServiceIntegrationSpec extends Specification {
         def inst1 = new Institution(name: 'name-inst1', email: 'inst1@email.com', password: 'password1').save()
         (1..2).each { index ->
             def event = new Event(title: "title$index", description: 'desc', category: cat,
-                institution: inst1, isOneTimeType: true)
+                institution: inst1, oneTimeType: true)
             event.addToPdtps(new Pdtp(place: 'place', fromDate: new Date(), toDate: new Date(),
-                time: new Date(), price: 'price'))
+                startTime: new Date(), price: 'price'))
             event.save()
         }
         sessionFactory.currentSession.clear()

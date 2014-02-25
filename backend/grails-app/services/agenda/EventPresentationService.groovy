@@ -16,15 +16,16 @@ import static org.joda.time.DateTimeConstants.DAYS_PER_WEEK
 
 class EventPresentationService {
 
-    private static final MINUS_HOURS_TO_SHOW_TODAYS_EVENTS = 1
-    private static final MAX_DISPLAYED_PDTPS_PER_EVENT_OF_ONE_TIME_TYPE = 3
-    private static final MAX_DISPLAYED_PDTPS_PER_EVENT_OF_TMP_TYPE = 1
+    def minusHoursToShowTodaysEvents = 1
+    def maxDisplayedPdtpsForOneTimeType = 3
+    def maxDisplayedPdtpsForTmpType = 1
 
     def weekMenuService
+    def institutionMenuService
     def pdtpQueryService
     def eventQueryService
 
-    def showByDate(requestedDate, categoryId, instId) { // TODO bgawel: categoryId, instId currently ignored
+    def showByDate(requestedDate) {
         showByDate(currentDateTime, requestedDate)
     }
 
@@ -45,7 +46,8 @@ class EventPresentationService {
         } else {
             events = showByCalendar(now, requestedDate)
         }
-        events
+        def badgesPerCategory = institutionMenuService.calculateBadgesPerCategory(events)
+        [categories: badgesPerCategory, events: events]
     }
 
     private showByFuture(now) {
@@ -92,8 +94,8 @@ class EventPresentationService {
                 firstPdtpOfEvent = pdtp
                 pdtpsOfEventToShow = [firstPdtpOfEvent]
                 currentEventId = firstPdtpOfEvent.event.id
-                maxPdtpsPerEvent = firstPdtpOfEvent.event.isOneTimeType ?
-                    MAX_DISPLAYED_PDTPS_PER_EVENT_OF_ONE_TIME_TYPE : MAX_DISPLAYED_PDTPS_PER_EVENT_OF_TMP_TYPE
+                maxPdtpsPerEvent = firstPdtpOfEvent.event.oneTimeType ?
+                    maxDisplayedPdtpsForOneTimeType : maxDisplayedPdtpsForTmpType
                 moreToShow = false
                 differentPlaces = false
                 differentPrices = false
@@ -111,7 +113,7 @@ class EventPresentationService {
                     ++indexOfPdtp
                     if (indexOfPdtp < maxPdtpsPerEvent) {
                         pdtpsOfEventToShow << pdtp
-                        if (!differentTime && (firstPdtpOfEvent.time != pdtp.time)) {
+                        if (!differentTime && (firstPdtpOfEvent.startTime != pdtp.startTime)) {
                             differentTime = true
                         }
                     } else {
@@ -140,14 +142,15 @@ class EventPresentationService {
 
     private makeEntryForShowByCalendar(pdtp) {
         makeCommonPartOfEntryForShow(pdtp, false) +
-            [place: pdtp.place, price: pdtp.price, displayTime: pdtp.timeDescription ?: printJdkTime(pdtp.time)]
+            [place: pdtp.place, price: pdtp.price, displayTime: pdtp.timeDescription ?: printJdkTime(pdtp.startTime)]
     }
 
     private makeCommonPartOfEntryForShow(pdtp, moreToShow) {
         def event = pdtp.event
         [id: pdtp.id, title: event.title, pic: event.pic, more: event.more, desc: event.description,
-            whoName: event.institution.name, whoAbout: makeDescOfInstitution(event.institution),
-            catName: event.category.name, dateTime: printDateTimeOfEventToSort(pdtp), moreToShow: moreToShow]
+            whoId:event.institution.id, whoName: event.institution.name,
+            whoAbout: makeDescOfInstitution(event.institution), catId:event.category.id, catName: event.category.name,
+            dateTime: printDateTimeOfEventToSort(pdtp), moreToShow: moreToShow]
     }
 
     private makeDescOfInstitution(institution) {
@@ -165,18 +168,18 @@ class EventPresentationService {
     }
 
     private printDateTimeOfEventToSort(pdtp) {
-        jdkDateAndTimeToString(pdtp.fromDate, pdtp.time)
+        jdkDateAndTimeToString(pdtp.fromDate, pdtp.startTime)
     }
 
     private printDateTimeOfEventForShowByFutureOrAll(pdtps, differentTime) {
         def dateTime = new StringBuilder()
         def firstPdtp = pdtps[0]
-        if (firstPdtp.event.isOneTimeType && !differentTime) {
+        if (firstPdtp.event.oneTimeType && !differentTime) {
             dateTime <<= printDateOfEventForShowByFutureOrAll(firstPdtp)
             (1..<pdtps.size()).each { i ->
                 dateTime <<= ", ${printDateOfEventForShowByFutureOrAll(pdtps[i])}"
             }
-            dateTime <<= " o ${printJdkTime(firstPdtp.time)}"
+            dateTime <<= " o ${printJdkTime(firstPdtp.startTime)}"
         } else {
             dateTime <<= printDateTimeOfEventForShowByFutureOrAll(firstPdtp)
             (1..<pdtps.size()).each { i ->
@@ -216,9 +219,9 @@ class EventPresentationService {
     private makeDateTimeToDisplay(pdtp, dateMaker) {
         def date, time
         def fromDateAsString = dateMaker(pdtp.fromDate)
-        if (pdtp.event.isOneTimeType) {
+        if (pdtp.event.oneTimeType) {
             date = fromDateAsString
-            time = printJdkTime(pdtp.time)
+            time = printJdkTime(pdtp.startTime)
         } else {
             date = pdtp.fromDate == pdtp.toDate ? fromDateAsString : "$fromDateAsString - ${dateMaker(pdtp.toDate)}"
             time = pdtp.timeDescription
@@ -227,7 +230,7 @@ class EventPresentationService {
     }
 
     private timeOf(date) {
-        dateTimeToTimeOnly(date.minusHours(MINUS_HOURS_TO_SHOW_TODAYS_EVENTS))
+        dateTimeToTimeOnly(date.minusHours(minusHoursToShowTodaysEvents))
     }
 
     private dateOf(date) {
