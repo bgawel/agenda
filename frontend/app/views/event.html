@@ -10,7 +10,7 @@
       <p>Przepraszamy, ale nie możemy wyświetlić szczegółów tego wydarzenia, ponieważ zostało ono usunięte</p>
     </alert>
     <div class="event clearfix" ng-hide="eventGone">
-      <div class="col-xs-10">
+      <div class="col-xs-9">
         <h4><b>{{event.title}}</b>, 
           <small>
             <a href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
@@ -26,7 +26,7 @@
           <p>{{event.desc}}</p>
         </div>
       </div>
-      <div class="col-xs-2">
+      <div class="col-xs-3">
         <p class="date">
           <b>{{event.dateTime | date:'dd-MM-yyyy'}}</b>
         </p>

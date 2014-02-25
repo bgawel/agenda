@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('PanelCtrl', ['$scope', '$routeParams', 'Inst', 'Category', 'Events', 'Event', 'MsgPanel', 'Uploader',
-              function ($scope, $routeParams, Inst, Category, Events, Event, MsgPanel, Uploader) {
+  .controller('PanelCtrl', ['$scope', '$routeParams', '$filter', 'Inst', 'Category', 'Events', 'Event', 'MsgPanel', 'Uploader',
+              function ($scope, $routeParams,  $filter, Inst, Category, Events, Event, MsgPanel, Uploader) {
 
     $scope.loadInst = function() {
       $scope.partial = 'panelInst.html';
@@ -32,6 +32,8 @@ angular.module('frontendApp')
       $scope.cancelClicked = undefined;
       $scope.event = {id: formId, selectedPic:null};
       $scope.evtMsgPanel = {show:false, messages:[]};
+      $scope.oneTimeType = true;
+      $scope.pdtpTypePartial = 'panelEventOneTime.html';
       $scope.isMeridian = false;
       $scope.minDate = new Date();
       $scope.dateOptions = {
@@ -78,6 +80,7 @@ angular.module('frontendApp')
           pdtp.time = previousPdtp.time;
           pdtp.price = previousPdtp.price;
           pdtp.place = previousPdtp.place;
+          pdtp.timeDescription = previousPdtp.timeDescription;
         }
         $scope.event.pdtps.splice(index+1, 0, pdtp);
       };
@@ -128,6 +131,19 @@ angular.module('frontendApp')
           postEvent();
         }
       };
+      
+      $scope.isOneTimeType = function(is) {
+        $scope.event.oneTimeType = is
+        $scope.pdtpTypePartial = is ? 'panelEventOneTime.html' : 'panelEventTmp.html'
+        if (!is) {
+          var pdtp
+          for (var i=0; i<$scope.event.pdtps.length; ++i) {
+            pdtp = $scope.event.pdtps[i];
+            pdtp.fromDate = pdtp.toDate;
+            pdtp.timeDescription = $filter('date')($scope.event.time, 'dd MMMM yyyy');
+          }
+        }
+      } 
     };
     
     $scope.loadNewEvent = function() {

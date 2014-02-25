@@ -67,37 +67,24 @@
   </div>
   <div class="form-group">
     <label class="col-sm-2 control-label">Typ wydarzenia *</label>
-    <div class="btn-group col-sm-10" data-toggle="buttons">
-      <label class="btn btn-primary btn-sm active">
-        <input type="radio" name="options" id="option1"> jednorazowe (np. przedstawienie, koncert, film)
-      </label>
-      <label class="btn btn-primary btn-sm">
-        <input type="radio" name="options" id="option2"> tymczasowe (np. wystawa, festiwal, targi)
-      </label>
+    <div ng-if="event.titleReadonly" class="col-sm-10">
+      <input type="text" class="form-control" readonly
+        value="{{event.oneTimeType ? 'jednorazowe (np. przedstawienie, koncert, film)' : 'tymczasowe (np. wystawa, festiwal, targi) * wchodzisz, kiedy chcesz'}}"/>
     </div>
-    <p class="help-block col-sm-offset-2 col-sm-10">Sprawdź obie opcje i wybierz dogodniejszą dla wydarzenia</p>
+    <div ng-if="!event.titleReadonly">
+      <div class="btn-group col-sm-10" data-toggle="buttons">
+        <label class="btn btn-primary btn-sm" ng-class="{active:(!event.oneTimeType)}" ng-click="isOneTimeType(true)">
+          <input type="radio" name="eventType" id="oneTimeType"> jednorazowe (np. przedstawienie, koncert, film)
+        </label>
+        <label class="btn btn-primary btn-sm" ng-class="{active:(event.oneTimeType)}" ng-click="isOneTimeType(false)">
+          <input type="radio" name="eventType" id="tmpType"> tymczasowe (np. wystawa, festiwal, targi) * wchodzisz, kiedy chcesz
+        </label>
+      </div>
+      <p class="help-block col-sm-offset-2 col-sm-10">Sprawdź obie opcje i wybierz dogodniejszą dla wydarzenia</p>
+    </div>
   </div>
   <div class="event-pdtp" ng-repeat="pdtp in event.pdtps">
-    <div class="form-group">
-      <label for="eventDate{{$index}}" class="col-sm-2 control-label">Kiedy *</label>
-      <div class="col-sm-4 input-group" ng-switch on="pdtp.readonly">
-        <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.date | date:'dd MMMM yyyy'}}" readonly />
-        <input ng-switch-default type="text" class="form-control" id="eventDate{{$index}}"
-          datepicker-popup="dd MMMM yyyy" ng-model="pdtp.date" is-open="pdtp.opened"
-          min="minDate" datepicker-options="dateOptions" required placeholder="np. 21 grudnia 2014"
-          current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"/> 
-        <span ng-switch-default class="input-group-btn">
-          <button class="btn btn-default" ng-click="openCalendar($event, pdtp)">
-            <i class="glyphicon glyphicon-calendar"></i>
-          </button>
-        </span>
-      </div>  
-      <label for="eventTime{{$index}}" class="col-sm-2 control-label">O godzinie *</label>
-      <div class="col-sm-2" id="eventTime{{$index}}" ng-model="pdtp.time" ng-switch on="pdtp.readonly">
-        <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.time | date:'HH:mm'}}" readonly />
-        <timepicker ng-switch-default show-meridian="isMeridian"/>
-      </div>
-    </div>
+    <div ng-include="'views/' + pdtpTypePartial" />
     <div class="form-group">
       <label for="eventPlace{{$index}}" class="col-sm-2 control-label">Gdzie *</label>
       <div class="col-sm-8">
@@ -113,49 +100,19 @@
          ng-model="pdtp.price" ng-readonly="pdtp.readonly" maxlength="64"
          placeholder="np. 40zł (norm.), 30zł (ulg.)" />
       </div>  
-    </div>     
+    </div>
     <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-8">
+      <div class="col-sm-offset-2 col-sm-10">
         <a class="next" href ng-click="addPdtp($index)">Następne wystąpienie >></a>
         <a class="next pull-right" href ng-click="removePdtp($index)" 
-          ng-show="isRemovePdtpShown(pdtp)">Usuń</a>
+            ng-show="isRemovePdtpShown(pdtp)">Usuń</a>
       </div>
-    </div>
-  </div>
-  <div>
-  <div class="form-group">
-      <label for="eventDateFrom" class="col-sm-2 control-label">Kiedy *</label>
-      <div class="col-sm-4 input-group" ng-switch on="pdtp.readonly">
-        <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.date | date:'dd MMMM yyyy'}}" readonly />
-        <input ng-switch-default type="text" class="form-control" id="eventDateFrom"
-          datepicker-popup="dd MMMM yyyy" ng-model="pdtp.date" is-open="pdtp.opened"
-          min="minDate" datepicker-options="dateOptions" required placeholder="np. 21 grudnia 2014"
-          current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"/> 
-        <span ng-switch-default class="input-group-btn">
-          <button class="btn btn-default" ng-click="openCalendar($event, pdtp)">
-            <i class="glyphicon glyphicon-calendar"></i>
-          </button>
-        </span>
-      </div>  
-      <label for="eventTime" class="col-sm-2 control-label">do *</label>
-      <div class="col-sm-4 input-group" ng-switch on="pdtp.readonly">
-        <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.date | date:'dd MMMM yyyy'}}" readonly />
-        <input ng-switch-default type="text" class="form-control" id="eventDateFrom"
-          datepicker-popup="dd MMMM yyyy" ng-model="pdtp.date" is-open="pdtp.opened"
-          min="minDate" datepicker-options="dateOptions" required placeholder="np. 21 grudnia 2014"
-          current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"/> 
-        <span ng-switch-default class="input-group-btn">
-          <button class="btn btn-default" ng-click="openCalendar($event, pdtp)">
-            <i class="glyphicon glyphicon-calendar"></i>
-          </button>
-        </span>
-      </div>
-    </div>
+    </div>    
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-default" ng-click="saveEvent()">Zapisz</button>
       <a class="btn btn-default" ng-click="cancelClicked()" ng-show="cancelClicked!==undefined">Anuluj</a>
     </div>
-  </div>       
+  </div>   
 </form>

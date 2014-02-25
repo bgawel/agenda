@@ -1,0 +1,20 @@
+<div class="form-group">
+  <label for="eventDate{{$index}}" class="col-sm-2 control-label">Kiedy *</label>
+  <div class="col-sm-4 input-group" ng-switch on="pdtp.readonly">
+    <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.toDate | date:'dd MMMM yyyy'}}" readonly />
+    <input ng-switch-default type="text" class="form-control" id="eventDate{{$index}}"
+      datepicker-popup="dd MMMM yyyy" ng-model="pdtp.toDate" is-open="pdtp.opened"
+      min="minDate" datepicker-options="dateOptions" required placeholder="np. 21 grudnia 2014"
+      current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"/> 
+    <span ng-switch-default class="input-group-btn">
+      <button class="btn btn-default" ng-click="openCalendar($event, pdtp)">
+        <i class="glyphicon glyphicon-calendar"></i>
+      </button>
+    </span>
+  </div>  
+  <label for="eventTime{{$index}}" class="col-sm-2 control-label">O godzinie *</label>
+  <div class="col-sm-2" id="eventTime{{$index}}" ng-model="pdtp.time" ng-switch on="pdtp.readonly">
+    <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.time | date:'HH:mm'}}" readonly />
+    <timepicker ng-switch-default show-meridian="isMeridian"/>
+  </div>
+</div>

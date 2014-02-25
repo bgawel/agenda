@@ -1,0 +1,45 @@
+<div class="form-group">
+  <label for="eventDateFrom" class="col-sm-2 control-label">Od *</label>
+  <div class="col-sm-4 input-group" ng-switch on="pdtp.readonly">
+    <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.fromDate | date:'dd MMMM yyyy'}}" readonly />
+    <input ng-switch-default type="text" class="form-control" id="eventDateFrom{{$index}}"
+      datepicker-popup="dd MMMM yyyy" ng-model="pdtp.fromDate" is-open="pdtp.opened"
+      min="minDate" max="pdtp.toDate" datepicker-options="dateOptions" required placeholder="np. 21 grudnia 2014"
+      current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"/> 
+    <span ng-switch-default class="input-group-btn">
+      <button class="btn btn-default" ng-click="openCalendar($event, pdtp)">
+        <i class="glyphicon glyphicon-calendar"></i>
+      </button>
+    </span>
+  </div>  
+  <label for="eventDateTo" class="col-sm-2 control-label">do *</label>
+  <div class="col-sm-4 input-group" ng-switch on="pdtp.readonly">
+    <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.toDate | date:'dd MMMM yyyy'}}" readonly />
+    <input ng-switch-default type="text" class="form-control" id="eventDateTo{{$index}}"
+      datepicker-popup="dd MMMM yyyy" ng-model="pdtp.toDate" is-open="pdtp.opened"
+      min="pdtp.fromDate" datepicker-options="dateOptions" required placeholder="np. 21 grudnia 2014"
+      current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"/> 
+    <span ng-switch-default class="input-group-btn">
+      <button class="btn btn-default" ng-click="openCalendar($event, pdtp)">
+        <i class="glyphicon glyphicon-calendar"></i>
+      </button>
+    </span>
+  </div>
+</div>
+<div class="form-group">
+  <label for="eventTimeDesc{{$index}}" class="col-sm-2 control-label">O godzinie *</label>
+  <div class="col-sm-10">
+    <textarea class="form-control" id="eventTimeDesc{{$index}}" rows="2"
+      maxlength="128" ng-model="pdtp.timeDescription" placeholder="np. wernisaż: 7 lutego, piątek, o godz. 18:00, pon.-pią.: 13.00-20.00, sob.: 11.00-15.00" />
+  </div>
+</div>
+<div class="form-group">
+  <label for="eventTime{{$index}}" class="col-sm-2 control-label">Najwcześniej o *</label>
+  <div class="col-sm-2" id="eventTime{{$index}}" ng-model="pdtp.time" ng-switch on="pdtp.readonly">
+    <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.time | date:'HH:mm'}}" readonly />
+    <timepicker ng-switch-default show-meridian="isMeridian"/>
+  </div>
+  <div class="col-sm-offset-2 col-sm-10">
+    <p class="help-block">Podaj najwcześniejszą godzinę rozpoczęcia wydarzenia w podanym terminie (w powyższym przykładzie: 11:00)</p>
+  </div>
+</div>
