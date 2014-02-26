@@ -68,6 +68,7 @@ angular.module('frontendApp')
     };
     
     $scope.init = function() {
+      $scope.loadingEvents = true;
       $scope.institutions = initializeInstitutions();
       $scope.orderEventsBy = initializeOrder();
       $q.all([Menu.categories(), Menu.week()]).then(function(results) {
@@ -140,7 +141,6 @@ angular.module('frontendApp')
       $scope.events = [];
       $scope.institutions = {};
       fetchEventsByDay(activeDay, activeCategory, activeInstitution);
-      scrollToEventIfNeeded();
     };
     var activateEventsDay = function(dayIndex) {
       if ($scope.weekMenu.active !== undefined) {
@@ -150,7 +150,7 @@ angular.module('frontendApp')
       activeDay.ngClass = 'active';
       activeDay.index = dayIndex;
       if (activeDay.abbr === DATE_ABBR) {
-        activeDay.id = $filter('date')($scope.weekMenu.calendar.value, 'dd-MM-yyyy');
+        activeDay.id = $filter('date')($scope.weekMenu.calendar.value, 'yyyy-MM-dd');
       } else {
         $scope.weekMenu.calendar.value = null;
       }
@@ -167,11 +167,13 @@ angular.module('frontendApp')
     };
     var fetchEventsByDay = function(day, category, institution) {
       Events.byDate(day.id, category.id, institution.id).then(function(data) {
-        $scope.events = data.events;
         fillBadgesAndInstitutionsOfCategories(data.categories);
         restoreActiveInstitutionOfCategory(institution.value, category);
         fillNewestEventsIfPresent(data);
         fillComingSoonEventsIfPresent(data);
+        $scope.loadingEvents = false;
+        $scope.events = data.events;
+        scrollToEventIfNeeded();
       });
     };
     var restoreActiveInstitutionOfCategory = function(institution, category) {

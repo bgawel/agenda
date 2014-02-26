@@ -57,7 +57,7 @@
       <div>
         <div class="nav-by-day">
       	    <ul class="nav nav-tabs">
-              <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch on="day.id">
+              <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch on="day.abbr">
                 <a ng-switch-when="all" ng-click="changeEventsDay($index)" href class="not-day">
                   {{day.name}}
                 </a>
@@ -71,7 +71,7 @@
                     current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść">
                   <span class="glyphicon glyphicon-calendar">
                   </span>
-                  {{weekMenu.calendar.value | date:'dd MMM'}}
+                  {{weekMenu.calendar.value | date:'dd.MM'}}
                 </a>
                 <a ng-switch-default ng-click="changeEventsDay($index)" href>
                   <abbr>{{day.abbr}}</abbr><br/>{{day.name}}
@@ -89,14 +89,23 @@
           </ul>
         </div>
       </div>
+              <alert type="'info'">
+          Brak wydarzeń
+        </alert>
+      <div class="progress progress-striped  active ">
+    <div class="bar bar-info"></div>
+</div>
       <div class="row">
+        <alert type="'info'" ng-show="!loadingEvents && events.length === 0">
+          Brak wydarzeń
+        </alert>
         <div ng-repeat="event in events | filter:{catName: categories.filter.name, whoName: institutions.filter.name}:true | orderBy:orderEventsBy" 
             class="event clearfix">
-          <div class="col-xs-10">
+          <div class="col-xs-9">
             <h4 id="event{{event.id}}"><a href ng-click="displayEvent(event.id, true)">{{event.title}}</a>, 
               <small ng-switch on="event.whoAbout">
                 <a ng-switch-default href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
-                <p ng-switch-when="">{{event.whoName}}</p>
+                <span ng-switch-when="">{{event.whoName}}</span>
               </small>
             </h4>
             <img ng-if="event.pic" ng-src="{{event.pic}}" width="95" height="84">
@@ -109,25 +118,30 @@
               <p>{{event.desc}}</p>
             </div>
           </div>
-          <div class="col-xs-2">
-            <p class="category">{{event.catName}}</p>
-            <p ng-if="weekMenu.active.id === 'all' || weekMenu.active.abbr === 'future'" class="date">
-              <b>{{event.dateTime | date:'dd-MM-yyyy'}}</b>
-            </p>
-            <p class="time"><b>{{event.dateTime | date:'HH:mm'}} </b></p>
+          <div class="col-xs-3">
+            <p class="category text-right">{{event.catName}}</p>
+            <p class="displayDt text-right"><b>{{event.displayDt}}</b></p>
           </div>
         </div>     
       </div>
     </div>
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas right" id="sidebarRight" role="navigation">
-      <p ng-show="newest.length > 0">Najnowsze wpisy:</p>
-      <div class="list-group announcement">
-        <a ng-repeat="event in newest" href ng-click="displayEvent(event.id)" class="list-group-item">{{event.text}}</a>
-      </div>
       <p ng-show="soon.length > 0">Wkrótce:</p>
       <div class="list-group announcement">
-        <a ng-repeat="event in soon" href ng-click="displayEvent(event.id)" class="list-group-item">{{event.text}}</a>
+        <a ng-repeat="event in soon" href ng-click="displayEvent(event.id)" class="list-group-item">
+          <p>{{event.label}} {{event.title}}</p>
+          <p>{{event.desc}}</p>
+          <p>{{event.more}}</p>
+        </a>
+      </div>
+      <p ng-show="newest.length > 0">Najnowsze wpisy:</p>
+      <div class="list-group announcement">
+        <a ng-repeat="event in soon" href ng-click="displayEvent(event.id)" class="list-group-item">
+          <p>{{event.label}} {{event.title}}</p>
+          <p>{{event.desc}}</p>
+          <p>{{event.more}}</p>
+        </a>
       </div>
     </div><!--/span-->
   </div><!--/row-->

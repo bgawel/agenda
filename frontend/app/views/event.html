@@ -5,15 +5,16 @@
       <li class="active">{{event.catName}}</li>
     </ol>
   </div>
-  <div class="row">
-    <alert type="'danger'" ng-show="eventGone">
-      <p>Przepraszamy, ale nie możemy wyświetlić szczegółów tego wydarzenia, ponieważ zostało ono usunięte</p>
-    </alert>
-    <div class="event clearfix" ng-hide="eventGone">
+	<alert type="'danger'" ng-show="eventGone">
+    <p>Przepraszamy, ale nie możemy wyświetlić szczegółów tego wydarzenia, ponieważ zostało ono usunięte. <a href="#">Wróć</a></p>
+  </alert>
+  <div class="row" ng-hide="eventGone">
+    <div class="event clearfix">
       <div class="col-xs-9">
         <h4><b>{{event.title}}</b>, 
-          <small>
-            <a href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
+          <small ng-switch on="event.whoAbout">
+            <a ng-switch-default href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
+            <span ng-switch-when="">{{event.whoName}}</span>
           </small>
         </h4>
         <img ng-if="event.pic" ng-src="{{event.pic}}" width="95" height="84">
@@ -27,11 +28,32 @@
         </div>
       </div>
       <div class="col-xs-3">
-        <p class="date">
-          <b>{{event.dateTime | date:'dd-MM-yyyy'}}</b>
-        </p>
-        <p class="time"><b>{{event.dateTime | date:'HH:mm'}} </b></p>
+        <p><b>{{event.displayDate}}</b></p>
+        <p><b>{{event.displayTime}}</b></p>
       </div>
     </div>
   </div>
+  <div class="row" ng-hide="eventGone || pdtps.length === 0">
+    <div class="event clearfix">
+      <div class="col-xs-12">
+      <p>Pozostałe terminy wydarzenia:</p>
+      <ul>
+        <li ng-repeat="pdtp in event.pdtps">
+          <div class="col-xs-3">
+            {{pdtp.displayDate}}
+          </div>
+          <div class="col-xs-3">
+            {{pdtp.displayTime}}
+          </div>
+          <div class="col-xs-3">
+            {{pdtp.place}}
+          </div>
+          <div class="col-xs-3">
+            {{pdtp.price}}
+          </div>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </div>  
 </div>
