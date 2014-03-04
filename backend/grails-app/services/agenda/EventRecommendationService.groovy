@@ -11,7 +11,7 @@ class EventRecommendationService {
     def maxNewestToRecommend = 3
     def maxComingSoonToRecommend = 5
     def dayOffsetForCommingSoon = 1
-    def maxIndexOfDescToShowIfNoDot = 31
+    def maxSizeOfDescToShow = 64
     def entryComparator = new BeanComparator('fromDate')
 
     def pdtpQueryService
@@ -80,10 +80,12 @@ class EventRecommendationService {
         def description
         if (event.description) {
             def endOfSentenceIndex = event.description.indexOf('.')
-            if (endOfSentenceIndex > 0) {
+            if (endOfSentenceIndex > 0 && endOfSentenceIndex <= maxSizeOfDescToShow) {
                 description = event.description[0..endOfSentenceIndex - 1]
             } else {
-                description = event.description[0..Math.min(event.description.size() - 1, maxIndexOfDescToShowIfNoDot)]
+                def min = Math.min(event.description.size(), maxSizeOfDescToShow)
+                def endOfDesc = min == event.description.size() ? '' : '...'
+                description = "${event.description[0..min - 1]}$endOfDesc"
             }
             [desc: description]
         } else {

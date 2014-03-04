@@ -40,31 +40,31 @@ class EventPresentationServiceSpec extends Specification {
         events[0].more == 'more1'
         events[0].desc == 'desc1'
         events[0].whoName == 'name-inst1'
-        events[0].whoAbout == 'address1, www.example1.com, tel1'
+        events[0].whoAbout == 'address1, <a href="http://www.example1.com">www.example1.com</a>, tel1'
         events[0].catName == 'cat1'
         events[0].place == '1-place1'
         events[0].price == '1-price1'
         events[0].moreToShow
         events[0].dateTime == '2014-01-12T19:00'
-        events[0].displayDt == '12 sty (N), 13 sty (Pn), 14 sty (Wt) o 19:00'
+        events[0].displayDt == '12.01(n), 13.01(pn), 14.01(wt) o 19:00'
         events[1].title == 'title2'
         events[1].place == ''
         events[1].price == ''
         events[1].moreToShow
         events[1].dateTime == '2013-12-28T20:00'
-        events[1].displayDt == '28 gru (So) - 12 sty (N) o timeDescription1'
+        events[1].displayDt == '28.12(so) - 12.01(n) o timeDescription1'
         events[2].title == 'title3'
         events[2].place == '3-place1'
         events[2].price == '3-price1'
         !events[2].moreToShow
         events[2].dateTime == '2014-01-12T19:00'
-        events[2].displayDt == '12 sty (N) o 19:00, 13 sty (Pn) o 19:00, 14 sty (Wt) o 18:00'
+        events[2].displayDt == '12.01(n) o 19:00, 13.01(pn) o 19:00, 14.01(wt) o 18:00'
         events[3].title == 'title4'
         events[3].place == '4-place1'
         events[3].price == '4-price1'
         !events[3].moreToShow
         events[3].dateTime == '2014-01-12T19:00'
-        events[3].displayDt == '12 sty (N) o timeDescription'
+        events[3].displayDt == '12.01(n) o timeDescription'
     }
 
     def "should find events by 'all'"() {
@@ -108,13 +108,13 @@ class EventPresentationServiceSpec extends Specification {
         events[0].more == 'more4'
         events[0].desc == 'desc4'
         events[0].whoName == 'name-inst1'
-        events[0].whoAbout == 'address1, www.example1.com, tel1'
+        events[0].whoAbout == 'address1, <a href="http://www.example1.com">www.example1.com</a>, tel1'
         events[0].catName == 'cat1'
         events[0].place == '4-place1'
         events[0].price == '4-price1'
         !events[0].moreToShow
-        events[0].dateTime == '2014-01-12T19:00'    // because faked entry was returned
-        events[0].displayTime == 'timeDescription'
+        events[0].dateTime == '19:00'    // because faked entry was returned
+        events[0].displayDt== 'timeDescription'
     }
 
     def "should find events by calendar date"() {
@@ -130,8 +130,8 @@ class EventPresentationServiceSpec extends Specification {
 
         then:
         events.size() == 1
-        events[0].dateTime == '2014-01-12T19:00'    // because faked entry was returned
-        events[0].displayTime == '19:00'
+        events[0].dateTime == '19:00'    // because faked entry was returned
+        events[0].displayDt == '19:00'
     }
 
     def "should not find events if calendar date < now"() {
@@ -167,15 +167,14 @@ class EventPresentationServiceSpec extends Specification {
         event.more == 'more1'
         event.desc == 'desc1'
         event.whoName == 'name-inst1'
-        event.whoAbout == 'address1, www.example1.com, tel1'
+        event.whoAbout == 'address1, <a href="http://www.example1.com">www.example1.com</a>, tel1'
         event.catName == 'cat1'
         event.place == '1-place1'
         event.price == '1-price1'
-        event.dateTime == '2014-01-12T19:00'
         event.pdtps.size() == 3
-        event.pdtps[0].displayDate == '13 styczeń 2014 (Pn)'
-        event.pdtps[1].displayDate == '14 styczeń 2014 (Wt)'
-        event.pdtps[2].displayDate == '15 styczeń 2014 (Śr)'
+        event.pdtps[0].displayDate == '13 styczeń 2014(pn)'
+        event.pdtps[1].displayDate == '14 styczeń 2014(wt)'
+        event.pdtps[2].displayDate == '15 styczeń 2014(śr)'
         event.pdtps.each {
             assert it.displayTime == '19:00'
             assert it.place == event.place
@@ -196,7 +195,7 @@ class EventPresentationServiceSpec extends Specification {
         1 * service.eventQueryService.findAllByInstitution(1) >> { [events[0], events[3]] }
 
         when:
-        def events = service.submittedEvents(1)
+        def events = service.submittedEvents(1).events
 
         then:
         events.size() == 2
@@ -220,7 +219,7 @@ class EventPresentationServiceSpec extends Specification {
                 startTime: time.toDate(), price: '1-price1'))
             fd = futureDate.plusDays(index)
         }
-        event1.save()
+        event1.save(validate: false)
         def event2 = new Event(title: 'title2', pic: 'pic2', more: 'more2', description: 'desc2', category: cat,
             institution: inst1, oneTimeType: false)
         fd = futureDate
@@ -229,7 +228,7 @@ class EventPresentationServiceSpec extends Specification {
                 startTime: time.plusHours(index).toDate(), price: "2-price$index", timeDescription: "timeDescription$index"))
             fd = futureDate.plusDays(index)
         }
-        event2.save()
+        event2.save(validate: false)
         def event3 = new Event(title: 'title3', pic: 'pic3', more: 'more3', description: 'desc3', category: cat,
             institution: inst1, oneTimeType: true)
         fd = futureDate
@@ -238,13 +237,13 @@ class EventPresentationServiceSpec extends Specification {
                 startTime: index == 3 ? time.minusHours(1).toDate() : time.toDate(), price: '3-price1'))
             fd = futureDate.plusDays(index)
         }
-        event3.save()
+        event3.save(validate: false)
         def event4 = new Event(id:4, title: 'title4', pic: 'pic4', more: 'more4', description: 'desc4', category: cat,
             institution: inst1, oneTimeType: false)
         // fromDate = toDate for tmp event
         event4.addToPdtps(new Pdtp(place: '4-place1', fromDate: futureDate.toDate(), toDate: futureDate.toDate(),
             startTime: time.toDate(), price: '4-price1', timeDescription: 'timeDescription'))
-        event4.save()
+        event4.save(validate: false)
         events = [event1, event2, event3, event4]
         service.pdtpQueryService = Mock(PdtpQueryService)
         service.eventQueryService = Mock(EventQueryService)

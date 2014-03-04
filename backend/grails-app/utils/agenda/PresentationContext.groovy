@@ -9,7 +9,7 @@ class PresentationContext {
 
     static final fullDateFormatter = DateTimeFormat.forPattern(/dd MMMM yyyy/).withLocale(locale)
     static final middleDateFormatter = DateTimeFormat.forPattern(/dd MMM yyyy/).withLocale(locale)
-    static final shortDateFormatter = DateTimeFormat.forPattern(/dd MMM/).withLocale(locale)
+    static final shortDateFormatter = DateTimeFormat.forPattern(/dd.MM/).withLocale(locale)
     static final timeFormatter = DateTimeFormat.forPattern(/HH:mm/).withLocale(locale)
 
     static printFullJdkDate(jdkDate) {

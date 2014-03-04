@@ -1,3 +1,5 @@
+import org.apache.log4j.DailyRollingFileAppender
+
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -63,7 +65,7 @@ grails {
         }
     }
 }
- 
+
 grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
@@ -86,6 +88,9 @@ grails.hibernate.cache.queries = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+        cors.headers = [
+            'Access-Control-Allow-Origin': 'http://127.0.0.1:9000'
+        ]
     }
     production {
         grails.logging.jul.usebridge = false
@@ -95,25 +100,77 @@ environments {
 
 // log4j configuration
 log4j = {
-    // Example of changing the log pattern for the default console appender:
-    //
+    def conversionPattern = '[%d{ISO8601} %5p] %c - %m%n'
+
+    // appender
     appenders {
-        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        'null' name: 'stacktrace'   // switch off logging into stacktrace.log
+        console name:'stdout', layout:pattern(conversionPattern: conversionPattern)
+
+        environments {
+            development {
+                appender new DailyRollingFileAppender(
+                    name: 'fileAppender',
+                    datePattern: "'.'yyyy-MM-dd",
+                    fileName: './logs/agenda.log',
+                    layout: pattern(conversionPattern: conversionPattern)
+                )
+            }
+            production {
+                appender new DailyRollingFileAppender(
+                    name: 'fileAppender',
+                    datePattern: "'.'yyyy-MM-dd",
+                    fileName: './logs/agenda.log',
+                    layout: pattern(conversionPattern: conversionPattern)
+                )
+            }
+        }
     }
-    
-    debug  'org.hibernate.SQL'
-    
-    error  'org.codehaus.groovy.grails.web.servlet',        // controllers
-           'org.codehaus.groovy.grails.web.pages',          // GSP
-           'org.codehaus.groovy.grails.web.sitemesh',       // layouts
-           'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-           'org.codehaus.groovy.grails.web.mapping',        // URL mapping
-           'org.codehaus.groovy.grails.commons',            // core / classloading
-           'org.codehaus.groovy.grails.plugins',            // plugins
-           'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
-           'org.springframework',
-           'org.hibernate',
-           'net.sf.ehcache.hibernate'
+
+    error   'StackTrace'
+
+    // loggers
+    environments {
+        test {
+            all     'grails.app'
+            debug   'org.hibernate.SQL'
+            //trace   'org.hibernate.type'
+        }
+        development {
+            debug  'grails.app.controllers'
+            debug  'grails.app.services'
+            debug  'grails.app.filters'
+            debug   'org.hibernate.SQL'
+            //trace   'org.hibernate.type'
+        }
+        production {
+            warn    'grails.app'
+        }
+    }
+
+    // root section
+    environments {
+        test {
+            root {
+                error 'stdout'
+            }
+        }
+        development {
+            root {
+                warn 'stdout', 'fileAppender'
+            }
+        }
+        production {
+            root {
+                error 'fileAppender'
+            }
+        }
+    }
 }
 
 grails.gorm.failOnError = true
+
+grails.app.context = 'b'
+
+grails.plugin.springsecurity.rejectIfNoRule = false
+grails.plugin.springsecurity.fii.rejectPublicInvocations = false

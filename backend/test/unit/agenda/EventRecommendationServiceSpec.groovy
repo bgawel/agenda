@@ -27,15 +27,15 @@ class EventRecommendationServiceSpec extends Specification {
 
         then:
         events.size() == 4
-        events[0].label == '[01 sty-03 sty, cat1]'
+        events[0].label == '[01.01-03.01, cat1]'
         events[0].title == 'title2'
         !events[0].desc
         events[0].more == 'more'
-        events[1].label == '[02 sty, cat1]'
+        events[1].label == '[02.01, cat1]'
         events[1].title == 'title1'
         events[1].desc == 'description'
         events[2].desc == 'part1'
-        events[3].desc == 'descriptiondescriptiondescriptio'
+        events[3].desc == 'descriptiondescriptiondescriptiodescriptiondescriptiondescriptio...'
     }
 
     def "get comming soon events"() {
@@ -73,7 +73,7 @@ class EventRecommendationServiceSpec extends Specification {
             new Pdtp(fromDate: date.toDate(), toDate: date.toDate(), event: new Event(title: 'title3',
                 description: 'part1. Part2', category: cat)),
             new Pdtp(fromDate: date.toDate(), toDate: date.toDate(), event: new Event(title: 'title3',
-                description: 'descriptiondescriptiondescription', category: cat))
+                description: 'descriptiondescriptiondescriptiodescriptiondescriptiondescription', category: cat))
         ]
         pdtps.eachWithIndex { pdtp, index ->
             pdtp.id = index + 1

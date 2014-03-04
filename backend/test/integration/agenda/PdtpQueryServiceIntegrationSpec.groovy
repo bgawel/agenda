@@ -182,21 +182,21 @@ class PdtpQueryServiceIntegrationSpec extends Specification {
         }
         event1.addToPdtps(new Pdtp(place: 'past-place$index', fromDate: pastDate.toDate(), toDate: pastDate.toDate(),
                 startTime: time.toDate(), price: 'past-price$index'))
-        event1.save()
+        event1.save(validate: false)
         def event2 = new Event(title: 'title2', description: 'desc2', category: cat1,
             institution: inst1, oneTimeType: false)
         (1..2).each { index ->
             event2.addToPdtps(new Pdtp(place: "2-place$index", fromDate: futureDate.toDate(), toDate: futureDate.toDate(),
                 startTime: time.plusHours(3 - index).toDate(), price: "2-price$index", timeDescription: "timeDescription$index"))
         }
-        event2.save()
+        event2.save(validate: false)
         def event3 = new Event(title: 'title3', description: 'desc3', category: cat2,
             institution: inst2, oneTimeType: true)
         (1..2).each { index ->
             event3.addToPdtps(new Pdtp(place: "3-place$index", fromDate: nowDate.toDate(), toDate: nowDate.toDate(),
                 startTime: time.minusHours(index - 1).toDate(), price: "3-price$index"))
         }
-        event3.save(flush:true)
+        event3.save(validate: false)
         sessionFactory.currentSession.clear()
     }
 }

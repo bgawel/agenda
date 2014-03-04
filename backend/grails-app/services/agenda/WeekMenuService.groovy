@@ -49,15 +49,15 @@ class WeekMenuService {
     }
 
     private getCalendarEntry() {
-        makeEntry(calendarEntryId, calendarEntryName, '')
+        makeEntry(calendarEntryId, calendarEntryName, calendarEntryId)
     }
 
     private getAllEntry() {
-        makeEntry(allEntryId, allEntryName, '')
+        makeEntry(allEntryId, allEntryName, allEntryId)
     }
 
     private getFutureEntry() {
-        makeEntry(futureEntryId, futureEntryName, '')
+        makeEntry(futureEntryId, futureEntryName, futureEntryId)
     }
 
     private makeEntry(id, name, abbr) {

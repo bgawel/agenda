@@ -89,16 +89,8 @@
           </ul>
         </div>
       </div>
-              <alert type="'info'">
-          Brak wydarzeń
-        </alert>
-      <div class="progress progress-striped  active ">
-    <div class="bar bar-info"></div>
-</div>
       <div class="row">
-        <alert type="'info'" ng-show="!loadingEvents && events.length === 0">
-          Brak wydarzeń
-        </alert>
+        <alert type="'info'" ng-show="noEventsMsg">Brak wydarzeń</alert>
         <div ng-repeat="event in events | filter:{catName: categories.filter.name, whoName: institutions.filter.name}:true | orderBy:orderEventsBy" 
             class="event clearfix">
           <div class="col-xs-9">

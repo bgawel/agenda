@@ -1,11 +1,11 @@
 package agenda
 
-import static agenda.LocalContext.areDatesTheSame
 import static agenda.LocalContext.dateTime
 import static agenda.LocalContext.dateTimeToDateOnly
 import static agenda.LocalContext.dateTimeToTimeOnly
 import static agenda.LocalContext.getCurrentDateTime
 import static agenda.LocalContext.jdkDateAndTimeToString
+import static agenda.LocalContext.jdkTimeToString
 import static agenda.LocalContext.stringToDate
 import static agenda.PresentationContext.printFullJdkDate
 import static agenda.PresentationContext.printJdkTime
@@ -34,7 +34,9 @@ class EventPresentationService {
     }
 
     def submittedEvents(instId) {
-        eventQueryService.findAllByInstitution(instId).collect { makeEntryForSubmittedEvent(it) }
+        // 'events' instead of array
+        // see http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx/
+        [events: eventQueryService.findAllByInstitution(instId).collect { makeEntryForSubmittedEvent(it) }]
     }
 
     protected showByDate(now, requestedDate) {
@@ -62,11 +64,11 @@ class EventPresentationService {
     private showByCalendar(now, requestedDate) {
         def events = []
         def eventsDate = dateOf(stringToDate(requestedDate))
-        def isDateOfEventsToday = areDatesTheSame(now, eventsDate)
-        if (isDateOfEventsToday) {
+        def today = dateOf(now)
+        if (eventsDate == today) {
             events = pdtpQueryService.findAllNotFinishedFor(eventsDate, timeOf(now))
                 .collect { makeEntryForShowByCalendar(it) }
-        } else if (now.isBefore(eventsDate)) {
+        } else if (today.isBefore(eventsDate)) {
             events = pdtpQueryService.findAllFor(eventsDate).collect { makeEntryForShowByCalendar(it) }
         }
         events
@@ -81,7 +83,8 @@ class EventPresentationService {
             .each {
                 otherPdtpsToDisplay << (makeDateTimeForShowByPdtp(it) + [place: it.place, price: it.price])
             }
-            makeEntryForShowByCalendar(firstPdtpToDisplay) + [pdtps: otherPdtpsToDisplay]
+            makeCommonPartOfEntryForShow(firstPdtpToDisplay, false) + makeDateTimeForShowByPdtp(firstPdtpToDisplay) +
+                [place: firstPdtpToDisplay.place, price: firstPdtpToDisplay.price, pdtps: otherPdtpsToDisplay]
         }
     }
 
@@ -137,28 +140,37 @@ class EventPresentationService {
         differentTime, moreToShow) {
         makeCommonPartOfEntryForShow(pdtp, moreToShow) +
             [place: differentPlaces ? '' : pdtp.place, price: differentPrices ? '' : pdtp.price,
+             dateTime: printDateTimeOfEventToSort(pdtp),
              displayDt: printDateTimeOfEventForShowByFutureOrAll(pdtpsOfEventToShow, differentTime)]
     }
 
     private makeEntryForShowByCalendar(pdtp) {
         makeCommonPartOfEntryForShow(pdtp, false) +
-            [place: pdtp.place, price: pdtp.price, displayTime: pdtp.timeDescription ?: printJdkTime(pdtp.startTime)]
+            [place: pdtp.place, price: pdtp.price, displayDt: pdtp.timeDescription ?: printJdkTime(pdtp.startTime),
+             dateTime: printTimeOfEventToSort(pdtp)]
     }
 
     private makeCommonPartOfEntryForShow(pdtp, moreToShow) {
         def event = pdtp.event
         [id: pdtp.id, title: event.title, pic: event.pic, more: event.more, desc: event.description,
-            whoId:event.institution.id, whoName: event.institution.name,
-            whoAbout: makeDescOfInstitution(event.institution), catId:event.category.id, catName: event.category.name,
-            dateTime: printDateTimeOfEventToSort(pdtp), moreToShow: moreToShow]
+            whoId:event.institution.id, whoName: event.institution.name, moreToShow: moreToShow,
+            whoAbout: makeDescOfInstitution(event.institution), catId:event.category.id, catName: event.category.name]
     }
 
     private makeDescOfInstitution(institution) {
         def description = new StringBuilder()
         appendValue(description, institution.address)
-        appendValue(description, institution.web)
+        appendWeb(description, institution.web)
         appendValue(description, institution.telephone)
         description.toString()
+    }
+
+    private appendWeb(description, originalWeb) {
+        if (originalWeb) {
+            def web = !originalWeb.startsWith('http://') && !originalWeb.startsWith('https://') ?
+                'http://' + originalWeb : web
+            appendValue(description, "<a href=\"$web\">$originalWeb</a>")
+        }
     }
 
     private appendValue(description, value) {
@@ -169,6 +181,10 @@ class EventPresentationService {
 
     private printDateTimeOfEventToSort(pdtp) {
         jdkDateAndTimeToString(pdtp.fromDate, pdtp.startTime)
+    }
+
+    private printTimeOfEventToSort(pdtp) {
+        jdkTimeToString(pdtp.startTime)
     }
 
     private printDateTimeOfEventForShowByFutureOrAll(pdtps, differentTime) {
@@ -203,7 +219,7 @@ class EventPresentationService {
     }
 
     private makeDateTimeToDisplayWithDayOfWeek(pdtp, dateMaker) {
-        makeDateTimeToDisplay(pdtp) { "${dateMaker(it)} (${printShortDayOfWeekForJdkDate(it)})" }
+        makeDateTimeToDisplay(pdtp) { "${dateMaker(it)}(${printShortDayOfWeekForJdkDate(it).toLowerCase()})" }
     }
 
     private makeEntryForSubmittedEvent(event) {

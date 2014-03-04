@@ -365,12 +365,14 @@ module.exports = function (grunt) {
         base: '.',
         module: 'ui-templates',
         rename: function (modulePath) {
-          var moduleName = modulePath.replace('app/views/ui-bootstrap-tpls/', '').replace('.html', '');
+          var moduleName = modulePath.replace('app/views/components/', '')
+            .replace('ui-bootstrap-tpls/', '')
+            .replace('.html', '');
           return 'template' + '/' + moduleName + '.html';
         }
       },
       main: {
-        src: ['app/views/ui-bootstrap-tpls/**/*.html'],
+        src: ['app/views/components/**/*.html', 'app/views/components/ui-bootstrap-tpls/**/*.html'],
         dest: '.tmp/ui-templates.js'
       }
     }

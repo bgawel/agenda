@@ -2,7 +2,6 @@ package agenda
 
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
-import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 
 class LocalContext {
@@ -17,6 +16,10 @@ class LocalContext {
 
     static getCurrentDateTime() {
         dateTime(new Date())
+    }
+
+    static getCurrentDate() {
+        dateTimeToDateOnly(currentDateTime)
     }
 
     static dateTime(jdkDate) {
@@ -47,6 +50,14 @@ class LocalContext {
         new DateTime(2014, 1, 1, dateTime.hourOfDay, dateTime.minuteOfHour, dateTimeZone)
     }
 
+    static jdkDateTimeToDateOnly(jdkDateTime) {
+        dateTimeToDateOnly(dateTime(jdkDateTime))
+    }
+
+    static jdkDateTimeToTimeOnly(jdkDateTime) {
+        dateTimeToTimeOnly(dateTime(jdkDateTime))
+    }
+
     static jdkDateAndTimeToString(jdkDate, jdkTime) {
         "${jdkDateToString(jdkDate)}T${jdkTimeToString(jdkTime)}"
     }
@@ -59,8 +70,10 @@ class LocalContext {
         timeFormatter.print(new DateTime(jdkTime, dateTimeZone))
     }
 
-    static areDatesTheSame(date1, date2) {
-        new LocalDate(date1, dateTimeZone) == new LocalDate(date2, dateTimeZone)
+    static jdkDateTimeToDateTime(jdkDate, jdkTime) {
+        def date = dateTime(jdkDate)
+        def time = dateTime(jdkTime)
+        new DateTime(date.year, date.monthOfYear, date.dayOfMonth, time.hourOfDay, time.minuteOfHour, dateTimeZone)
     }
 
     private LocalContext() { }

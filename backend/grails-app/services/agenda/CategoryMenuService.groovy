@@ -8,8 +8,6 @@ class CategoryMenuService {
     def allEntryName = 'Wszystko'
     def activeIndex = 0
 
-    def categoryQueryService
-
     def getCategories() {
         def entries = []
         entries << allEntry
@@ -18,7 +16,7 @@ class CategoryMenuService {
     }
 
     private getDbEntries() {
-        categoryQueryService.all.collect { makeEntry(it.id, it.name) }
+        Category.all.collect { makeEntry(it.id, it.name) }
     }
 
     private getAllEntry() {

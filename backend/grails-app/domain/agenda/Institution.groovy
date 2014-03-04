@@ -1,7 +1,7 @@
 package agenda
 
-import groovy.transform.ToString;
-import groovy.transform.EqualsAndHashCode;
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
 
 @ToString(includeNames=true, includeFields=true, excludes='password')
 @EqualsAndHashCode(includes='email')
@@ -13,11 +13,10 @@ class Institution {
     String address
     String web
     String telephone
-    String fax
-    
+
     Date dateCreated
     Date lastUpdated
-    
+
     static hasMany = [events: Event]
 
     static constraints = {
@@ -27,10 +26,10 @@ class Institution {
         address maxSize: 128, nullable: true
         web maxSize: 64, nullable: true
         telephone maxSize: 64, nullable: true
-        fax maxSize: 64, nullable: true
     }
-        
+
     static mapping = {
         version false
+        events cascade: 'all-delete-orphan'
     }
 }

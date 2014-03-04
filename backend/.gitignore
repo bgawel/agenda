@@ -6,4 +6,5 @@ grailsw.bat
 .project
 target
 wrapper
+logs
 *~

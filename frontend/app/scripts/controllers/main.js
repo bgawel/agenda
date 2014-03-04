@@ -2,8 +2,10 @@
 
 angular.module('frontendApp')
   .controller('MainCtrl',
-      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', 'Menu', 'Events',
-      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, Menu, Events) {
+      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', 'Menu', 
+       'Events', 'Progressbar',
+      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, Menu, Events,
+          Progressbar) {
     $scope.toggleRightPanel = function () {
       $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
     };
@@ -57,7 +59,7 @@ angular.module('frontendApp')
           dateOptions:{
             'year-format': '\'yy\'',
             'starting-day': 1,
-            'show-weeks': false // doesn't work
+            'show-weeks': false
           }
         };
       var calendarValue = cache.get(CACHE_CALENDAR_KEY);
@@ -68,7 +70,6 @@ angular.module('frontendApp')
     };
     
     $scope.init = function() {
-      $scope.loadingEvents = true;
       $scope.institutions = initializeInstitutions();
       $scope.orderEventsBy = initializeOrder();
       $q.all([Menu.categories(), Menu.week()]).then(function(results) {
@@ -135,6 +136,7 @@ angular.module('frontendApp')
     };
     
     $scope.changeEventsDay = function(dayIndex) {
+      Progressbar.open($scope);
       var activeDay = activateEventsDay(dayIndex);
       var activeCategory = $scope.categories.active;
       var activeInstitution = getActiveInstitution();
@@ -171,8 +173,9 @@ angular.module('frontendApp')
         restoreActiveInstitutionOfCategory(institution.value, category);
         fillNewestEventsIfPresent(data);
         fillComingSoonEventsIfPresent(data);
-        $scope.loadingEvents = false;
         $scope.events = data.events;
+        $scope.noEventsMsg = !$scope.events.length;
+        Progressbar.close($scope);
         scrollToEventIfNeeded();
       });
     };
