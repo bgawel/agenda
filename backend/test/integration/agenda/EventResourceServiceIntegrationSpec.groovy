@@ -10,7 +10,7 @@ class EventResourceServiceIntegrationSpec extends Specification {
     def sessionFactory
     def eventResourceService
 
-    def "should discard changes made for readonly pdtp and restore removed readonly pdtp"() {
+    def "should discard changes made for readonly pdtp and restore removed readonly pdtp and changed title"() {
         setup:
         def event = Event.findByTitle('title1')
         def readonlyPdtpIds = [event.pdtps[0].id, event.pdtps[2].id]

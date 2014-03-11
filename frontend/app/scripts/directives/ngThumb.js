@@ -2,13 +2,9 @@
 
 angular.module('frontendApp')
   /**
-   * The ng-thumb directive
    * http://nervgh.github.io/pages/angular-file-upload/examples/image-preview/
-   * 
-   * @author: nerv, bgawel
-   * @version: 0.1.2, 2014-01-09
    */
-  .directive('ngThumb', [ '$window', function($window) {
+  .directive('ngThumb', ['$window', function($window) {
     var helper = {
       support : !!($window.FileReader && $window.CanvasRenderingContext2D),
       isFile : function(item) {
@@ -33,6 +29,15 @@ angular.module('frontendApp')
         if (!helper.isImage(params.file)) {
           return;
         }
+        var onLoadImage = function() {
+          var width = params.width || this.width / this.height * params.height;
+          var height = params.height || this.height / this.width * params.width;
+          canvas.attr({
+            width : width,
+            height : height
+          });
+          canvas[0].getContext('2d').drawImage(this, 0, 0, width, height);
+        };
         function onLoadFile(event) {
           var img = new Image();
           img.onload = onLoadImage;
@@ -42,15 +47,6 @@ angular.module('frontendApp')
         var reader = new FileReader();
         reader.onload = onLoadFile;
         reader.readAsDataURL(params.file);
-        function onLoadImage() {
-          var width = params.width || this.width / this.height * params.height;
-          var height = params.height || this.height / this.width * params.width;
-          canvas.attr({
-            width : width,
-            height : height
-          });
-          canvas[0].getContext('2d').drawImage(this, 0, 0, width, height);
-        }
       }
     };
   }]);

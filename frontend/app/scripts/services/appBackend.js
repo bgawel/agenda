@@ -2,10 +2,10 @@
 
 var app = angular.module('frontendApp');
 
-var serwerUrl = 'http://localhost:8080/'
+var serwerUrl = 'http://localhost:8080/';
 var url = function(path) {
   return serwerUrl + path;
-}
+};
 
 app.factory('Menu', ['$http', function($http) {
   return {
@@ -16,6 +16,16 @@ app.factory('Menu', ['$http', function($http) {
     },
     categories : function() {
       return $http.get(url('b/menu/categories.json')).then(function(result) {
+        return result.data;
+      });
+    }
+  };
+}]);
+
+app.factory('Config', ['$http', function($http) {
+  return {
+    now : function() {
+      return $http.get(url('b/config/now.json')).then(function(result) {
         return result.data;
       });
     }
@@ -39,16 +49,16 @@ app.factory('Events', ['$http', function($http) {
       // and promise.then() also returns a promise
       // that resolves to whatever value is returned in it's
       // callback argument, we can return that.
-      return $http.get(url('b/evntPres/byDate/' + date + '.json'), {params : {category : category, inst: institution}}).
+      return $http.get(url('b/evntProj/byDate/' + date + '.json'), {params : {category : category, inst: institution}}).
         then(function(result) {
           return result.data;
-      });
+        });
     },
-    byId : function(eventId, error410) {
-      return $http({method: 'GET', url: url('b/evntPres/byEvent/' + eventId + '.json')}).
-        error(function(data, status, headers, config) {
-          if (status === 410) {
-            error410(data)
+    byId : function(eventId, notFound) {
+      return $http({method: 'GET', url: url('b/evntProj/byEvent/' + eventId + '.json')}).
+        error(function(data, status) {
+          if (status === 404) {
+            notFound(data);
           }
         }).
         then(function(result) {
@@ -56,7 +66,7 @@ app.factory('Events', ['$http', function($http) {
         });
     },
     submitted : function(instId) {
-      return $http.get(url('b/evntPres/submitted/' + instId + '.json')).then(function(result) {
+      return $http.get(url('b/evntProj/submitted/' + instId + '.json')).then(function(result) {
         return result.data;
       });
     }
@@ -64,10 +74,27 @@ app.factory('Events', ['$http', function($http) {
 }]);
 
 app.factory('Inst', ['$resource', function($resource) {
-  return $resource('inst/:id.json');
+  return $resource(url('b/inst/:id.json'), null,
+  {
+    update: { method: 'PUT' }
+  });
 }]);
+
 app.factory('Event', ['$resource', function($resource) {
-  return $resource('event/:id.json');
+  return $resource(url('b/event/:id.json'), null,
+  {
+    update: { method: 'PUT' }
+  });
+}]);
+
+app.factory('Insts', ['$http', function($http) {
+  return {
+    names : function() {
+      return $http.get(url('b/instProj/names.json')).then(function(result) {
+        return result.data;
+      });
+    }
+  };
 }]);
 
 app.factory('Uploader', ['$fileUploader', function($fileUploader) {

@@ -5,6 +5,7 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 @import 'panel';
 @import 'login';
 @import 'progressbar';
+@import 'signup';
 
 .browsehappy {
     margin: 0.2em 0;
@@ -121,6 +122,32 @@ footer {
 
 .sidebar-offcanvas.left a:focus {
   outline: none;  
+}
+
+.form-horizontal.validate {
+	input.ng-invalid {
+		border-color: $btn-danger-border;
+  }
+  span.error {
+  	color: $btn-danger-bg;
+  }
+}
+
+span.danger-text {
+	color: $btn-danger-bg;
+}
+
+span.info-text {
+	color: $btn-info-bg;
+}
+
+span.question-text {
+	color: $btn-info-bg;
+}
+
+span.add-info {
+  color: #CCCCCC;
+  font-weight: normal;
 }
 
 /*

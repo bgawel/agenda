@@ -12,7 +12,7 @@
 			"place": "Scena na Świebodzkim",
 			"fromDate": "2014-02-01T00:00:00",
 			"toDate": "2014-02-01T00:00:00",
-			"time": "2014-02-01T18:00:00",
+			"startTime": "2014-02-01T18:00:00",
 			"price": "25 ulg., 35 norm.",
 			"readonly": true
 		},
@@ -20,7 +20,7 @@
 			"place": "Scena na Świebodzkim",
 			"fromDate": "2014-05-01T00:00:00",
 			"toDate": "2014-05-01T00:00:00",
-			"time": "2014-05-01T18:00:00",
+			"startTime": "2014-05-01T18:00:00",
 			"price": "25 ulg., 35 norm.",
 			"readonly": false
 		}

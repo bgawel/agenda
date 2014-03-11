@@ -6,6 +6,16 @@
     </ol>
   </div>
   <div class="row">
-    <div ng-include="'views/panelInst.html'"></div>
+    <div class="col-md-3">
+      Dotychczas zarejestrowali się:
+      <div class="well">
+        <ul class="insts-list">
+          <li ng-repeat="inst in registeredInsts">{{inst.name}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div ng-include="'views/panelInst.html'"></div>
+    </div>
   </div>
 </div>

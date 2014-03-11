@@ -2,7 +2,7 @@ package agenda
 
 import static agenda.LocalContext.dateToString
 import static agenda.LocalContext.getCurrentDateTime
-import static agenda.LocalContext.locale
+import static agenda.PresentationContext.locale
 import static agenda.PresentationContext.printShortDayOfWeek
 import static org.joda.time.DateTimeConstants.DAYS_PER_WEEK
 

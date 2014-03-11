@@ -172,5 +172,7 @@ grails.gorm.failOnError = true
 
 grails.app.context = 'b'
 
+grails.databinding.dateFormats = ["yyyy-MM-dd'T'HH:mm"]
+
 grails.plugin.springsecurity.rejectIfNoRule = false
 grails.plugin.springsecurity.fii.rejectPublicInvocations = false

@@ -7,15 +7,14 @@ import org.joda.time.format.DateTimeFormat
 class LocalContext {
 
     static final TIME_ZONE_ID = 'Europe/Warsaw'
-
-    static final locale = new Locale('pl', 'PL')
-    static final dateFormatter = DateTimeFormat.forPattern(/yyyy-MM-dd/).withLocale(locale)
-    static final timeFormatter = DateTimeFormat.forPattern(/HH:mm/).withLocale(locale)
-    static final dateTimeFormatter = DateTimeFormat.forPattern(/yyyy-MM-dd'T'HH:mm/).withLocale(locale)
     static final dateTimeZone = DateTimeZone.forID(TIME_ZONE_ID)
 
+    static final dateFormatter = DateTimeFormat.forPattern(/yyyy-MM-dd/)
+    static final timeFormatter = DateTimeFormat.forPattern(/HH:mm/)
+    static final dateTimeFormatter = DateTimeFormat.forPattern(/yyyy-MM-dd'T'HH:mm/)
+
     static getCurrentDateTime() {
-        dateTime(new Date())
+        new DateTime(dateTimeZone)
     }
 
     static getCurrentDate() {
@@ -23,7 +22,7 @@ class LocalContext {
     }
 
     static dateTime(jdkDate) {
-        new DateTime(jdkDate, dateTimeZone)
+        new DateTime(jdkDate).withZoneRetainFields(dateTimeZone)
     }
 
     static dateToString(date) {
@@ -62,12 +61,16 @@ class LocalContext {
         "${jdkDateToString(jdkDate)}T${jdkTimeToString(jdkTime)}"
     }
 
+    static jdkDateTimeToString(jdkDateTime) {
+        dateTimeToString(dateTime(jdkDateTime))
+    }
+
     static jdkDateToString(jdkDate) {
-        dateFormatter.print(new DateTime(jdkDate, dateTimeZone))
+        dateFormatter.print(dateTime(jdkDate))
     }
 
     static jdkTimeToString(jdkTime) {
-        timeFormatter.print(new DateTime(jdkTime, dateTimeZone))
+        timeFormatter.print(dateTime(jdkTime))
     }
 
     static jdkDateTimeToDateTime(jdkDate, jdkTime) {

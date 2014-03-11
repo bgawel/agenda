@@ -16,12 +16,12 @@ class EventController {
     def eventResourceService
 
     def show() {
-        respond eventResourceService.get(params.id)
+        respond eventResourceService.show(params.id)
     }
 
     def save() {
         def event = bindWithParams(new Event())
-        event.validate()
+        eventResourceService.validate(event)
         if (event.hasErrors()) {
             respond((Object)responseBuilderService.makeMsgsFromErrors(event.errors), [status: UNPROCESSABLE_ENTITY])
         } else {
@@ -61,6 +61,8 @@ class EventController {
     }
 
     private bindWithParams(event) {
-        bindData(event, params, [include: ['title', 'pic', 'more', 'description', 'oneTimeType', 'category', 'pdtps']])
+        bindData(event, params, [include: ['title', 'pic', 'more', 'description', 'oneTimeType', 'category', 'pdtps',
+            // TODO bgawel: only until logging is implemented
+            'institution']])
     }
 }

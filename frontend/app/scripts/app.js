@@ -9,7 +9,7 @@ angular.module('frontendApp', [
   'ui-templates',
   'angularFileUpload'
 ])
-  .config(['$routeProvider', '$provide', function ($routeProvider, $provide) {
+  .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -38,28 +38,4 @@ angular.module('frontendApp', [
       .otherwise({
         redirectTo: '/'
       });
-    //TODO bgawel make it optional for testing and serving
-    $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
-  }])
- .run(function($httpBackend) {
-    var regexpUrl = function(regexp) {
-      return {
-        test: function(url) {
-          this.matches = url.match(regexp);
-          return this.matches && this.matches.length > 0;
-        }
-      };
-    };
-    $httpBackend.when('GET', regexpUrl(/.*/)).passThrough();
-    //$httpBackend.when('POST', regexpUrl(/.*/)).passThrough();
-    $httpBackend.whenPOST('inst.json').respond(200,
-        {success:true,
-         id:1,
-         messages:['Zapisano dane']
-        });
-    $httpBackend.whenPOST('event.json').respond(200,
-        {success:true,
-         id:1,
-         messages:['Zapisano dane']
-        });
-  });
+  }]);

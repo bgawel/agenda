@@ -2,7 +2,7 @@
 
 angular.module('frontendApp')
   .controller('MainCtrl',
-      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', 'Menu', 
+      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', 'Menu',
        'Events', 'Progressbar',
       function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, Menu, Events,
           Progressbar) {

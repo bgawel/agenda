@@ -46,8 +46,6 @@
     <script src="bower_components/angular/angular.js"></script>
     <script src="ext_components/angular-file-upload.js"></script>
     <script src="ext_components/angular-locale_pl-pl.js"></script>
-    <!-- TODO bgawel mock responses for POST -->
-    <script src="bower_components/angular-mocks/angular-mocks.js"></script>
 
         <!-- build:js scripts/plugins.js -->
         <script src="bower_components/sass-bootstrap/js/affix.js"></script>
@@ -76,16 +74,23 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+        <script src="scripts/directives/ngThumb.js"></script>
+        <script src="scripts/directives/ngSameAs.js"></script>   
+        <script src="scripts/directives/ngServerError.js"></script> 
+        <script src="scripts/directives/timepicker.js"></script> 
+        <script src="scripts/directives/ngDateFix.js"></script>
         <script src="scripts/services/appBackend.js"></script>
+        <script src="scripts/services/msgPanel.js"></script>
+        <script src="scripts/services/progressbar.js"></script>
+        <script src="scripts/services/serverError.js"></script>
+        <script src="scripts/services/confirmDialog.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/event.js"></script>
         <script src="scripts/controllers/panel.js"></script>
         <script src="scripts/controllers/login.js"></script>
         <script src="scripts/controllers/signup.js"></script>
-        <script src="scripts/services/msgPanel.js"></script>
-        <script src="scripts/directives/ngThumb.js"></script>
         <script src="scripts/controllers/about.js"></script>
-        <script src="scripts/services/progressbar.js"></script>
+
         <!-- endbuild -->   
         
 </body>

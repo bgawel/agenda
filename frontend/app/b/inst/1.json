@@ -2,9 +2,8 @@
   "id": 1,
 	"name": "Teatr Polski",
 	"email": "info@tp.wroc.pl",
-	"pwd": "1234",
+	"password": "12345",
 	"address": "ul. G. Zapolskiej 3, 50-032 Wrocław",
 	"web": "www.teatrpolski.wroc.pl",
-  "tel": "(+48) 71 316 07 00",
-  "fax": "(+48) 71 316 07 01"
+  "telephone": "(+48) 71 316 07 00"
 }

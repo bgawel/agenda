@@ -22,11 +22,15 @@ class Pdtp {
         place maxSize: 64, blank: false
         price maxSize: 64, blank: false
         startTime nullable: false
-        timeDescription maxSize: 128, nullable: true
         toDate nullable: false
         fromDate nullable: false, validator: { value, thisPdtp ->
             if (value > thisPdtp.toDate) {
                 ['fromGreaterThanTo']
+            }
+        }
+        timeDescription maxSize: 128, nullable: true, validator: { value, thisPdtp ->
+            if (thisPdtp.event && !thisPdtp.event.oneTimeType && !value) {
+                ['required']
             }
         }
     }
@@ -34,4 +38,6 @@ class Pdtp {
     static mapping = {
         version false
     }
+
+    private static final wwwValidator = new WwwValidator()
 }

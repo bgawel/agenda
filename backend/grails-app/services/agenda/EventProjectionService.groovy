@@ -14,7 +14,7 @@ import static agenda.PresentationContext.printShortDayOfWeekForJdkDate
 import static agenda.PresentationContext.printShortJdkDate
 import static org.joda.time.DateTimeConstants.DAYS_PER_WEEK
 
-class EventPresentationService {
+class EventProjectionService {
 
     def minusHoursToShowTodaysEvents = 1
     def maxDisplayedPdtpsForOneTimeType = 3
@@ -167,8 +167,7 @@ class EventPresentationService {
 
     private appendWeb(description, originalWeb) {
         if (originalWeb) {
-            def web = !originalWeb.startsWith('http://') && !originalWeb.startsWith('https://') ?
-                'http://' + originalWeb : web
+            def web = WwwValidator.startWithScheme(originalWeb) ? originalWeb : ('http://' + originalWeb)
             appendValue(description, "<a href=\"$web\">$originalWeb</a>")
         }
     }

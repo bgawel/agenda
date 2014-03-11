@@ -20,12 +20,16 @@ class Institution {
     static hasMany = [events: Event]
 
     static constraints = {
-        name maxSize: 128, blank: false, unique: true
+        name maxSize: 64, blank: false, unique: true
         email email: true, maxSize: 64, blank: false, unique: true
         password size: 5..16, blank: false
         address maxSize: 128, nullable: true
-        web maxSize: 64, nullable: true
         telephone maxSize: 64, nullable: true
+        web maxSize: 64, nullable: true, validator: {
+            if (!WwwValidator.validate(it)) {
+                ['incorrectUrl']
+            }
+        }
     }
 
     static mapping = {

@@ -1,11 +1,12 @@
 package agenda
 
 import static agenda.LocalContext.dateTime
-import static agenda.LocalContext.locale
 
 import org.joda.time.format.DateTimeFormat
 
 class PresentationContext {
+
+    static final locale = new Locale('pl', 'PL')
 
     static final fullDateFormatter = DateTimeFormat.forPattern(/dd MMMM yyyy/).withLocale(locale)
     static final middleDateFormatter = DateTimeFormat.forPattern(/dd MMM yyyy/).withLocale(locale)

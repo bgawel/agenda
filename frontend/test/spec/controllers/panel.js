@@ -321,7 +321,7 @@ describe('Controller: PanelCtrl', function () {
   it('should initialize model with view of submitted events', function () {
     $routeParams.o = '3';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('b/evntPres/submitted/666.json').respond(SUBMITTED_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/submitted/666.json').respond(SUBMITTED_RESPONSE);
     $httpBackend.flush();
     
     expect(scope.option).toBe(3);
@@ -331,7 +331,7 @@ describe('Controller: PanelCtrl', function () {
   it('should load existing event', function () {
     $routeParams.o = '3';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('b/evntPres/submitted/666.json').respond(SUBMITTED_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/submitted/666.json').respond(SUBMITTED_RESPONSE);
     $httpBackend.flush();
     
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
@@ -348,14 +348,14 @@ describe('Controller: PanelCtrl', function () {
   it('should cancel editing an existing event', function () {
     $routeParams.o = '3';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('b/evntPres/submitted/666.json').respond(SUBMITTED_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/submitted/666.json').respond(SUBMITTED_RESPONSE);
     $httpBackend.flush();
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.expectGET('event/1.json').respond({title:'Mayday'});
     scope.loadExistingEvent(1);
     $httpBackend.flush();
     
-    $httpBackend.expectGET('b/evntPres/submitted/666.json').respond(SUBMITTED_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/submitted/666.json').respond(SUBMITTED_RESPONSE);
     scope.cancelClicked();
     $httpBackend.flush();
     

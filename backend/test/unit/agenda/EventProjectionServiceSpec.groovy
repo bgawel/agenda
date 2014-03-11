@@ -9,9 +9,9 @@ import org.joda.time.DateTime
 
 import spock.lang.Specification
 
-@TestFor(EventPresentationService)
+@TestFor(EventProjectionService)
 @Mock([Category, Event, Institution, Pdtp])
-class EventPresentationServiceSpec extends Specification {
+class EventProjectionServiceSpec extends Specification {
 
     def now = new DateTime(2014, 1, 2, 19, 0)
     def events = []

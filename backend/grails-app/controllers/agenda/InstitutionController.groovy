@@ -2,6 +2,7 @@ package agenda
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
+import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
@@ -9,13 +10,13 @@ class InstitutionController {
 
     static responseFormats = ['json']
 
-    static allowedMethods = [save: 'POST', update: 'PUT']
+    static allowedMethods = [save: 'POST', update: 'PUT', delete: 'DELETE']
 
     def responseBuilderService
     def institutionResourceService
 
     def show() {
-        respond Institution.get(params.id)
+        respond institutionResourceService.show(params.id)
     }
 
     def save() {
@@ -38,6 +39,16 @@ class InstitutionController {
             } else {
                 respond((Object)institutionResourceService.update(inst), [status: OK])
             }
+        } else {
+            render status: NOT_FOUND
+        }
+    }
+
+    def delete() {
+        def inst = Institution.get(params.id)
+        if (inst) {
+            institutionResourceService.delete(inst)
+            render status: NO_CONTENT
         } else {
             render status: NOT_FOUND
         }

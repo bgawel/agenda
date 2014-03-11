@@ -1,6 +1,6 @@
 package agenda
 
-import static agenda.LocalContext.locale
+import static agenda.PresentationContext.locale
 
 import javax.annotation.PostConstruct
 
@@ -17,7 +17,7 @@ class ResponseBuilderService {
 
     def makeMsgsFromErrors(errors) {
         def global = []
-        def fields = []
+        def fields = [:]
         errors.fieldErrors?.each {
             fields << [(it.field): g.message(error:it, locale: locale)]
         }

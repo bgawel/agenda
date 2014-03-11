@@ -1,7 +1,10 @@
 package agenda
 
-import org.joda.time.DateTime;
-import spock.lang.Specification;
+import grails.test.mixin.TestFor
+
+import org.joda.time.DateTime
+
+import spock.lang.Specification
 
 @TestFor(WeekMenuService)
 class WeekMenuServiceSpec extends Specification {
@@ -9,7 +12,7 @@ class WeekMenuServiceSpec extends Specification {
     def "should get week menu"() {
         when:
         def week = service.getWeek(new DateTime(2014, 2, 6, 0, 0))
-        
+
         then:
         week.entries.size() == 10
         week.activeIndex == 2

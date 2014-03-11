@@ -1,19 +1,27 @@
-<alert type="evtMsgPanel.type" ng-show="evtMsgPanel.show" ng-switch on="evtMsgPanel.messages.length">
-    <p ng-switch-when="1">{{evtMsgPanel.messages[0]}}</p>
+<alert type="evtMsgPanel.type" ng-show="evtMsgPanel.show && form.event.$pristine" ng-switch on="evtMsgPanel.messages.length">
+    <span ng-switch-when="1">
+      <span ng-show="evtMsgPanel.type === 'danger'" class="glyphicon glyphicon-exclamation-sign error"></span> {{evtMsgPanel.messages[0]}}
+    </span>
     <ul ng-switch-default>
       <li ng-repeat="msg in evtMsgPanel.messages">
-        {{msg}}
+        <span ng-show="evtMsgPanel.type === 'danger'" class="glyphicon glyphicon-exclamation-sign error"></span> {{msg}}
       </li>
     </ul>
 </alert>
-<form class="form-horizontal panel-event" role="form" name="form.event">
+<form class="form-horizontal form-event" role="form" name="form.event" novalidate ng-class="{validate: formEventValidations}">
   <div class="form-group">
     <label for="eventTitle" class="col-sm-2 control-label">Tytuł *</label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="eventTitle" required
-      maxlength="64" ng-model="event.title" ng-readonly="event.titleReadonly"
-      placeholder="nazwa wydarzenia" />
+      <input type="text" class="form-control" id="eventTitle" required name="title"
+        maxlength="64" ng-model="event.title" ng-readonly="!event.canDelete"
+        placeholder="nazwa wydarzenia" />
     </div>
+    <div class="col-sm-offset-2 col-sm-10" ng-show="formEventValidations && form.event.title.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span class="error">
+        Podaj tytuł wydarzenia
+      </span>
+    </div> 
   </div>
   <div class="form-group">
     <label for="eventPic" class="col-sm-2 control-label">Zdjęcie</label>
@@ -45,61 +53,95 @@
   <div class="form-group">
     <label for="eventMore" class="col-sm-2 control-label">Link do opisu</label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="eventMore"
+      <input type="text" class="form-control" id="eventMore" name="more" ng-server-error
       maxlength="64" ng-model="event.more" placeholder="np. www.twoja-strona.pl/to-wydarzenie"/>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10" ng-show="formEventValidations && form.event.more.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span ng-show="form.event.more.$error.server" class="error">
+        {{form.event.more.$error.errorText}}
+      </span>
     </div>
   </div>
   <div class="form-group">
-    <label for="eventDesc" class="col-sm-2 control-label">Opis</label>
+    <label for="eventDesc" class="col-sm-2 control-label"><span class="add-info">oraz/lub</span> Opis</label>
     <div class="col-sm-10">
-      <textarea class="form-control" id="eventDesc" rows="5"
-      maxlength="1800" ng-model="event.desc" placeholder="maksymalnie 1800 znaków" />
-    </div>
+      <textarea class="form-control" id="eventDesc" rows="5" name="description"
+        maxlength="1800" ng-model="event.description" placeholder="maksymalnie 1800 znaków"
+        ng-required="!event.description && !event.more"/>
+    </div>        
+    <div class="col-sm-offset-2 col-sm-10" ng-show="formEventValidations && form.event.description.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span class="error">
+        Opisz wydarzenie lub podaj przynajmniej link do opisu w polu 'Link do opisu'
+      </span>
+    </div>   
   </div>
   <div class="form-group">
     <label for="eventCategory" class="col-sm-2 control-label">Kategoria *</label>
     <div class="col-sm-4">
-      <select class="form-control" id="eventCategory" ng-model="event.category" required
-        ng-options="c.id as c.name for c in categories">
+      <select class="form-control" id="eventCategory" ng-model="event.category.id" required
+        ng-options="c.id as c.name for c in categories" name="category">
          <option value="">-- wybierz kategorię --</option>
       </select>
     </div>
+    <div class="col-sm-offset-2 col-sm-10" ng-show="formEventValidations && form.event.category.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span class="error">
+        Wybierz kategorię
+      </span>
+    </div>       
   </div>
   <div class="form-group">
     <label class="col-sm-2 control-label">Typ wydarzenia *</label>
-    <div ng-if="event.titleReadonly" class="col-sm-10">
-      <input type="text" class="form-control" readonly
+    <div ng-if="!event.canDelete" class="col-sm-10">
+      <input type="text" class="form-control" readonly name="oneTimeType"
         value="{{event.oneTimeType ? 'jednorazowe (np. przedstawienie, koncert, film)' : 'tymczasowe (np. wystawa, festiwal, targi) * wchodzisz, kiedy chcesz'}}"/>
     </div>
-    <div ng-if="!event.titleReadonly">
+    <div ng-if="event.canDelete">
       <div class="btn-group col-sm-10" data-toggle="buttons">
-        <label class="btn btn-primary btn-sm" ng-class="{active:(!event.oneTimeType)}" ng-click="isOneTimeType(true)">
+        <label class="btn btn-info btn-sm" ng-class="{active: event.oneTimeType}" ng-click="isOneTimeType($event, true)">
           <input type="radio" name="eventType" id="oneTimeType"> jednorazowe (np. przedstawienie, koncert, film)
         </label>
-        <label class="btn btn-primary btn-sm" ng-class="{active:(event.oneTimeType)}" ng-click="isOneTimeType(false)">
+        <label class="btn btn-info btn-sm" ng-class="{active: !event.oneTimeType}" ng-click="isOneTimeType($event, false)">
           <input type="radio" name="eventType" id="tmpType"> tymczasowe (np. wystawa, festiwal, targi)
         </label>
       </div>
-      <p class="help-block col-sm-offset-2 col-sm-10">Sprawdź obie opcje i wybierz dogodniejszą dla wydarzenia</p>
+      <span class="col-sm-offset-2 col-sm-10" ng-show="event.id < 0">
+        <span class="glyphicon glyphicon-info-sign add-info"></span>
+        <span class="add-info">Sprawdź obie opcje i wybierz dogodniejszą dla wydarzenia</span>
+      </span>
     </div>
   </div>
-  <div class="event-pdtp" ng-repeat="pdtp in event.pdtps">
-    <div ng-include="'views/' + pdtpTypePartial" />
+  <div class="event-pdtp" ng-repeat="pdtp in event.pdtps" ng-form="subForm">
+    <div ng-include="'views/' + (event.oneTimeType ? 'panelEventOneTime.html' : 'panelEventTmp.html')" />
     <div class="form-group">
       <label for="eventPlace{{$index}}" class="col-sm-2 control-label">Gdzie *</label>
       <div class="col-sm-8">
         <input type="text" class="form-control" id="eventPlace{{$index}}" required
-        maxlength="64" ng-model="pdtp.place" ng-readonly="pdtp.readonly"
+        maxlength="64" ng-model="pdtp.place" ng-readonly="pdtp.readonly" name="place"
         placeholder="lokalizacja wydarzenia, np. Mała Scena, Świętego Antoniego 651" />
       </div> 
+      <div class="col-sm-offset-2 col-sm-10" ng-show="formEventValidations && subForm.place.$invalid">
+        <span class="glyphicon glyphicon-exclamation-sign error"></span>
+        <span class="error">
+          Podaj miejsce, gdzie odbędzie się wydarzenie
+        </span>
+      </div>       
     </div>
     <div class="form-group">
       <label for="eventPrice{{$index}}" class="col-sm-2 control-label">Cena *</label>
       <div class="col-sm-8">
         <input type="text" class="form-control" id="eventPrice{{$index}}" required
-         ng-model="pdtp.price" ng-readonly="pdtp.readonly" maxlength="64"
+         ng-model="pdtp.price" ng-readonly="pdtp.readonly" maxlength="64" name="price"
          placeholder="np. 40zł (norm.), 30zł (ulg.)" />
-      </div>  
+      </div>
+      <div class="col-sm-offset-2 col-sm-10" ng-show="formEventValidations && subForm.price.$invalid">
+        <span class="glyphicon glyphicon-exclamation-sign error"></span>
+        <span class="error">
+          Podaj cenę
+        </span>
+      </div> 
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
@@ -111,8 +153,11 @@
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default" ng-click="saveEvent()">Zapisz</button>
-      <a class="btn btn-default" ng-click="cancelClicked()" ng-show="cancelClicked!==undefined">Anuluj</a>
+      <button type="submit" class="btn btn-primary" ng-click="saveEvent()" type="button" autofocus>Zapisz</button>
+      <button class="btn btn-warning" ng-click="cancelClicked()" ng-show="cancelClicked!==undefined">Anuluj</a>
+      <button class="btn btn-xs btn-danger pull-right xs-delete-button" ng-click="deleteEvent()" ng-show="event.canDelete">
+        Usuń wydarzenie...
+       </button>
     </div>
   </div>   
 </form>

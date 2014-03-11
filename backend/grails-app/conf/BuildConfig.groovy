@@ -66,7 +66,7 @@ grails.project.dependency.resolution = {
         /*compile ":spring-security-rest:1.3.0.RC3", { //https://github.com/alvarosanchez/grails-spring-security-rest/issues/14
             excludes: 'spring-security-core'
         }*/
-        compile ":mongodb:1.3.1"
+        //compile ":mongodb:1.3.1"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.7" // or ":hibernate4:4.1.11.6"

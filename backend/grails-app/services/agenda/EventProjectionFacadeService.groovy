@@ -1,21 +1,21 @@
 package agenda
 
-class EventPresentationFacadeService {
+class EventProjectionFacadeService {
 
-    def eventPresentationService
+    def eventProjectionService
     def eventRecommendationService
 
     def showByDate(requestedDate, categoryId, instId) {
-        eventPresentationService.showByDate(requestedDate) +
+        eventProjectionService.showByDate(requestedDate) +
             [newest: eventRecommendationService.getNewlyAdded(categoryId, instId),
              soon: eventRecommendationService.getComingSoon(categoryId, instId)]
     }
 
     def showByPdtp(pdtpId) {
-        eventPresentationService.showByPdtp(pdtpId)
+        eventProjectionService.showByPdtp(pdtpId)
     }
 
     def submittedEvents(instId) {
-       eventPresentationService.submittedEvents(instId)
+       eventProjectionService.submittedEvents(instId)
     }
 }
