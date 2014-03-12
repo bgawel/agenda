@@ -12,7 +12,7 @@ angular.module('frontendApp')
           panel.type = type;
           panel.messages = messages;
           panel.show = true;
-          if (form) {
+          if (form && form.$setPristine) {
             form.$setPristine();
           }
           $window.scrollTo(0,0);

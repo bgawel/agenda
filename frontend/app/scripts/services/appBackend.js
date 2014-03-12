@@ -2,7 +2,9 @@
 
 var app = angular.module('frontendApp');
 
+// TODO bgawel: make it configurable for tests
 var serwerUrl = 'http://localhost:8080/';
+//var serwerUrl = '';
 var url = function(path) {
   return serwerUrl + path;
 };

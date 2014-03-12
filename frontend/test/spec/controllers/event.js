@@ -28,7 +28,7 @@ describe('Controller: EventCtrl', function () {
   });
   
   it('should handle error response from server', function () {
-    $httpBackend.expectGET('b/evntProj/byEvent/' + $routeParams.eventId + '.json').respond(410);
+    $httpBackend.expectGET('b/evntProj/byEvent/' + $routeParams.eventId + '.json').respond(404);
     $controller('EventCtrl', {$scope: scope});
     $httpBackend.flush();
     

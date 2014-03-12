@@ -12,7 +12,7 @@ describe('Controller: MainCtrl', function () {
       activeIndex: 0
     };
   var WEEK_MENU_RESPONSE = {
-      entries: [{name: 'All', abbr:'', id:'all'}, {name: 'today', abbr:'MON', id:'03-02-2014'}, 
+      entries: [{name: 'All', abbr:'', id:'all'}, {name: 'today', abbr:'MON', id:'2014-02-03'}, 
                 {name: '', abbr:'date', id:'date'}],
       activeIndex: 1
     };
@@ -97,7 +97,7 @@ describe('Controller: MainCtrl', function () {
     scope = $rootScope.$new();
     $httpBackend.expectGET('b/menu/categories.json').respond(CATEGORY_FILTER_RESPONSE);
     $httpBackend.expectGET('b/menu/week.json').respond(WEEK_MENU_RESPONSE);
-    $httpBackend.expectGET('b/evntProj/byDate/03-02-2014.json?category=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-03.json?category=all').respond(EVENTS_RESPONSE);
     MainCtrl = $controller('MainCtrl', {$scope: scope});
   }));
 
@@ -208,7 +208,7 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
     
-    $httpBackend.expectGET('b/evntProj/byDate/16-02-2014.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
@@ -218,7 +218,7 @@ describe('Controller: MainCtrl', function () {
     expect(scope.weekMenu[1].ngClass).toEqual('');
     expect(activeDay.ngClass).toEqual('active');
     expect(activeDay.index).toEqual(2);
-    expect(activeDay.id).toEqual('16-02-2014');
+    expect(activeDay.id).toEqual('2014-02-16');
     expect(activeDay.name).toEqual(WEEK_MENU_RESPONSE.entries[2].name);
     expect(activeDay.abbr).toEqual(WEEK_MENU_RESPONSE.entries[2].abbr);
   });
@@ -226,23 +226,23 @@ describe('Controller: MainCtrl', function () {
   it('should pick up another day from a calendar', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/16-02-2014.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
     
-    $httpBackend.expectGET('b/evntProj/byDate/17-02-2014.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-17.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 17);
     scope.$apply();
     $httpBackend.flush(); 
     
-    expect(scope.weekMenu.active.id).toEqual('17-02-2014');
+    expect(scope.weekMenu.active.id).toEqual('2014-02-17');
   });
   
   it('should not trigger request if date from a calendar has not changed', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/16-02-2014.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
@@ -256,7 +256,7 @@ describe('Controller: MainCtrl', function () {
   it('should set calendar value to null if changed to other option', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/16-02-2014.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
@@ -298,7 +298,7 @@ describe('Controller: MainCtrl', function () {
   it('should change events day but active institution should stay even if no events for the institution', function () {
     $httpBackend.flush();
     scope.changeInstitution(1);
-    expect(scope.weekMenu.active.id).not.toBe('16-02-2014');
+    expect(scope.weekMenu.active.id).not.toBe('2014-02-16');
     expect(scope.categories.active.badge).toBe(1);
     expect(scope.institutions.active.name).toBe('Polish Theater');
     expect(scope.institutions.active.badge).toBe(1);
@@ -342,12 +342,12 @@ describe('Controller: MainCtrl', function () {
              ],
         events: []
     };  
-    $httpBackend.expectGET('b/evntProj/byDate/16-02-2014.json?category=all&inst=1').respond(response);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=1').respond(response);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
     
-    expect(scope.weekMenu.active.id).toBe('16-02-2014');
+    expect(scope.weekMenu.active.id).toBe('2014-02-16');
     expect(scope.categories.active.badge).toBe(0);
     expect(scope.institutions.active.name).toBe('Polish Theater');
     expect(scope.institutions.active.badge).toBe(0);
@@ -358,7 +358,7 @@ describe('Controller: MainCtrl', function () {
   it('should cache user settings', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/16-02-2014.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     var date = new Date(2014, 1, 16);
     scope.weekMenu.calendar.value = date;
     scope.$apply();
@@ -381,7 +381,7 @@ describe('Controller: MainCtrl', function () {
     scope.changeCategory(1);
     scope.changeInstitution(1);
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/16-02-2014.json?category=1&inst=1').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=1&inst=1').respond(EVENTS_RESPONSE);
     var date = new Date(2014, 1, 16);
     scope.weekMenu.calendar.value = date;
     scope.$apply();
@@ -390,7 +390,7 @@ describe('Controller: MainCtrl', function () {
     
     $httpBackend.expectGET('b/menu/categories.json').respond(CATEGORY_FILTER_RESPONSE);
     $httpBackend.expectGET('b/menu/week.json').respond(WEEK_MENU_RESPONSE);
-    $httpBackend.expectGET('b/evntProj/byDate/16-02-2014.json?category=1&inst=1').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=1&inst=1').respond(EVENTS_RESPONSE);
     scope.init();
     $httpBackend.flush();
     

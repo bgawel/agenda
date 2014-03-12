@@ -42,7 +42,8 @@ describe('Controller: PanelCtrl', function () {
     $routeParams = _$routeParams_;
     scope = $rootScope.$new();
     $routeParams.instId = 666;
-    $httpBackend.expectGET('inst/666.json').respond(INST_RESPONSE);
+    $httpBackend.whenGET('b/config/now.json').respond({dateTime: '2014-12-24T19:00'});
+    $httpBackend.expectGET('b/inst/666.json').respond(INST_RESPONSE);
   }));
 
   it('should initialize model with view of institution details', function () {
@@ -53,29 +54,29 @@ describe('Controller: PanelCtrl', function () {
     expect(scope.partial).toBe('panelInst.html');
     expect(scope.instMsgPanel.show).toBe(false);
     expect(scope.inst.name).toBe(INST_RESPONSE.name);
-    expect(scope.inst.pwd).toBe(scope.inst.repwd);
+    expect(scope.inst.password).toBe(scope.inst.repwd);
   });
   
-  it('should post inst data and handle successful response having clicked save', function () {
+  it('should put inst data and handle successful response having clicked save', function () {
     $controller('PanelCtrl', {$scope: scope});
     $httpBackend.flush();
     scope.form.inst = {$invalid: false};
     
-    $httpBackend.expectPOST('inst.json').respond({success: true, messages:'Saved'});
+    $httpBackend.expectPUT('b/inst/1.json').respond(INST_RESPONSE);
     scope.saveInst();
     $httpBackend.flush();
     
     expect(scope.instMsgPanel.show).toBe(true);
     expect(scope.instMsgPanel.type).toBe('success');
-    expect(scope.instMsgPanel.messages).toEqual(['Saved']);
+    expect(scope.instMsgPanel.messages).toEqual(['Dane zostały zaktualizowane']);
   });
   
-  it('should post inst data and handle unsuccessful response having clicked save', function () {
+  it('should put inst data and handle unsuccessful response having clicked save', function () {
     $controller('PanelCtrl', {$scope: scope});
     $httpBackend.flush();
     scope.form.inst = {$invalid: false};
     
-    $httpBackend.expectPOST('inst.json').respond({success: false, messages:'Not saved'});
+    $httpBackend.expectPUT('b/inst/1.json').respond(422, {global: 'Not saved'});
     scope.saveInst();
     $httpBackend.flush();
     
@@ -89,7 +90,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     scope.form.inst = {$invalid: false};
     
-    $httpBackend.expectPOST('inst.json').respond(404);
+    $httpBackend.expectPUT('b/inst/1.json').respond(404);
     scope.saveInst();
     $httpBackend.flush();
     
@@ -120,7 +121,7 @@ describe('Controller: PanelCtrl', function () {
     expect(scope.event.id).toBeDefined()
     expect(scope.evtMsgPanel.show).toBe(false);
     expect(scope.categories.length).toBe(3);
-    expect(scope.event.pdtps[0].time).toBeDefined();
+    expect(scope.event.pdtps[0].startTime).toBeDefined();
   });
   
   it('should add a new place / date / price section initialized with previous values', function () {
@@ -129,7 +130,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     $httpBackend.flush();
     scope.event.pdtps[0].place = 'Sky Tower';
-    scope.event.pdtps[0].time = new Date();
+    scope.event.pdtps[0].startTime = new Date();
     scope.event.pdtps[0].date = new Date();
     scope.event.pdtps[0].price = '15 euro'
     
@@ -137,7 +138,7 @@ describe('Controller: PanelCtrl', function () {
     
     expect(scope.event.pdtps.length).toBe(2);
     expect(scope.event.pdtps[1].place).toBe(scope.event.pdtps[0].place);
-    expect(scope.event.pdtps[1].time).toBe(scope.event.pdtps[0].time);
+    expect(scope.event.pdtps[1].startTime).toBe(scope.event.pdtps[0].startTime);
     expect(scope.event.pdtps[1].date).toBeUndefined();
     expect(scope.event.pdtps[1].price).toBe(scope.event.pdtps[0].price);
   });
@@ -194,15 +195,14 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
-    $httpBackend.expectPOST('event.json').respond({success: true, messages:'Saved', id:2});
+    $httpBackend.expectPOST('b/event.json').respond({id:2});
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
-    $httpBackend.expectGET('event/2.json').respond({title:'Mayday'});
     scope.saveEvent();
     $httpBackend.flush();
     
     expect(scope.evtMsgPanel.show).toBe(true);
     expect(scope.evtMsgPanel.type).toBe('success');
-    expect(scope.evtMsgPanel.messages).toEqual(['Saved']);
+    expect(scope.evtMsgPanel.messages).toEqual(['Nowe wydarzenie zostało dodane']);
   });
   
   it('should post event data and handle unsuccessful response having clicked save', function () {
@@ -212,13 +212,13 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
-    $httpBackend.expectPOST('event.json').respond({success: false, messages:'Not saved'});
+    $httpBackend.expectPOST('b/event.json').respond(500);
     scope.saveEvent();
     $httpBackend.flush();
     
     expect(scope.evtMsgPanel.show).toBe(true);
     expect(scope.evtMsgPanel.type).toBe('danger');
-    expect(scope.evtMsgPanel.messages).toEqual(['Not saved']);
+    expect(scope.evtMsgPanel.messages).toEqual(['Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl']);
   });
   
   it('should post event data and handle unexpected error having clicked save', function () {
@@ -228,7 +228,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
-    $httpBackend.expectPOST('event.json').respond(404);
+    $httpBackend.expectPOST('b/event.json').respond(404);
     scope.saveEvent();
     $httpBackend.flush();
     
@@ -272,9 +272,8 @@ describe('Controller: PanelCtrl', function () {
     scope.form.event = {$invalid: false};
     var spiedUploader = spyUploader();
 
-    $httpBackend.expectPOST('event.json').respond({success: true, messages:'Saved', id:2});
+    $httpBackend.expectPOST('b/event.json').respond({id:2});
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
-    $httpBackend.expectGET('event/2.json').respond({title:'Mayday'});
     scope.saveEvent();
     scope.uploader.trigger('completeall');
     $httpBackend.flush();
@@ -291,13 +290,13 @@ describe('Controller: PanelCtrl', function () {
     var spiedUploader = spyUploader();
 
     scope.saveEvent();
-    scope.uploader.trigger('error', {}, {}, {messages:'Not uploaded'});
+    scope.uploader.trigger('error', {}, {}, {});
     
     spiedUploader.verify();
     $httpBackend.verifyNoOutstandingRequest();
     expect(scope.evtMsgPanel.show).toBe(true);
     expect(scope.evtMsgPanel.type).toBe('danger');
-    expect(scope.evtMsgPanel.messages[0]).toBe('Not uploaded');
+    expect(scope.evtMsgPanel.messages[0]).toBe('Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl');
   });
   
   it('should not post event data if could not upload picture, display default response', function () {
@@ -315,7 +314,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.verifyNoOutstandingRequest();
     expect(scope.evtMsgPanel.show).toBe(true);
     expect(scope.evtMsgPanel.type).toBe('danger');
-    expect(scope.evtMsgPanel.messages[0]).toBe('Nie można zapisać zdjęcia');
+    expect(scope.evtMsgPanel.messages[0]).toBe('Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl');
   });
   
   it('should initialize model with view of submitted events', function () {
@@ -335,7 +334,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
-    $httpBackend.expectGET('event/1.json').respond({title:'Mayday'});
+    $httpBackend.expectGET('b/event/1.json').respond({title:'Mayday'});
     scope.loadExistingEvent(1);
     $httpBackend.flush();
     
@@ -351,7 +350,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.expectGET('b/evntProj/submitted/666.json').respond(SUBMITTED_RESPONSE);
     $httpBackend.flush();
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
-    $httpBackend.expectGET('event/1.json').respond({title:'Mayday'});
+    $httpBackend.expectGET('b/event/1.json').respond({title:'Mayday'});
     scope.loadExistingEvent(1);
     $httpBackend.flush();
     
