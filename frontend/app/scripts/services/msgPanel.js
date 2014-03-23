@@ -12,27 +12,22 @@ angular.module('frontendApp')
           panel.type = type;
           panel.messages = messages;
           panel.show = true;
-          if (form && form.$setPristine) {
-            form.$setPristine();
-          }
+          form && form.$setPristine && form.$setPristine();
           $window.scrollTo(0,0);
+        } else {
+          panel.show = false;
         }
+        return panel.show;
       },
       showError : function(panel, messages, form) {
-        this.show(panel, 'danger', messages, form);
+        return this.show(panel, 'danger', messages, form);
       },
       showSuccess : function(panel, messages, form) {
-        this.show(panel, 'success', messages, form);
+        return this.show(panel, 'success', messages, form);
       },
       hide : function(panel) {
         panel.messages = [];
         panel.show = false;
-      },
-      unexpectedError : function(panel, messages, form) {
-        if (!messages) {
-          messages = 'Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl';
-        }
-        this.showError(panel, messages, form);
       }
     };
   }]);

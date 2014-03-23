@@ -2,10 +2,10 @@
 
 angular.module('frontendApp')
   .controller('MainCtrl',
-      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', 'Menu',
-       'Events', 'Progressbar',
-      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, Menu, Events,
-          Progressbar) {
+      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', '$rootScope',
+       'Menu', 'Events', 'Progressbar', 'Auth',
+      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, $rootScope, 
+          Menu, Events, Progressbar, Auth) {
     $scope.toggleRightPanel = function () {
       $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
     };
@@ -15,6 +15,8 @@ angular.module('frontendApp')
     
     var DISPLAY_ALL_ID = 'all';
     var DATE_ABBR = 'date';
+    
+    $scope.showMaxChars = 200;
     
     var CACHE_NAME = 'mainCache';
     var CACHE_DAY_KEY = 'mainCache_DAY';
@@ -84,7 +86,7 @@ angular.module('frontendApp')
     $scope.changeCategory = function(categoryIndex) {
       var activeCategory = activateCategory(categoryIndex);
       setCategoryFilter(activeCategory);
-      setInstitutionOfGivenCategoryToAll(activeCategory);// tu jest bug jak init z cache
+      setInstitutionOfGivenCategoryToAll(activeCategory);
     };
     var activateCategory = function(categoryIndex) {
       if ($scope.categories.active !== undefined) {
@@ -136,7 +138,7 @@ angular.module('frontendApp')
     };
     
     $scope.changeEventsDay = function(dayIndex) {
-      Progressbar.open($scope);
+      Progressbar.open();
       var activeDay = activateEventsDay(dayIndex);
       var activeCategory = $scope.categories.active;
       var activeInstitution = getActiveInstitution();
@@ -175,7 +177,7 @@ angular.module('frontendApp')
         fillComingSoonEventsIfPresent(data);
         $scope.events = data.events;
         $scope.noEventsMsg = !$scope.events.length;
-        Progressbar.close($scope);
+        Progressbar.close();
         scrollToEventIfNeeded();
       });
     };
@@ -263,13 +265,21 @@ angular.module('frontendApp')
       getCache().removeAll();
       $window.location.reload(); // $route.reload() causes problems in unit tests (unexpected GET views.main.html)
     };
-    $scope.newEvent = function() {
+    $scope.panel = function(option) {
       cacheUserSettings();
-      $location.url('login');
+      var o = option ? ('?o=' + option): '';
+      $location.url('panel/' + $rootScope.userId + o);
     };
     $scope.about = function() {
       cacheUserSettings();
       $location.url('about');
+    };
+    $scope.login = function() {
+      cacheUserSettings();
+      $location.url('login');
+    };
+    $scope.logout = function() {
+      Auth.logout();
     };
     
     var scrollTo = function(hash) {

@@ -20,22 +20,22 @@ class Event {
     Date dateCreated
     Date lastUpdated
 
-    Boolean oneTimeType = true
+    boolean oneTimeType = true
 
     List pdtps = []
     static hasMany = [pdtps: Pdtp]
     static belongsTo = [institution: Institution]
 
+    static final PIC_MAX_SIZE = 64
     static constraints = {
         title maxSize: 64, blank: false
-        pic maxSize: 64, nullable: true
+        pic maxSize: PIC_MAX_SIZE, nullable: true
         more maxSize: 64, nullable: true, validator: {
             if (!WwwValidator.validate(it)) {
                 ['incorrectUrl']
             }
         }
         category nullable: false
-        oneTimeType nullable: false
         description maxSize: 1800, nullable: true, validator: { value, thisEvent ->
             if (!value && !thisEvent.more) {
                 ['descriptionOrMoreRequired']

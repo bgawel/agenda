@@ -85,15 +85,25 @@ grails.exceptionresolver.params.exclude = ['password']
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
 
+grails.mail.default.from = 'info@agenda.pl'
+agenda.mail.admin = 'admin@agenda.pl'
 environments {
+    test {
+        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+    }
     development {
         grails.logging.jul.usebridge = true
         cors.headers = [
-            'Access-Control-Allow-Origin': 'http://127.0.0.1:9000'
+            'Access-Control-Allow-Origin': 'http://127.0.0.1:9000',
+            'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with, x-auth-token'
         ]
+        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
     }
     production {
         grails.logging.jul.usebridge = false
+        cors.enabled = false
+        greenmail.disabled = true
+        agenda.signup.adminmustconfirm = true
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
@@ -140,7 +150,9 @@ log4j = {
             debug  'grails.app.controllers'
             debug  'grails.app.services'
             debug  'grails.app.filters'
-            debug   'org.hibernate.SQL'
+            debug  'org.hibernate.SQL'
+            debug  'com.odobo.grails.plugin.springsecurity.rest'
+            debug  'agenda.security'
             //trace   'org.hibernate.type'
         }
         production {
@@ -170,9 +182,51 @@ log4j = {
 
 grails.gorm.failOnError = true
 
-grails.app.context = 'b'
+grails.app.context = '/b'
 
 grails.databinding.dateFormats = ["yyyy-MM-dd'T'HH:mm"]
 
 grails.plugin.springsecurity.rejectIfNoRule = false
 grails.plugin.springsecurity.fii.rejectPublicInvocations = false
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'agenda.Institution'
+grails.plugin.springsecurity.userLookup.usernamePropertyName = 'email'
+grails.plugin.springsecurity.userLookup.accountExpiredPropertyName = null
+grails.plugin.springsecurity.userLookup.accountLockedPropertyName = null
+grails.plugin.springsecurity.userLookup.passwordExpiredPropertyName = null
+grails.plugin.springsecurity.userLookup.authority.className = 'agenda.security.Role'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'agenda.security.UserRole'
+grails.plugin.springsecurity.password.algorithm = 'bcrypt'
+grails.plugin.springsecurity.password.bcrypt.logrounds = 13
+grails.plugin.springsecurity.roleHierarchy = '''
+   ROLE_ADMIN > ROLE_INST
+'''
+grails.plugin.springsecurity.apf.filterProcessesUrl = '/j_083a2_security_check'
+grails.plugin.springsecurity.apf.usernameParameter = 'j_973username'
+grails.plugin.springsecurity.apf.passwordParameter = 'j_279password'
+grails.plugin.springsecurity.filterChain.chainMap = [
+    '/menu/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/category/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/evntProj/byDate/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/evntProj/byEvent/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/instProj/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/config/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/rest/resetPwd/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/confirm/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/greenmail/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/**': 'JOINED_FILTERS'
+]
+grails.plugin.springsecurity.controllerAnnotations.staticRules = []
+
+grails.plugin.springsecurity.rest.login.endpointUrl = '/rest/login.json'
+grails.plugin.springsecurity.rest.logout.endpointUrl = '/rest/logout'
+grails.plugin.springsecurity.rest.login.failureStatusCode = 403
+grails.plugin.springsecurity.rest.token.validation.headerName = 'X-Auth-Token'
+grails.plugin.springsecurity.rest.token.validation.endpointUrl = '/rest/checkLogin'
+grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
+grails.plugin.springsecurity.rest.login.useJsonCredentials = true
+grails.plugin.springsecurity.rest.login.usernamePropertyName = 'email'
+grails.plugin.springsecurity.rest.login.passwordPropertyName = 'password'
+
+agenda.adminMode = true
+
+agenda.confirm.timeout = 1000*60*60*24*2L // 2 days

@@ -14,9 +14,9 @@ angular.module('frontendApp')
           if (httpResponse.data.global) {
             MsgPanel.showError(msgPanel, httpResponse.data.global, form);
           }
-        } else {
-          MsgPanel.unexpectedError(msgPanel, null, form);
+          return true;
         }
+        return false;
       }
     };
   }]);

@@ -1,5 +1,7 @@
 package agenda
 
+import grails.plugin.springsecurity.annotation.Secured
+
 class EventProjectionController {
 
     static responseFormats = ['json']
@@ -14,6 +16,7 @@ class EventProjectionController {
         respond eventProjectionFacadeService.showByPdtp(params.id as long)
     }
 
+    @Secured(['IS_AUTHENTICATED_FULLY'])
     def submitted() {
         respond eventProjectionFacadeService.submittedEvents(params.id as long)
     }

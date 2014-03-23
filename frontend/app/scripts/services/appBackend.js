@@ -56,13 +56,8 @@ app.factory('Events', ['$http', function($http) {
           return result.data;
         });
     },
-    byId : function(eventId, notFound) {
+    byId : function(eventId) {
       return $http({method: 'GET', url: url('b/evntProj/byEvent/' + eventId + '.json')}).
-        error(function(data, status) {
-          if (status === 404) {
-            notFound(data);
-          }
-        }).
         then(function(result) {
           return result.data;
         });
@@ -99,15 +94,54 @@ app.factory('Insts', ['$http', function($http) {
   };
 }]);
 
-app.factory('Uploader', ['$fileUploader', function($fileUploader) {
+app.factory('Uploader', ['$fileUploader', '$http', function($fileUploader, $http) {
   return {
-    create : function(scope, formId) {
+    create : function(scope) {
       return $fileUploader.create({
         scope: scope,
-        url: 'upload',
-        formData: [{formId: formId}],
-        removeAfterUpload: false
+        url: url('b/upload/evntPic'),
+        removeAfterUpload: false,
+        headers: {
+          'X-Auth-Token': $http.defaults.headers.common['X-Auth-Token']
+        }
       });
     }
+  };
+}]);
+
+app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', 
+                     function($rootScope, $http, $q, $timeout, $cookies) {
+  return {
+    login : function(credentials, rememberMe) {
+      return $http.post(url('b/rest/login.json'), credentials).then(function(result) {
+        $http.defaults.headers.common['X-Auth-Token'] = result.data.token;
+        if (rememberMe) {
+          $cookies.username = result.data.username;
+        } else {
+          $cookies.username = '';
+        }
+        $rootScope.$broadcast('onAuthenticationSuccess', result.data);
+        return result.data;
+      });
+    },
+    check : function() {
+      if (!$http.defaults.headers.common['X-Auth-Token']) {
+        var deferred = $q.defer();
+        $timeout(function(){ deferred.reject({status: 401}); }, 0);
+        return deferred.promise;
+      }
+      return $http.get(url('b/rest/checkLogin'));
+    },
+    logout : function() {
+      return $http.post(url('b/rest/logout')).then(function() {
+        delete $http.defaults.headers.common['X-Auth-Token'];
+        $rootScope.$broadcast('onLogoutSuccess');
+        return true;
+      });
+    },
+    resetPwd : function(username) {
+      return $http.post(url('b/rest/resetPwd/' + username));
+    },
+    changePwd : function
   };
 }]);

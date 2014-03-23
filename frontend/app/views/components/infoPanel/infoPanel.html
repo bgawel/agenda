@@ -1,0 +1,10 @@
+<alert type="panel.type" ng-show="panel.show" ng-switch on="panel.messages.length">
+  <span ng-switch-when="1">
+    <span ng-show="panel.type === 'danger'" class="glyphicon glyphicon-exclamation-sign error"></span> {{panel.messages[0]}}
+  </span>
+  <ul ng-switch-default>
+    <li ng-repeat="msg in panel.messages">
+      <span ng-show="panel.type === 'danger'" class="glyphicon glyphicon-exclamation-sign error"></span> {{msg}}
+    </li>
+  </ul>
+</alert>

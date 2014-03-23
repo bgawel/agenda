@@ -13,6 +13,7 @@
 
         <!-- build:css({.tmp,app}) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="bower_components/angular-ui-growl/css/growl.css">
         <!-- endbuild -->
 </head>
   <body ng-app="frontendApp">
@@ -61,6 +62,8 @@
         <script src="bower_components/sass-bootstrap/js/tooltip.js"></script>
         <script src="bower_components/sass-bootstrap/js/popover.js"></script>
 		    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="bower_components/angular-ui-growl/src/growl.js"></script>
+        <script src="bower_components/angular-truncate/dist/angular-truncate.js"></script>
         <!-- load custom templates -->
         <script src="/ui-templates.js"></script>
         <!-- endbuild -->
@@ -79,11 +82,15 @@
         <script src="scripts/directives/ngServerError.js"></script> 
         <script src="scripts/directives/timepicker.js"></script> 
         <script src="scripts/directives/ngDateFix.js"></script>
+        <script src="scripts/directives/ngFormAutofillFix.js"></script>
+        <script src="scripts/directives/infoPanel.js"></script> 
         <script src="scripts/services/appBackend.js"></script>
         <script src="scripts/services/msgPanel.js"></script>
         <script src="scripts/services/progressbar.js"></script>
         <script src="scripts/services/serverError.js"></script>
         <script src="scripts/services/confirmDialog.js"></script>
+        <script src="scripts/services/i18n.js"></script>
+        <script src="scripts/services/responseInterceptor.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/event.js"></script>
         <script src="scripts/controllers/panel.js"></script>

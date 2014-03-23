@@ -60,12 +60,16 @@ grails.project.dependency.resolution = {
 
         // plugins for the compile step
         compile ":scaffolding:2.0.1"
-        compile ':cache:1.1.1'
+        compile ":cache:1.1.1"
+        compile ":cache-ehcache:1.0.1"
         compile ":joda-time:1.4"
+        compile ":session-temp-files:1.0"
         compile ":spring-security-core:2.0-RC2"
-        /*compile ":spring-security-rest:1.3.0.RC3", { //https://github.com/alvarosanchez/grails-spring-security-rest/issues/14
-            excludes: 'spring-security-core'
-        }*/
+        compile ":spring-security-rest:1.3.0.RC3", { //https://github.com/alvarosanchez/grails-spring-security-rest/issues/14
+            excludes: ['spring-security-core', 'cors']
+        }
+        compile ":email-confirmation:2.0.8"
+        compile ":greenmail:1.3.4"
         //compile ":mongodb:1.3.1"
 
         // plugins needed at runtime but not for compilation

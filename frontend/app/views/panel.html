@@ -1,9 +1,14 @@
 <div class="container">
   <div class="row">
-    <ol class="breadcrumb">
-      <li><a href="#">Wydarzenia</a></li>
-      <li class="active">Panel administracyjny - {{inst.name}}</li>
-    </ol>
+    <div class="col-xs-11">
+      <ol class="breadcrumb">
+        <li><a href="#">Wydarzenia</a></li>
+        <li class="active">Panel administracyjny - {{inst.name}}</li>
+      </ol>
+    </div>
+    <div class="col-xs-1">
+      <a class="pull-right" href ng-click='logout()'>Wyloguj</a>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-3">

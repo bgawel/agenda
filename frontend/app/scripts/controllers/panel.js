@@ -2,51 +2,54 @@
 
 angular.module('frontendApp')
   .controller('PanelCtrl', ['$scope', '$routeParams', '$filter', '$location', 'Inst', 'Category', 'Events', 'Event',
-                            'MsgPanel', 'Uploader', 'ServerError', 'Progressbar', 'ConfirmDialog', 'Config',
+                            'MsgPanel', 'Uploader', 'ServerError', 'Progressbar', 'ConfirmDialog', 'Config', 'Auth',
               function ($scope, $routeParams,  $filter, $location, Inst, Category, Events, Event, MsgPanel, Uploader,
-                  ServerError, Progressbar, ConfirmDialog, Config) {
+                  ServerError, Progressbar, ConfirmDialog, Config, Auth) {
 
+    $scope.logout = function() {
+      Auth.logout();
+      $location.url('/');
+    };
+    
     $scope.loadInst = function() {
       $scope.formInstValidations = false; // if this is not explicitly set, the errors blink for a moment 
-      Progressbar.open($scope);
+      Progressbar.open();
       $scope.partial = 'panelInst.html';
       $scope.instMsgPanel = {show: false, messages: []};
       $scope.inst = Inst.get({id:$routeParams.instId}, function() {
         instLoaded();
-        Progressbar.close($scope);
+        Progressbar.close();
         $scope.formInstValidations = true;
+      }, function() {
+        $scope.logout();
       });
     };
     $scope.saveInst = function() {
       if ($scope.form.inst.$invalid) {
         return;
       }
-      Progressbar.open($scope);
+      Progressbar.open();
       Inst.update({id: $scope.inst.id}, $scope.inst,
         function(value) {
           instLoaded(value);
-          MsgPanel.showSuccess($scope.instMsgPanel, 'Dane zostały zaktualizowane', $scope.form.inst);
-          Progressbar.close($scope);
+          MsgPanel.showSuccess($scope.instMsgPanel, $scope.i18n.status.updated, $scope.form.inst);
+          Progressbar.close();
         }, function(httpResponse) {
           ServerError.show(httpResponse, $scope, $scope.form.inst, $scope.instMsgPanel);
-          Progressbar.close($scope);
         });
     };
     $scope.deleteInst = function() {
-      ConfirmDialog.confirmDelete($scope, 'Usunięcie konta organizatora',
-          'Czy na pewno chcesz usunąć konto razem z wszystkimi zgłoszonymi wydarzeniami?').result
+      ConfirmDialog.confirmDelete($scope, $scope.i18n.inst.del.title, $scope.i18n.inst.del.query).result
         .then(function() {
-          Progressbar.open($scope);
+          Progressbar.open();
           $scope.inst.$delete({id: $scope.inst.id}, function() {
-              Progressbar.close($scope);
-              ConfirmDialog.confirmInfo($scope, 'Usunięcie konta organizatora',
-                  'Konto zostało usunięte wraz z wszystkimi danymi.').result
+              Progressbar.close();
+              ConfirmDialog.confirmInfo($scope, $scope.i18n.inst.del.title, $scope.i18n.inst.del.confirm).result
                 .then(function() {
                   $location.url('/');
                 });
             }, function(httpResponse) {
               ServerError.show(httpResponse, $scope, $scope.form.inst, $scope.instMsgPanel);
-              Progressbar.close($scope);
             });
         });
     };
@@ -58,33 +61,36 @@ angular.module('frontendApp')
     }
     
     $scope.loadNewEvent = function() {
+      $scope.option = 2;
       var defaultTime = new Date();
-      var newEventId = -defaultTime.getTime();
       defaultTime.setHours(19);
       defaultTime.setMinutes(0);
-      $scope.event = {id: newEventId, pdtps: [{startTime: defaultTime}], oneTimeType: true, canDelete: true,
+      $scope.event = {pdtps: [{startTime: defaultTime}], oneTimeType: true, canDelete: true,
           institution: {id: $scope.inst.id}};
-      initEventPanel($scope.event.id);
+      initEventPanel();
       $scope.cancelClicked = undefined;
     };
     
     $scope.loadSubmittedEvents = function() {
-      Progressbar.open($scope);
+      $scope.option = 3;
+      Progressbar.open();
       $scope.partial = 'panelSubmittedEvents.html';
       Events.submitted($routeParams.instId).then(function(data) {
         $scope.submittedEvents = data.events;
-        Progressbar.close($scope);
+        Progressbar.close();
       });
     };
     
     $scope.loadExistingEvent = function(eventId) {
       $scope.formEventValidations = false;
-      Progressbar.open($scope);
-      loadExistingEventView(eventId);
+      Progressbar.open();
+      loadExistingEventView();
       $scope.event = Event.get({id:eventId}, function() {
         eventLoaded();
-        Progressbar.close($scope);
+        Progressbar.close();
         $scope.formEventValidations = true;
+      }, function() {
+        $scope.loadSubmittedEvents();
       });
     };
     
@@ -93,19 +99,17 @@ angular.module('frontendApp')
     };
     
     $scope.deleteEvent = function() {
-      ConfirmDialog.confirmDelete($scope, 'Usunięcie wydarzenia', 'Czy na pewno chcesz usunąć wydarzenie?').result
+      ConfirmDialog.confirmDelete($scope, $scope.i18n.event.del.title, $scope.i18n.event.del.query).result
       .then(function() {
-        Progressbar.open($scope);
+        Progressbar.open();
         $scope.event.$delete({id: $scope.event.id}, function() {
-            Progressbar.close($scope);
-            ConfirmDialog.confirmInfo($scope, 'Usunięcie wydarzenia', 'Wydarzenie zostało usunięte.').result
+            Progressbar.close();
+            ConfirmDialog.confirmInfo($scope, $scope.i18n.event.del.title, $scope.i18n.event.del.confirm).result
               .then(function() {
-                $scope.option = 2;
                 $scope.loadNewEvent();
               });
           }, function(httpResponse) {
             ServerError.show(httpResponse, $scope, $scope.form.event, $scope.evtMsgPanel);
-            Progressbar.close($scope);
           });
       });
     };
@@ -130,16 +134,15 @@ angular.module('frontendApp')
       }
       $scope.eventTitle = $scope.event.title;
     }
-    function loadExistingEventView(eventId) {
-      initEventPanel(eventId);
+    function loadExistingEventView() {
+      initEventPanel();
       $scope.cancelClicked = function() {
         $scope.eventTitle = undefined;
         $scope.loadSubmittedEvents();
-        $scope.option = 3;
       };
       $scope.option = 4;
     }
-    function initEventPanel(eventId) {
+    function initEventPanel() {
       loadCategories();
       loadConfig();
       $scope.partial = 'panelEvent.html';
@@ -150,7 +153,7 @@ angular.module('frontendApp')
           'starting-day': 1,
           'show-weeks': false
         };
-      createUploader(eventId);
+      createUploader();
     }
     function loadCategories() {
       Category.all().then(function(data) {
@@ -162,14 +165,18 @@ angular.module('frontendApp')
         $scope.minDate = data.dateTime;
       });
     }
-    function createUploader(eventId) {
-      var uploader = $scope.uploader = Uploader.create($scope, eventId);
+    function createUploader() {
+      var uploader = $scope.uploader = Uploader.create($scope);
       // http://nervgh.github.io/pages/angular-file-upload/examples/image-preview/controllers.js
       uploader.filters.push(function(item /* {File|HTMLInputElement} */) {
         var type = uploader.isHTML5 ? item.type : '/' + item.value.slice(item.value.lastIndexOf('.') + 1);
         type = '|' + type.toLowerCase().slice(type.lastIndexOf('/') + 1) + '|';
-        var isImg = $scope.event.isImg = '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        var isImg = !($scope.event.isNotImg = '|jpg|png|jpeg|bmp|gif|'.indexOf(type) < 0);
         return isImg;
+      });
+      uploader.filters.push(function(item) {
+        var okSize = !($scope.event.notOkSize = item.size > 3145728); // <= 3 MB
+        return okSize;
       });
       uploader.bind('afteraddingfile', function () {
         if (uploader.queue.length > 1) {
@@ -216,7 +223,7 @@ angular.module('frontendApp')
       if ($scope.form.event.$invalid) {
         return;
       }
-      Progressbar.open($scope);
+      Progressbar.open();
       if ($scope.uploader.getNotUploadedItems().length) {
         uploadItemsAndSaveOrUpdateEvent();
       } else {
@@ -227,39 +234,42 @@ angular.module('frontendApp')
       var uploader = $scope.uploader;
       uploader.uploadAll();
       var noError = true;
+      uploader.bind('success', function (event, xhr, item, response) {
+        $scope.event.picId = response.fileId;
+      }); 
       uploader.bind('error', function (event, xhr, item, response) {
         noError = false;
-        ServerError.show(response, $scope, $scope.form.event, $scope.evtMsgPanel);
       });
       uploader.bind('completeall', function () {
         if (noError) {
           saveOrUpdateEvent();
         } else {
-          Progressbar.close($scope);
+          MsgPanel.showError($scope.evtMsgPanel, $scope.i18n.event.uploadError, $scope.form.event);
+          Progressbar.close();
         }
       });
     }
     function saveOrUpdateEvent() {
       var errorCallback = function(httpResponse) {
         ServerError.show(httpResponse, $scope, $scope.form.event, $scope.evtMsgPanel);
-        Progressbar.close($scope);
       };
       var successCallback = function(value, successMsg) {
         eventLoaded(value);
+        $scope.uploader.clearQueue();
         MsgPanel.showSuccess($scope.evtMsgPanel, successMsg, $scope.form.event);
-        Progressbar.close($scope);
+        Progressbar.close();
       };
       var event = eventToTransfer();
-      if (event.id < 0) {
-        Event.save({}, event,
+      if (event.id) {
+        Event.update({id: event.id, picId: $scope.event.picId}, event,
           function(value) {
-            loadExistingEventView(value.id);
-            successCallback(value, 'Nowe wydarzenie zostało dodane');
+            successCallback(value, $scope.i18n.status.updated);
           }, errorCallback);
       } else {
-        Event.update({id: event.id}, event,
+        Event.save({picId: $scope.event.picId}, event,
           function(value) {
-            successCallback(value, 'Dane zostały zaktualizowane');
+            loadExistingEventView();
+            successCallback(value, $scope.i18n.event.addedNew);
           }, errorCallback);
       }
     }
@@ -268,20 +278,14 @@ angular.module('frontendApp')
       angular.forEach(event.pdtps, function(pdtp) {
         // to prevent converting to UTC
         if (!pdtp.readonly) {
-          pdtp.fromDate = dateToTransfer(pdtp.fromDate);
-          pdtp.toDate = dateToTransfer(pdtp.toDate);
-          pdtp.startTime = timeToTransfer(pdtp.startTime);
+          pdtp.fromDate = dtToTransfer(pdtp.fromDate);
+          pdtp.toDate = dtToTransfer(pdtp.toDate);
+          pdtp.startTime = dtToTransfer(pdtp.startTime);
         }
       });
       return event;
     }
-    function dateToTransfer(date) {
-      if (typeof date === 'object') {
-        return $filter('date')(date, 'yyyy-MM-ddTHH:mm');
-      }
-      return date;
-    }
-    function timeToTransfer(date) {
+    function dtToTransfer(date) {
       if (typeof date === 'object') {
         return $filter('date')(date, 'yyyy-MM-ddTHH:mm');
       }
@@ -291,11 +295,10 @@ angular.module('frontendApp')
     $scope.isOneTimeType = function($event, isOneTimeType) {
       $event.preventDefault();
       $event.stopPropagation();
-      if ($scope.event.id > 0 && $scope.event.oneTimeType !== isOneTimeType) {
-        ConfirmDialog.confirmQuestion($scope, 'Zmiana typu wydarzenia',
-            'Czy na pewno chcesz zmienić typ wydarzenia? Część danych dotycząca terminów zostanie utracona.').result
-        .then(function () {
-          changeEventType(isOneTimeType);
+      if ($scope.event.id && $scope.event.oneTimeType !== isOneTimeType) {
+        ConfirmDialog.confirmQuestion($scope, $scope.i18n.event.changeType.title, $scope.i18n.event.changeType.query).
+          result.then(function () {
+            changeEventType(isOneTimeType);
         });
       } else {
         changeEventType(isOneTimeType);
@@ -308,7 +311,7 @@ angular.module('frontendApp')
         for (var i=0; i<$scope.event.pdtps.length; ++i) {
           pdtp = $scope.event.pdtps[i];
           pdtp.fromDate = pdtp.toDate;
-          pdtp.timeDescription = $filter('date')(pdtp.startTime, 'HH:mm');
+          pdtp.timeDescription = $filter('date')(pdtp.startTime, $scope.i18n.timeFormat);
         }
       }
     }

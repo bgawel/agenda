@@ -10,6 +10,13 @@ class UrlMappings {
         '/inst'(resources: 'institution')
         '/event'(resources: 'event')
         "/config/$action(.${format})?"(controller: 'configuration')
+        "/upload/$action"(controller: 'fileUpload')
+
+        "/rest/resetPwd/$id"(controller: 'resetPwd')
+        '/rest/resetPwd/change/$id'(controller: 'emailConfirmation', parseRequest:true)
+
+        "/confirm/$id"(controller: 'emailConfirmation')
+        "/greenmail/$id?"(controller: 'greenmail')
 
         "/"(view:"/index")
         "500"(view:'/error')

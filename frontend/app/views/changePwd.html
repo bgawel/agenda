@@ -1,0 +1,55 @@
+<info-panel panel="pwdMsgPanel" form="form.pwd"></info-panel>
+<form class="form-horizontal form-pwd" role="form" name="form.pwd" 
+    novalidate ng-class="{validate: formPwdValidations}" ng-submit="change()">
+  <div class="form-group">
+    <label for="oldPwd" class="col-sm-2 control-label">Bieżące hasło *</label>
+    <div class="col-sm-3">
+      <input type="password" class="form-control" id="oldPwd" required
+        name="oldPwd" maxlength="30" ng-model="oldPwd"/>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10" ng-show="formPwdValidations && form.pwd.oldPwd.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span class="error">
+        Podaj hasło
+      </span>
+    </div> 
+  </div>        
+  <div class="form-group">
+    <label for="newPwd" class="col-sm-2 control-label">Nowe hasło *</label>
+    <div class="col-sm-3">
+      <input type="password" class="form-control" id="newPwd" required
+        placeholder="min. 5 znaków" name="password" ng-change="rePwd = undefined;"
+        maxlength="30" ng-model="newPwd" ng-pattern="/.{5,}/" ng-server-error />
+    </div>
+    <div class="col-sm-offset-2 col-sm-10" ng-show="formPwdValidations && form.pwd.newPwd.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span ng-show="form.pwd.newPwd.$error.required || form.pwd.newPwd.$error.pattern" class="error">
+        Podaj hasło: min. 5 znaków
+      </span>
+      <span ng-show="form.pwd.newPwd.$error.server" class="error">
+        {{form.pwd.newPwd.$error.errorText}}
+      </span>
+    </div> 
+  </div> 
+  <div class="form-group">
+    <label for="rePwd" class="col-sm-2 control-label">Potwierdź nowe hasło *</label>
+    <div class="col-sm-3">
+      <input type="password" class="form-control" id="rePwd" required
+        maxlength="30" ng-model="rePwd" name="rePwd" ng-same-as="newPwd" />
+    </div>
+    <div class="col-sm-offset-2 col-sm-10" ng-show="formPwdValidations && form.pwd.rePwd.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span ng-show="form.pwd.rePwd.$error.required" class="error">
+        Potwierdź hasło
+      </span>
+      <span ng-show="form.pwd.rePwd.$error.sameAs" class="error">
+        Podana wartość nie jest równa nowemu hasłu
+      </span>      
+    </div> 
+  </div>  
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">Zapisz</button>
+    </div>
+  </div>
+</form>

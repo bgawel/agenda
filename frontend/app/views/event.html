@@ -5,10 +5,7 @@
       <li class="active">{{event.catName}}</li>
     </ol>
   </div>
-	<alert type="'danger'" ng-show="eventGone">
-    <p>Przepraszamy, ale nie możemy wyświetlić szczegółów tego wydarzenia, ponieważ zostało ono usunięte. <a href="#">Wróć</a></p>
-  </alert>
-  <div class="row" ng-hide="eventGone">
+  <div class="row">
     <div class="event clearfix">
       <div class="col-xs-9">
         <h4><b>{{event.title}}</b>, 
@@ -33,7 +30,7 @@
       </div>
     </div>
   </div>
-  <div class="row" ng-hide="eventGone || pdtps.length === 0">
+  <div class="row" ng-show="pdtps.length > 1">
     <div class="event clearfix">
       <div class="col-xs-12">
       <p>Pozostałe terminy wydarzenia:</p>

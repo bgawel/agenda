@@ -2,10 +2,10 @@
 
 angular.module('frontendApp').factory('Progressbar', function() {
   return {
-    open : function(scope) {
+    open : function() {
       return {};
     },
-    close : function(scope) {
+    close : function() {
     }
   };
 });

@@ -24,6 +24,7 @@ class EventProjectionService {
     def institutionMenuService
     def pdtpQueryService
     def eventQueryService
+    def staticResourceService
 
     def showByDate(requestedDate) {
         showByDate(currentDateTime, requestedDate)
@@ -152,9 +153,9 @@ class EventProjectionService {
 
     private makeCommonPartOfEntryForShow(pdtp, moreToShow) {
         def event = pdtp.event
-        [id: pdtp.id, title: event.title, pic: event.pic, more: event.more, desc: event.description,
-            whoId:event.institution.id, whoName: event.institution.name, moreToShow: moreToShow,
-            whoAbout: makeDescOfInstitution(event.institution), catId:event.category.id, catName: event.category.name]
+        [id: pdtp.id, title: event.title, pic: staticResourceService.makeImageSrc(event.pic), more: event.more,
+           desc: event.description, whoId:event.institution.id, whoName: event.institution.name, moreToShow: moreToShow,
+           whoAbout: makeDescOfInstitution(event.institution), catId:event.category.id, catName: event.category.name]
     }
 
     private makeDescOfInstitution(institution) {

@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('EventCtrl', ['$scope', '$routeParams', 'Events', function($scope, $routeParams, Events) {
-    Events.byId($routeParams.eventId, function() {
-      $scope.eventGone = true;
-    }).
-    then(function(event) {
-      $scope.eventGone = false;
+  .controller('EventCtrl', ['$scope', '$routeParams', '$location', 'Events', 
+                            function($scope, $routeParams, $location, Events) {
+    Events.byId($routeParams.eventId).then(function(event) {
       $scope.event = event;
+    }, function() {
+      $location.url('/');
     });
   }]);
