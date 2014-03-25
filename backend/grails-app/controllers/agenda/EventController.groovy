@@ -27,7 +27,7 @@ class EventController {
         Event.withTransaction {
             eventResourceService.validate(event)
             if (event.hasErrors()) {
-                respond((Object)responseBuilderService.makeMsgsFromErrors(event.errors), [status: UNPROCESSABLE_ENTITY])
+                respond responseBuilderService.makeMsgsFromErrors(event.errors), [status: UNPROCESSABLE_ENTITY]
             } else {
                 responseObject = eventResourceService.save(event, params.picId)
             }
@@ -46,7 +46,7 @@ class EventController {
                 bindWithParams(event)
                 eventResourceService.validate(event, readonlyPdtpIds)
                 if (event.hasErrors()) {
-                    respond((Object)responseBuilderService.makeMsgsFromErrors(event.errors), [status: UNPROCESSABLE_ENTITY])
+                    respond responseBuilderService.makeMsgsFromErrors(event.errors), [status: UNPROCESSABLE_ENTITY]
                 } else {
                     responseObject = eventResourceService.update(event, params.picId)
                 }
@@ -66,7 +66,7 @@ class EventController {
             if (event) {
                 eventResourceService.checkIfCanDelete(event)
                 if (event.hasErrors()) {
-                    respond((Object)responseBuilderService.makeMsgsFromErrors(event.errors), [status: UNPROCESSABLE_ENTITY])
+                    respond responseBuilderService.makeMsgsFromErrors(event.errors), [status: UNPROCESSABLE_ENTITY]
                 } else {
                     responseObject = eventResourceService.delete(event)
                 }

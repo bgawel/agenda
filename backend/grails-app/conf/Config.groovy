@@ -85,29 +85,6 @@ grails.exceptionresolver.params.exclude = ['password']
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
 
-grails.mail.default.from = 'info@agenda.pl'
-agenda.mail.admin = 'admin@agenda.pl'
-environments {
-    test {
-        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-    }
-    development {
-        grails.logging.jul.usebridge = true
-        cors.headers = [
-            'Access-Control-Allow-Origin': 'http://127.0.0.1:9000',
-            'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with, x-auth-token'
-        ]
-        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-    }
-    production {
-        grails.logging.jul.usebridge = false
-        cors.enabled = false
-        greenmail.disabled = true
-        agenda.signup.adminmustconfirm = true
-        // TODO: grails.serverURL = "http://www.changeme.com"
-    }
-}
-
 // log4j configuration
 log4j = {
     def conversionPattern = '[%d{ISO8601} %5p] %c - %m%n'
@@ -177,6 +154,36 @@ log4j = {
                 error 'fileAppender'
             }
         }
+    }
+}
+
+grails.mail.default.from = 'info@agenda.pl'
+agenda.mail.admin = 'admin@agenda.pl'
+agenda.confirm.invalid.redirect = [url: 'http://127.0.0.1:9000/#/rc/invalid']
+agenda.confirm.invalid.xhrMode = { render status: 410 }
+agenda.signup.adminconfirmed = [url: 'http://127.0.0.1:9000/#/rc/signup/a']
+agenda.signup.userconfirmed = [url: 'http://127.0.0.1:9000/#/rc/signup/u']
+agenda.setpwd.baseUri = 'http://127.0.0.1:9000/#/rc/setPwd'
+agenda.setpwd.confirmed = { render status: 200 }
+environments {
+    test {
+        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+    }
+    development {
+        grails.logging.jul.usebridge = true
+        cors.headers = [
+            'Access-Control-Allow-Origin': 'http://127.0.0.1:9000',
+            'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with, x-auth-token'
+        ]
+        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+        agenda.signup.adminmustconfirm = true
+    }
+    production {
+        grails.logging.jul.usebridge = false
+        cors.enabled = false
+        greenmail.disabled = true
+        agenda.signup.adminmustconfirm = true
+        // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
 

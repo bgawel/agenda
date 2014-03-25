@@ -40,12 +40,25 @@ angular.module('frontendApp', [
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
+      .when('/rc/invalid', {
+        templateUrl: 'views/invalidConfirmation.html',
+        controller: 'InvalidConfirmationCtrl'
+      })
+      .when('/rc/signup/:type', {
+        templateUrl: 'views/signupConfirmation.html',
+        controller: 'SignupConfirmationCtrl'
+      })
+      .when('/rc/setPwd/:token/:username', {
+        templateUrl: 'views/setPwd.html',
+        controller: 'SetPwdCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
     $httpProvider.interceptors.push('ResponseInterceptor');
   }])
-  .run(['$location', '$rootScope', 'I18n', '$growl', function ($location, $rootScope, I18n, $growl) {
+  .run(['$location', '$rootScope', 'I18n', '$growl', '$modalStack', 
+        function ($location, $rootScope, I18n, $growl, $modalStack) {
     $rootScope.i18n = I18n;
     $rootScope.userId = -666;
     $rootScope.$on('onAuthenticationSuccess', function(event, data) {
@@ -56,17 +69,32 @@ angular.module('frontendApp', [
       $rootScope.userId = -666;
     });
     $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
-      if (rejection && (rejection.status === 401 || rejection.status === 403)) {
+      if (rejection && rejection.status === 666) {
         var panelOption = current.params.o;
         $location.url('login' + (panelOption ? ('?o=' + panelOption) : ''));
       }
     });
-    $rootScope.$on('onUnexpectedServerError', function(event, status) {
-      var text = status === 404 ? I18n.error.status404 : (status === 0 ? I18n.error.status0 : I18n.error.unexpected)
-      $growl.box(null, text, {
-        class: 'danger',
-        sticky: false,
-        timeout: 5000
-      }).open();
+    $rootScope.$on('onUnexpectedServerError', function(event, rejection) {
+      var text
+      switch (rejection.status) {
+        case 401:
+        case 403:
+          $modalStack.dismissAll();
+          $location.url('login');
+          break;
+        case 404:
+          text = I18n.error.status404
+          break;
+        case 0: // status = 0 as well when response to xhr and status - 302 
+          text = I18n.error.status0
+          break;
+        default:
+          text = I18n.error.unexpected
+      }
+      text && $growl.box(null, text, {
+                class: 'danger',
+                sticky: false,
+                timeout: 10000
+              }).open();
     });
   }]);

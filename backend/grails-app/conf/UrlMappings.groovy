@@ -12,11 +12,10 @@ class UrlMappings {
         "/config/$action(.${format})?"(controller: 'configuration')
         "/upload/$action"(controller: 'fileUpload')
 
-        "/rest/resetPwd/$id"(controller: 'resetPwd')
-        '/rest/resetPwd/change/$id'(controller: 'emailConfirmation', parseRequest:true)
+        "/rest/$action(.${format})?"(controller: 'password')
 
         "/confirm/$id"(controller: 'emailConfirmation')
-        "/greenmail/$id?"(controller: 'greenmail')
+        "/greenmail/$action?/$id?"(controller: 'greenmail')
 
         "/"(view:"/index")
         "500"(view:'/error')

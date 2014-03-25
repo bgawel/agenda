@@ -6,7 +6,7 @@ angular.module('frontendApp')
       error : {
         unexpected: 'Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl',
         status0: 'Wystąpił problem połączenia z serwerem',
-        status404: 'Przykro nam, ale obiekt nie został znaleziony w bazie danych',
+        status404: 'Przykro nam, ale obiekt nie jest dostępny',
         email: 'Podaj poprawny adres e-mail',
         pwd: 'Podaj hasło'
       },
@@ -40,8 +40,8 @@ angular.module('frontendApp')
                '+ Twoja organizacja będzie widoczna na głównej stronie na liście organizatorów',
                '+ Użytkownik będzie mógł wyświetlić dane Twojej organizacji przy wydarzeniu'],
         badCredentials: 'Adres email lub hasło są niepoprawne',
-        resetPwd: 'Link aktywujący nowe hasło został wysłany na Twój adres e-mail',
-        pwdNotFound: 'Nie jesteś zarejestrowany w systemie'
+        resetPwd: 'Link umożliwiający ustanowienie nowego hasła został wysłany na Twój adres e-mail',
+        statusPwdChanged: 'Hasło zostało zmienione'
       },
       appName: 'kulturalna AGENDA Wrocławia',
       doneBy: 'DaDa Soft Lab 2014',       

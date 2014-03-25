@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('SignupCtrl', ['$scope', '$location', 'Inst', 'ServerError', 'Progressbar', 'Insts', 'MsgPanel',
-                             function ($scope, $location, Inst, ServerError, Progressbar, Insts, MsgPanel) {
+  .controller('SignupCtrl', ['$scope', '$location', 'Inst', 'ServerError', 'Progressbar', 'Insts', '$growl',
+                             function ($scope, $location, Inst, ServerError, Progressbar, Insts, $growl) {
     Insts.names().then(function(data) {
       $scope.registeredInsts = data;
     });
@@ -21,10 +21,14 @@ angular.module('frontendApp')
           if (value.id) {
             $location.url('panel/' + value.id + '?o=2');
           } else {
-            MsgPanel.showSuccess($scope.instMsgPanel, value.message, $scope.form.inst);
+            $location.url('/');
+            $growl.box(null, value.message, {
+              class: 'success',
+              sticky: true
+            }).open();
           }
         }, function(httpResponse) {
-          ServerError.show(httpResponse, $scope, $scope.form.inst, $scope.instMsgPanel);
+          ServerError.show(httpResponse, $scope, $scope.instMsgPanel, $scope.form.inst);
         });
     };
   }]);

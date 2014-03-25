@@ -3,7 +3,7 @@
 angular.module('frontendApp')
   .factory('ServerError', ['MsgPanel', function(MsgPanel) {
     return {
-      show : function(httpResponse, scope, form, msgPanel) {
+      show : function(httpResponse, scope, msgPanel, form) {
         if (httpResponse.status === 422) {
           if (httpResponse.data.fields) {
             var fieldsErrors = httpResponse.data.fields;

@@ -16,16 +16,17 @@ class ResetPwdConfirmationService {
     def emailConfirmationService
     def baseConfirmationService
     private g
+    private config
 
     def sendConfirmation(inst) {
         emailConfirmationService.sendConfirmation(
             to: inst.email,
-            from: grailsApplication.config.grails.mail.default.from,
-            subject: g.message(code:'confirmation.signup.subject', locale: locale),
+            from: baseConfirmationService.defaultEmail,
+            subject: g.message(code:'confirmation.resetpwd.subject', locale: locale),
             id: inst.id,
             event: 'resetPwd',
             view: '/emails/resetPwdConfirmationRequest',
-            model: [locale: locale])
+            model: [locale: locale, baseUri: config.baseUri, username: inst.email])
     }
 
     @Transactional
@@ -34,9 +35,8 @@ class ResetPwdConfirmationService {
         def inst = Institution.get(info.id)
         if (inst) {
             inst.password = WebUtils.retrieveGrailsWebRequest().params['password']
-            def confirmed = { render(view: '/panel/', model: [locale: locale]) }
             log.info "Reset password confirmed for inst ${info.email}"
-            confirmed
+            config.confirmed
         } else {
             log.warn "Could not find inst with id=${info.id}; info $info"
             baseConfirmationService.onInvalid
@@ -51,5 +51,6 @@ class ResetPwdConfirmationService {
     @PostConstruct
     def init() {
         g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        config = grailsApplication.config.agenda.setpwd
     }
 }

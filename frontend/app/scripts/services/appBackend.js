@@ -127,7 +127,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies',
     check : function() {
       if (!$http.defaults.headers.common['X-Auth-Token']) {
         var deferred = $q.defer();
-        $timeout(function(){ deferred.reject({status: 401}); }, 0);
+        $timeout(function(){ deferred.reject({status: 666}); }, 0);
         return deferred.promise;
       }
       return $http.get(url('b/rest/checkLogin'));
@@ -139,9 +139,14 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies',
         return true;
       });
     },
-    resetPwd : function(username) {
-      return $http.post(url('b/rest/resetPwd/' + username));
+    resetPwd : function(data) {
+      return $http.post(url('b/rest/resetPwd.json'), data);
     },
-    changePwd : function
+    setPwd : function(data, token) {
+      return $http.post(url('b/rest/setPwd.json'), data);
+    },
+    changePwd : function(data) {
+      return $http.post(url('b/rest/changePwd.json'), data);
+    }
   };
 }]);

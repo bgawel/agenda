@@ -8,6 +8,7 @@ class InstitutionResourceService {
 
     def signupConfirmationService
     def grailsApplication
+    def restReauthenticationService
     private g
 
     def show(id) {
@@ -44,6 +45,18 @@ class InstitutionResourceService {
     }
 
     def update(inst) {
+        if (inst.email != inst.getPersistentValue('email')) {
+            new OnTransaction(
+                null,
+                {
+                    try {
+                        restReauthenticationService.reauthenticate(inst.email)
+                    } catch (e) {
+                        log.error "Could not re-authenticate user after commit for inst $inst", e
+                    }
+                }
+            )
+        }
         convert(persistInst(inst))
     }
 
@@ -53,8 +66,8 @@ class InstitutionResourceService {
     }
 
     private convert(inst) {
-        [id: inst.id, name: inst.name, email: inst.email, password: inst.password, address: inst.address,
-            web: inst.web, telephone: inst.telephone]
+        [id: inst.id, name: inst.name, email: inst.email, address: inst.address, web: inst.web,
+            telephone: inst.telephone]
     }
 
     private persistInst(inst) {

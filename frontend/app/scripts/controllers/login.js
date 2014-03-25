@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('LoginCtrl', ['$scope', '$routeParams', '$location', '$cookies', 'Auth', 'MsgPanel', 'Progressbar',
-                            function ($scope, $routeParams, $location, $cookies, Auth, MsgPanel, Progressbar) {
+  .controller('LoginCtrl', ['$scope', '$routeParams', '$location', '$cookies', '$modal', 'Auth', 'MsgPanel', 
+                            'Progressbar',
+                            function ($scope, $routeParams, $location, $cookies, $modal, Auth, MsgPanel, Progressbar) {
     $scope.form = {};
     $scope.loginMsgPanel = {show: false, messages:[]};
     $scope.username = $cookies.username;
@@ -28,19 +29,44 @@ angular.module('frontendApp')
       );
     };
     $scope.resetPwd = function() {
-      if ($scope.form.login.username.$invalid) {
-        return;
-      }
-      Progressbar.open();
-      Auth.resetPwd($scope.username).then(
-          function() {
-            MsgPanel.showSuccess($scope.loginMsgPanel, $scope.i18n.login.resetPwd, $scope.form.login);
+      var modalInstance = $modal.open({
+        templateUrl: 'views/resetPwd.html',
+        controller: ResetPwdCtrl,
+        resolve: {
+          Auth: function() { return Auth; },
+          ServerError: ['ServerError', function(ServerError) { return ServerError }],
+          Progressbar: function() { return Progressbar }
+        },
+        scope: $scope,
+        backdrop: false
+      });
+      modalInstance.result.then(function() {
+        $scope.username = $scope.password = null;
+        MsgPanel.showSuccess($scope.loginMsgPanel, $scope.i18n.login.resetPwd, $scope.form.inst);
+      });
+    };
+    
+    var ResetPwdCtrl = function ($scope, $modalInstance, Auth, ServerError, Progressbar) {
+      $scope.pwdMsgPanel = {show: false, messages:[]};
+      $scope.pwd = {username: null};
+      $scope.reset = function() {
+        $scope.formPwdValidations = true;
+        if ($scope.form.pwd.$invalid) {
+          return;
+        }
+        Progressbar.open();
+        Auth.resetPwd({username: $scope.pwd.username}).then(
+          function(data) {
             Progressbar.close();
+            $modalInstance.close();
           },
           function(httpResponse) {
-            httpResponse.status === 422 &&
-              MsgPanel.showError($scope.loginMsgPanel, $scope.i18n.login.pwdNotFound, $scope.form.login);
+            ServerError.show(httpResponse, $scope, $scope.pwdMsgPanel);
           }
-       );
+        );
+      };
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
     };
   }]);

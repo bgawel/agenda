@@ -18,6 +18,11 @@
 
 .form-horizontal {
 	.xs-delete-button {
+		color: $btn-danger-bg;
 		margin-top: 11px;
+		
+		&:hover, &:focus {
+			color: darken($btn-danger-bg, 15%);
+		}
 	}
 }

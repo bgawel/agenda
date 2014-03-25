@@ -7,7 +7,7 @@ angular.module('frontendApp')
     return function(scope, elem, attrs) {
       // Fixes Chrome bug: https://groups.google.com/forum/#!topic/angular/6NlucSskQjY
       elem.prop('method', 'POST');
-  
+      
       // Fix autofill issues where Angular doesn't know about autofilled inputs
       if(attrs.ngSubmit) {
         setTimeout(function() {

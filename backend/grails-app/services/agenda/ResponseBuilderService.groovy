@@ -12,7 +12,7 @@ class ResponseBuilderService {
     private g
 
     def makeGlobalMsg(messageId, parameters=[]) {
-        [global: [g.message(code: messageId, args: parameters, locale: locale)]]
+        new Error(global: [g.message(code: messageId, args: parameters, locale: locale)])
     }
 
     def makeMsgsFromErrors(errors) {
@@ -24,7 +24,7 @@ class ResponseBuilderService {
         errors.globalErrors?.each {
             global << g.message(error:it, locale: locale)
         }
-        [global: global, fields: fields]
+        new Error(global: global, fields: fields)
     }
 
     @PostConstruct

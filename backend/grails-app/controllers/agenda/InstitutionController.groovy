@@ -22,12 +22,12 @@ class InstitutionController {
     }
 
     def save() {
-        def inst = bindWithParams(new Institution())
+        def inst = bindWithParams(new Institution(), true)
         def responseObject
         Event.withTransaction {
             inst.validate()
             if (inst.hasErrors()) {
-                respond((Object)responseBuilderService.makeMsgsFromErrors(inst.errors), [status: UNPROCESSABLE_ENTITY])
+                respond responseBuilderService.makeMsgsFromErrors(inst.errors), [status: UNPROCESSABLE_ENTITY]
             } else {
                 responseObject = institutionResourceService.save(inst)
             }
@@ -46,7 +46,7 @@ class InstitutionController {
                 bindWithParams(inst)
                 inst.validate()
                 if (inst.hasErrors()) {
-                    respond((Object)responseBuilderService.makeMsgsFromErrors(inst.errors), [status: UNPROCESSABLE_ENTITY])
+                    respond responseBuilderService.makeMsgsFromErrors(inst.errors), [status: UNPROCESSABLE_ENTITY]
                 } else {
                     responseObject = institutionResourceService.update(inst)
                 }
@@ -75,7 +75,11 @@ class InstitutionController {
         }
     }
 
-    private bindWithParams(inst) {
-        bindData(inst, params, [include: ['name', 'email', 'password', 'address', 'web', 'telephone']])
+    private bindWithParams(inst, includePwd=false) {
+        def include = ['name', 'email', 'address', 'web', 'telephone']
+        if (includePwd) {
+            include <<= 'password'
+        }
+        bindData(inst, params, [include:  include])
     }
 }

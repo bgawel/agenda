@@ -12,7 +12,7 @@
       </span>
     </div>       
     <input type="password" ng-model="password" class="form-control" placeholder="{{i18n.placeholder.pwd}}" required name="password"
-      maxlength="16"/>
+      maxlength="16" ng-clear-fix />
     <div class="error-password" ng-show="formLoginValidations && form.login.password.$invalid">
       <span class="glyphicon glyphicon-exclamation-sign error"></span>
       <span class="error">

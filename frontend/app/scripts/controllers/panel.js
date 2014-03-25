@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('PanelCtrl', ['$scope', '$routeParams', '$filter', '$location', 'Inst', 'Category', 'Events', 'Event',
-                            'MsgPanel', 'Uploader', 'ServerError', 'Progressbar', 'ConfirmDialog', 'Config', 'Auth',
-              function ($scope, $routeParams,  $filter, $location, Inst, Category, Events, Event, MsgPanel, Uploader,
-                  ServerError, Progressbar, ConfirmDialog, Config, Auth) {
+  .controller('PanelCtrl', ['$scope', '$routeParams', '$filter', '$location', '$modal', 'Inst', 'Category', 'Events',
+                            'Event', 'MsgPanel', 'Uploader', 'ServerError', 'Progressbar', 'ConfirmDialog', 'Config', 
+                            'Auth',
+              function ($scope, $routeParams,  $filter, $location, $modal, Inst, Category, Events, Event, MsgPanel, 
+                  Uploader, ServerError, Progressbar, ConfirmDialog, Config, Auth) {
 
     $scope.logout = function() {
       Auth.logout();
@@ -35,7 +36,7 @@ angular.module('frontendApp')
           MsgPanel.showSuccess($scope.instMsgPanel, $scope.i18n.status.updated, $scope.form.inst);
           Progressbar.close();
         }, function(httpResponse) {
-          ServerError.show(httpResponse, $scope, $scope.form.inst, $scope.instMsgPanel);
+          ServerError.show(httpResponse, $scope, $scope.instMsgPanel, $scope.form.inst);
         });
     };
     $scope.deleteInst = function() {
@@ -49,9 +50,25 @@ angular.module('frontendApp')
                   $location.url('/');
                 });
             }, function(httpResponse) {
-              ServerError.show(httpResponse, $scope, $scope.form.inst, $scope.instMsgPanel);
+              ServerError.show(httpResponse, $scope, $scope.instMsgPanel, $scope.form.inst);
             });
         });
+    };
+    $scope.changePwd = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'views/changePwd.html',
+        controller: ChangePwdCtrl,
+        resolve: {
+          Auth: function() { return Auth; },
+          ServerError: function() { return ServerError },
+          Progressbar: function() { return Progressbar }
+        },
+        scope: $scope,
+        backdrop: false
+      });
+      modalInstance.result.then(function() {
+        MsgPanel.showSuccess($scope.instMsgPanel, $scope.i18n.login.pwdChanged, $scope.form.inst);
+      });
     };
     function instLoaded(value) {
       if (value) {
@@ -109,7 +126,7 @@ angular.module('frontendApp')
                 $scope.loadNewEvent();
               });
           }, function(httpResponse) {
-            ServerError.show(httpResponse, $scope, $scope.form.event, $scope.evtMsgPanel);
+            ServerError.show(httpResponse, $scope, $scope.evtMsgPanel, $scope.form.event);
           });
       });
     };
@@ -251,7 +268,7 @@ angular.module('frontendApp')
     }
     function saveOrUpdateEvent() {
       var errorCallback = function(httpResponse) {
-        ServerError.show(httpResponse, $scope, $scope.form.event, $scope.evtMsgPanel);
+        ServerError.show(httpResponse, $scope, $scope.evtMsgPanel, $scope.form.event);
       };
       var successCallback = function(value, successMsg) {
         eventLoaded(value);
@@ -315,4 +332,28 @@ angular.module('frontendApp')
         }
       }
     }
+    
+    var ChangePwdCtrl = function ($scope, $modalInstance, Auth, ServerError, Progressbar) {
+      $scope.pwdMsgPanel = {show: false, messages:[]};
+      $scope.pwd = {oldPwd: null, newPwd: null, rePwd: null}; // it has to go through 'pwd', otherwise not propagated to scope
+      $scope.change = function() {
+        $scope.formPwdValidations = true;
+        if ($scope.form.pwd.$invalid) {
+          return;
+        }
+        Progressbar.open();
+        Auth.changePwd({pwd: $scope.pwd.oldPwd, newPwd: $scope.pwd.newPwd}).then(
+          function(data) {
+            Progressbar.close();
+            $modalInstance.close();
+          },
+          function(httpResponse) {
+            ServerError.show(httpResponse, $scope, $scope.pwdMsgPanel);
+          }
+        );
+      };
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    };
   }]);

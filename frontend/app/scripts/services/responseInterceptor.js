@@ -9,8 +9,8 @@ angular.module('frontendApp')
     return {
       responseError: function(rejection) {
         closeProgress();
-        if (rejection.status !== 401 && rejection.status !== 403 && rejection.status !== 422) {
-          $rootScope.$broadcast('onUnexpectedServerError', rejection.status);
+        if (rejection.status !== 422 && rejection.status !== 410) {
+          $rootScope.$broadcast('onUnexpectedServerError', rejection);
         }
         return $q.reject(rejection);
       }
