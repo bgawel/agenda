@@ -9,7 +9,7 @@ angular.module('frontendApp')
 
     $scope.logout = function() {
       Auth.logout();
-      $location.url('/');
+      $location.url('login');
     };
     
     $scope.loadInst = function() {
@@ -78,6 +78,7 @@ angular.module('frontendApp')
     }
     
     $scope.loadNewEvent = function() {
+      $scope.formEventValidations = false;
       $scope.option = 2;
       var defaultTime = new Date();
       defaultTime.setHours(19);
@@ -102,7 +103,7 @@ angular.module('frontendApp')
       $scope.formEventValidations = false;
       Progressbar.open();
       loadExistingEventView();
-      $scope.event = Event.get({id:eventId}, function() {
+      $scope.event = Event.get({id: eventId}, function() {
         eventLoaded();
         Progressbar.close();
         $scope.formEventValidations = true;

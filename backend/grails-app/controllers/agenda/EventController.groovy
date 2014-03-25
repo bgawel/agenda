@@ -22,7 +22,7 @@ class EventController {
     }
 
     def save() {
-        def event = bindWithParams(new Event())
+        def event = bindWithParams(new Event(), true)
         def responseObject
         Event.withTransaction {
             eventResourceService.validate(event)
@@ -79,9 +79,11 @@ class EventController {
         }
     }
 
-    private bindWithParams(event) {
-        bindData(event, params, [include: ['title', 'pic', 'more', 'description', 'oneTimeType', 'category', 'pdtps',
-            // TODO bgawel: only until logging is implemented
-            'institution']])
+    private bindWithParams(event, includeInst=false) {
+        def include = ['title', 'pic', 'more', 'description', 'oneTimeType', 'category', 'pdtps']
+        if (includeInst) {
+            include <<= 'institution'
+        }
+        bindData(event, params, [include: include])
     }
 }

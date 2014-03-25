@@ -13,10 +13,12 @@ class EventResourceService {
 
     def sessionFactory
     def staticResourceService
+    def securityAttackService
 
     def show(id) {
         def event = Event.get(id)
         if (event) {
+            assertOwnerOfEvent(event)
             convert(event)
         }
     }
@@ -26,6 +28,7 @@ class EventResourceService {
     }
 
     def validate(event, readonlyPdtpIds=[]) {
+        assertOwnerOfEvent(event)
         prepareForValidation(event, readonlyPdtpIds)
         event.validate()
     }
@@ -47,6 +50,7 @@ class EventResourceService {
     }
 
     def checkIfCanDelete(event) {
+        assertOwnerOfEvent(event)
         def cannotDelete = findAllReadOnlyPdtps(event.pdtps).size() > 0
         if (cannotDelete) {
             event.errors.reject('event.delete.cannotDelete')
@@ -187,5 +191,9 @@ class EventResourceService {
         } else {
             suggestedName
         }
+    }
+
+    private assertOwnerOfEvent(event) {
+        securityAttackService.assertOwner(event.institution.id)
     }
 }

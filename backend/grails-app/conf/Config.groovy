@@ -171,10 +171,6 @@ environments {
     }
     development {
         grails.logging.jul.usebridge = true
-        cors.headers = [
-            'Access-Control-Allow-Origin': 'http://127.0.0.1:9000',
-            'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with, x-auth-token'
-        ]
         grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
         agenda.signup.adminmustconfirm = true
     }
@@ -233,6 +229,11 @@ grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
 grails.plugin.springsecurity.rest.login.useJsonCredentials = true
 grails.plugin.springsecurity.rest.login.usernamePropertyName = 'email'
 grails.plugin.springsecurity.rest.login.passwordPropertyName = 'password'
+cors.headers = [
+    'Access-Control-Allow-Origin': 'http://127.0.0.1:9000',
+    'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with, ' +
+        grails.plugin.springsecurity.rest.token.validation.headerName.toLowerCase()
+]
 
 agenda.adminMode = true
 

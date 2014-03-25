@@ -57,8 +57,8 @@ angular.module('frontendApp', [
       });
     $httpProvider.interceptors.push('ResponseInterceptor');
   }])
-  .run(['$location', '$rootScope', 'I18n', '$growl', '$modalStack', 
-        function ($location, $rootScope, I18n, $growl, $modalStack) {
+  .run(['$location', '$rootScope', 'I18n', '$growl', '$modalStack', '$route',
+        function ($location, $rootScope, I18n, $growl, $modalStack, $route) {
     $rootScope.i18n = I18n;
     $rootScope.userId = -666;
     $rootScope.$on('onAuthenticationSuccess', function(event, data) {

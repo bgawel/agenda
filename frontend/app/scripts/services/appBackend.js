@@ -9,6 +9,8 @@ var url = function(path) {
   return serwerUrl + path;
 };
 
+var AUTH_TOKEN_NAME = 'X-Auth-Token'
+
 app.factory('Menu', ['$http', function($http) {
   return {
     week : function() {
@@ -97,13 +99,13 @@ app.factory('Insts', ['$http', function($http) {
 app.factory('Uploader', ['$fileUploader', '$http', function($fileUploader, $http) {
   return {
     create : function(scope) {
+      var headers = {};
+      headers[AUTH_TOKEN_NAME] = $http.defaults.headers.common[AUTH_TOKEN_NAME];
       return $fileUploader.create({
         scope: scope,
         url: url('b/upload/evntPic'),
         removeAfterUpload: false,
-        headers: {
-          'X-Auth-Token': $http.defaults.headers.common['X-Auth-Token']
-        }
+        headers: headers
       });
     }
   };
@@ -114,7 +116,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies',
   return {
     login : function(credentials, rememberMe) {
       return $http.post(url('b/rest/login.json'), credentials).then(function(result) {
-        $http.defaults.headers.common['X-Auth-Token'] = result.data.token;
+        $http.defaults.headers.common[AUTH_TOKEN_NAME] = result.data.token;
         if (rememberMe) {
           $cookies.username = result.data.username;
         } else {
@@ -125,7 +127,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies',
       });
     },
     check : function() {
-      if (!$http.defaults.headers.common['X-Auth-Token']) {
+      if (!$http.defaults.headers.common[AUTH_TOKEN_NAME]) {
         var deferred = $q.defer();
         $timeout(function(){ deferred.reject({status: 666}); }, 0);
         return deferred.promise;
@@ -134,7 +136,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies',
     },
     logout : function() {
       return $http.post(url('b/rest/logout')).then(function() {
-        delete $http.defaults.headers.common['X-Auth-Token'];
+        delete $http.defaults.headers.common[AUTH_TOKEN_NAME];
         $rootScope.$broadcast('onLogoutSuccess');
         return true;
       });

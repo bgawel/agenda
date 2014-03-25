@@ -1,3 +1,5 @@
+import org.springframework.security.authentication.InsufficientAuthenticationException
+
 class UrlMappings {
 
 	static mappings = {
@@ -18,6 +20,7 @@ class UrlMappings {
         "/greenmail/$action?/$id?"(controller: 'greenmail')
 
         "/"(view:"/index")
+        "500"(controller: 'securityAttack', exception: InsufficientAuthenticationException)
         "500"(view:'/error')
 	}
 }
