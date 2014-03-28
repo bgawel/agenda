@@ -38,6 +38,4 @@ class Pdtp {
     static mapping = {
         version false
     }
-
-    private static final wwwValidator = new WwwValidator()
 }

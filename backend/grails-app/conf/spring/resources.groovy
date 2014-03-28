@@ -1,4 +1,6 @@
 import grails.util.Environment
+import agenda.EventChangedListener
+import agenda.InstitutionChangedListener
 import agenda.PdtpRandomQueryH2Service
 import agenda.security.RestAdminAuthenticationFilter
 import agenda.security.RestAuthenticationTokenJsonRendererImpl
@@ -23,5 +25,12 @@ beans = {
         restTokenValidationFilter = ref('restTokenValidationFilter')
         grailsApplication = ref('grailsApplication')
         userDetailsService = ref('userDetailsService')
+    }
+
+    eventChangedListener(EventChangedListener) {
+        cacheUpdaterService = ref('cacheUpdaterService')
+    }
+    institutionChangedListener(InstitutionChangedListener) {
+        cacheUpdaterService = ref('cacheUpdaterService')
     }
 }

@@ -6,6 +6,7 @@ import static agenda.LocalContext.jdkDateTimeToDateOnly
 import static agenda.LocalContext.jdkDateTimeToDateTime
 import static agenda.LocalContext.jdkDateTimeToString
 import static agenda.LocalContext.jdkDateTimeToTimeOnly
+import grails.plugin.cache.CacheEvict
 
 import org.apache.commons.io.FilenameUtils
 
@@ -33,20 +34,22 @@ class EventResourceService {
         event.validate()
     }
 
+    @CacheEvict(value='submittedEvents', key='#event.institution.id')
     def save(event, picId=null) {
         def sessionEvent = addToSession(event)
         if (picId) {
             saveImgIfUploaded(sessionEvent, picId)
         }
-        convert(sessionEvent)
+        convertAndPublish(sessionEvent, [saved: true])
     }
 
+    @CacheEvict(value='submittedEvents', key='#event.institution.id')
     def update(event, picId=null) {
         deleteImgIfNeeded(event)
         if (picId) {
             saveImgIfUploaded(event, picId)
         }
-        convert(event)
+        convertAndPublish(event, [updated: true])
     }
 
     def checkIfCanDelete(event) {
@@ -58,9 +61,16 @@ class EventResourceService {
         !cannotDelete
     }
 
+    @CacheEvict(value='submittedEvents', key='#event.institution.id')
     def delete(event) {
         event.delete()
-        true
+        convertAndPublish(event, [deleted: true])
+    }
+
+    private convertAndPublish(event, reason) {
+        def converted = convert(event)
+        publishEvent new EventChangedEvent([event: converted] << reason)
+        converted
     }
 
     private convert(event) {
@@ -68,7 +78,7 @@ class EventResourceService {
         def canDelete = !pdtps.any { it.readonly }
         [id: event.id, title: event.title, pic: staticResourceService.makeImageSrc(event.pic), more: event.more,
             description: event.description, category: [id: event.category.id], oneTimeType: event.oneTimeType,
-            pdtps: pdtps, canDelete: canDelete]
+            pdtps: pdtps, canDelete: canDelete, lastModified: event.lastUpdated]
     }
 
     private prepareForValidation(event, readonlyPdtpIds) {

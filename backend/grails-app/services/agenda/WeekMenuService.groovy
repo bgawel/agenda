@@ -5,6 +5,9 @@ import static agenda.LocalContext.getCurrentDateTime
 import static agenda.PresentationContext.locale
 import static agenda.PresentationContext.printShortDayOfWeek
 import static org.joda.time.DateTimeConstants.DAYS_PER_WEEK
+import grails.plugin.cache.Cacheable
+
+import javax.annotation.PostConstruct
 
 class WeekMenuService {
 
@@ -13,12 +16,15 @@ class WeekMenuService {
     def allEntryId = 'all'
     def calendarEntryId = 'date'
     def futureEntryId = 'future'
-    def todayEntryName = 'dziś'
-    def calendarEntryName = 'kalendarz'
-    def allEntryName = 'wszystkie'
-    def futureEntryName = 'przyszłe'
     def activeIndex = 2
 
+    def messageSource
+    private todayEntryName
+    private calendarEntry
+    private allEntry
+    private futureEntry
+
+    @Cacheable(value='weekMenu', key='#root.methodName')
     def getWeek() {
         getWeek(currentDateTime)
     }
@@ -48,19 +54,21 @@ class WeekMenuService {
         printShortDayOfWeek(date).toUpperCase(locale)
     }
 
-    private getCalendarEntry() {
-        makeEntry(calendarEntryId, calendarEntryName, calendarEntryId)
-    }
-
-    private getAllEntry() {
-        makeEntry(allEntryId, allEntryName, allEntryId)
-    }
-
     private getFutureEntry() {
         makeEntry(futureEntryId, futureEntryName, futureEntryId)
     }
 
     private makeEntry(id, name, abbr) {
         [id: id, name:name, abbr:abbr]
+    }
+
+    @PostConstruct
+    void init() {
+        todayEntryName = messageSource.getMessage('weekMenu.entry.today', null, locale)
+        calendarEntry = makeEntry(calendarEntryId, messageSource.getMessage('weekMenu.entry.calendar', null, locale),
+            calendarEntryId)
+        allEntry = makeEntry(allEntryId, messageSource.getMessage('weekMenu.entry.all', null, locale), allEntryId)
+        futureEntry = makeEntry(futureEntryId, messageSource.getMessage('weekMenu.entry.future', null, locale),
+            futureEntryId)
     }
 }

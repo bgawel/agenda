@@ -1,6 +1,9 @@
 package agenda
 
 import static agenda.PresentationContext.locale
+import grails.plugin.cache.CacheEvict
+import grails.plugin.cache.CachePut
+import grails.plugin.cache.Cacheable
 
 import javax.annotation.PostConstruct
 
@@ -11,6 +14,7 @@ class InstitutionResourceService {
     def restReauthenticationService
     private g
 
+    @Cacheable(value='inst', key='#id')
     def show(id) {
         def inst = Institution.get(id)
         if (inst) {
@@ -19,7 +23,7 @@ class InstitutionResourceService {
     }
 
     def save(inst) {
-        def newInst = persistInst(inst)
+        def newInst = addToSession(inst)
         new OnTransaction(
             null,
             {
@@ -44,6 +48,7 @@ class InstitutionResourceService {
         }
     }
 
+    @CachePut(value='inst', key='#inst.id')
     def update(inst) {
         if (inst.email != inst.getPersistentValue('email')) {
             new OnTransaction(
@@ -57,20 +62,24 @@ class InstitutionResourceService {
                 }
             )
         }
-        convert(persistInst(inst))
+        def converted = convert(inst)
+        publishEvent new InstitutionChangedEvent([updated: true, instId: inst.id])
+        converted
     }
 
+    @CacheEvict(value='inst, submittedEvents', key='#inst.id')
     def delete(inst) {
         inst.delete()
+        publishEvent new InstitutionChangedEvent([deleted: true, instId: inst.id])
         true
     }
 
     private convert(inst) {
         [id: inst.id, name: inst.name, email: inst.email, address: inst.address, web: inst.web,
-            telephone: inst.telephone]
+            telephone: inst.telephone, lastModified: inst.lastUpdated]
     }
 
-    private persistInst(inst) {
+    private addToSession(inst) {
         inst.save(validate: false)
     }
 

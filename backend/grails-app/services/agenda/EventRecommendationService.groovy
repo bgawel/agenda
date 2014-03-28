@@ -3,6 +3,7 @@ package agenda
 import static agenda.LocalContext.dateTimeToDateOnly
 import static agenda.LocalContext.getCurrentDateTime
 import static agenda.PresentationContext.printShortJdkDate
+import grails.plugin.cache.Cacheable
 
 import org.apache.commons.beanutils.BeanComparator
 
@@ -18,6 +19,7 @@ class EventRecommendationService {
     def categoryMenuService
     def institutionMenuService
 
+    @Cacheable('newlyAdded')
     def getNewlyAdded(categoryId, instId) {
         getNewlyAdded(currentDateTime, categoryId, instId)
     }

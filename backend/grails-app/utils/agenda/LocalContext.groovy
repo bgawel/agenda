@@ -20,7 +20,6 @@ class LocalContext {
     static getCurrentDate() {
         dateTimeToDateOnly(currentDateTime)
     }
-
     static dateTime(jdkDate) {
         new DateTime(jdkDate).withZoneRetainFields(dateTimeZone)
     }

@@ -6,8 +6,10 @@ import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 import grails.plugin.springsecurity.annotation.Secured
+import grails.util.Mixin
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
+@Mixin(AddControllerApi)
 class EventController {
 
     static responseFormats = ['json']
@@ -18,7 +20,7 @@ class EventController {
     def eventResourceService
 
     def show() {
-        respond eventResourceService.show(params.id)
+        respondWithCacheHeaders this, eventResourceService.show(params.id as long)
     }
 
     def save() {

@@ -14,12 +14,12 @@ class TokenStorageServiceImpl implements TokenStorageService {
 
     @Override
     void storeToken(String tokenValue, Object principal) {
-        grailsCacheManager.getCache('security').put(tokenValue, principal)
+        grailsCacheManager.getCache('tokenStorage').put(tokenValue, principal)
         log.debug "Stored principal $principal for token $tokenValue"
     }
 
     @Override
-    @Cacheable(value=['security'], key='#tokenValue')
+    @Cacheable(value='tokenStorage', key='#tokenValue')
     Object loadUserByToken(String tokenValue) throws TokenNotFoundException {
         def tokenNotFoundMsg = "Token $tokenValue not found"
         log.debug tokenNotFoundMsg
@@ -27,7 +27,7 @@ class TokenStorageServiceImpl implements TokenStorageService {
     }
 
     @Override
-    @CacheEvict(value=['security'], key='#tokenValue')
+    @CacheEvict(value='tokenStorage', key='#tokenValue')
     void removeToken(String tokenValue) throws TokenNotFoundException {
         log.debug "Removed token $tokenValue"
     }

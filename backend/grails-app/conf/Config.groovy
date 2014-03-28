@@ -115,6 +115,8 @@ log4j = {
     }
 
     error   'StackTrace'
+    info    'grails.app.jobs'
+    info    'agenda.security.RestAdminAuthenticationFilter'
 
     // loggers
     environments {
@@ -151,7 +153,7 @@ log4j = {
         }
         production {
             root {
-                error 'fileAppender'
+                warn 'fileAppender'
             }
         }
     }

@@ -1,13 +1,18 @@
 package agenda
 
+import grails.plugin.cache.Cacheable
+
 class CategoryMenuService {
 
     static transactional = false
+
+    def categoryQueryService
 
     def allEntryId = 'all'
     def allEntryName = 'Wszystko'
     def activeIndex = 0
 
+    @Cacheable(value='categoryMenu', key='#root.methodName')
     def getCategories() {
         def entries = []
         entries << allEntry
@@ -16,7 +21,7 @@ class CategoryMenuService {
     }
 
     private getDbEntries() {
-        Category.all.collect { makeEntry(it.id, it.name) }
+        categoryQueryService.all.collect { makeEntry(it.id, it.name) }
     }
 
     private getAllEntry() {

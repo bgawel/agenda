@@ -14,6 +14,7 @@ class Category {
     }
 
     static mapping = {
+        cache usage: 'read-only'
         version false
         sort 'name'
     }

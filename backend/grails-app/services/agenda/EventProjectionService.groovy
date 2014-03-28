@@ -13,6 +13,7 @@ import static agenda.PresentationContext.printMiddleJdkDate
 import static agenda.PresentationContext.printShortDayOfWeekForJdkDate
 import static agenda.PresentationContext.printShortJdkDate
 import static org.joda.time.DateTimeConstants.DAYS_PER_WEEK
+import grails.plugin.cache.Cacheable
 
 class EventProjectionService {
 
@@ -26,18 +27,20 @@ class EventProjectionService {
     def eventQueryService
     def staticResourceService
 
+    @Cacheable(value='eventByDate', key='#requestedDate')
     def showByDate(requestedDate) {
         showByDate(currentDateTime, requestedDate)
     }
 
+    @Cacheable(value='eventByPdtp', key='#pdtpId')
     def showByPdtp(pdtpId) {
         showByPdtp(currentDateTime, pdtpId)
     }
 
+    @Cacheable(value='submittedEvents', key='#instId')
     def submittedEvents(instId) {
-        // 'events' instead of array
-        // see http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx/
-        [events: eventQueryService.findAllByInstitution(instId).collect { makeEntryForSubmittedEvent(it) }]
+        [events: eventQueryService.findAllByInstitution(instId).collect { makeEntryForSubmittedEvent(it) },
+            id: instId, lastModified: Institution.get(instId).lastUpdated]
     }
 
     protected showByDate(now, requestedDate) {

@@ -6,7 +6,9 @@ import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 import grails.plugin.springsecurity.annotation.Secured
+import grails.util.Mixin
 
+@Mixin(AddControllerApi)
 class InstitutionController {
 
     static responseFormats = ['json']
@@ -18,7 +20,7 @@ class InstitutionController {
 
     @Secured(['IS_AUTHENTICATED_FULLY'])
     def show() {
-        respond institutionResourceService.show(params.id)
+        respondWithCacheHeaders this, institutionResourceService.show(params.id as long)
     }
 
     def save() {

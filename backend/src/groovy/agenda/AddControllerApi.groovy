@@ -21,4 +21,19 @@ class AddControllerApi {
             [:]
         }
     }
+
+    def respondWithCacheHeaders(controller, entity) {
+        controller.withCacheHeaders {
+            etag {
+                // very important toString(), otherwise line 172 in CacheHeadersService evaluates to true
+                "${entity.id}:${entity.lastModified.time}".toString()
+            }
+            delegate.lastModified {
+                entity.lastModified
+            }
+            generate {
+                controller.respond entity
+            }
+        }
+    }
 }

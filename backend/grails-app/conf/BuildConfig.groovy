@@ -70,10 +70,14 @@ grails.project.dependency.resolution = {
         }
         compile ":email-confirmation:2.0.8"
         compile ":greenmail:1.3.4"
+        compile ":spring-events:1.2"
+        compile ":cache-headers:1.1.6"
         //compile ":mongodb:1.3.1"
 
         // plugins needed at runtime but not for compilation
-        runtime ":hibernate:3.6.10.7" // or ":hibernate4:4.1.11.6"
+        runtime ":hibernate:3.6.10.7"
+        //runtime ":hibernate4:4.3.4.2"
+
         // runtime ":database-migration:1.3.8"
         // runtime ":jquery:1.10.2.2"
         runtime ":resources:1.2.1"
