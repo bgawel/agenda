@@ -6,6 +6,7 @@ angular.module('frontendApp')
        'Menu', 'Events', 'Progressbar', 'Auth',
       function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, $rootScope, 
           Menu, Events, Progressbar, Auth) {
+    
     $scope.toggleRightPanel = function () {
       $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
     };
@@ -72,6 +73,7 @@ angular.module('frontendApp')
     };
     
     $scope.init = function() {
+      Auth.checkIfLoggedIn();
       $scope.institutions = initializeInstitutions();
       $scope.orderEventsBy = initializeOrder();
       $q.all([Menu.categories(), Menu.week()]).then(function(results) {

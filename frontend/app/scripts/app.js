@@ -24,8 +24,9 @@ angular.module('frontendApp', [
       .when('/panel/:instId', {
         templateUrl: 'views/panel.html',
         controller: 'PanelCtrl',
+        reloadOnSearch: false,
         resolve: {
-          checkLoggedin: ['Auth', function(Auth) { return Auth.check(); }]
+          checkLoggedin: ['Auth', function(Auth) { return Auth.assert(); }]
         }
       })
       .when('/login', {
@@ -70,8 +71,7 @@ angular.module('frontendApp', [
     });
     $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
       if (rejection && rejection.status === 666) {
-        var panelOption = current.params.o;
-        $location.url('login' + (panelOption ? ('?o=' + panelOption) : ''));
+        gotoLoginPage(rejection);
       }
     });
     $rootScope.$on('onUnexpectedServerError', function(event, rejection) {
@@ -79,8 +79,7 @@ angular.module('frontendApp', [
       switch (rejection.status) {
         case 401:
         case 403:
-          $modalStack.dismissAll();
-          $location.url('login');
+          gotoLoginPage(rejection);
           break;
         case 404:
           text = I18n.error.status404
@@ -97,4 +96,15 @@ angular.module('frontendApp', [
                 timeout: 10000
               }).open();
     });
+    
+    var gotoLoginPage = function(rejection) {
+      if ($location.path() !== '/') { // main page check passes through 
+        $modalStack.dismissAll();
+        var params = $route.current.params;
+        $location.url('login');
+        delete params.instId;
+        $location.search(params);
+      }
+    };
+    
   }]);

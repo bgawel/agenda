@@ -10,7 +10,6 @@ angular.module('frontendApp')
     if ($scope.username) {
       $scope.rememberMe = true;
     }
-    var panelOption = $routeParams.o ? ('?o=' + $routeParams.o) : '';
     $scope.login = function() {
       $scope.formLoginValidations = true;
       if ($scope.form.login.$invalid) {
@@ -20,7 +19,8 @@ angular.module('frontendApp')
       Auth.login({username: $scope.username, password: $scope.password}, $scope.rememberMe).then(
         function(data) {
           Progressbar.close();
-          $location.url('panel/' + data.id + panelOption);
+          $location.url('panel/' + data.id);
+          $location.search($routeParams);
         },
         function(httpResponse) {
           httpResponse.status === 403 &&

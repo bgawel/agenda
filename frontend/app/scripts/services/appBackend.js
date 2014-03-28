@@ -9,7 +9,7 @@ var url = function(path) {
   return serwerUrl + path;
 };
 
-var AUTH_TOKEN_NAME = 'X-Auth-Token'
+var AUTH_TOKEN_NAME = 'X-XSRF-TOKEN'
 
 app.factory('Menu', ['$http', function($http) {
   return {
@@ -116,26 +116,51 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies',
   return {
     login : function(credentials, rememberMe) {
       return $http.post(url('b/rest/login.json'), credentials).then(function(result) {
-        $http.defaults.headers.common[AUTH_TOKEN_NAME] = result.data.token;
+        $cookies[AUTH_TOKEN_NAME] = $http.defaults.headers.common[AUTH_TOKEN_NAME] = result.data.token;
         if (rememberMe) {
           $cookies.username = result.data.username;
         } else {
-          $cookies.username = '';
+          delete $cookies.username;
         }
         $rootScope.$broadcast('onAuthenticationSuccess', result.data);
         return result.data;
       });
     },
-    check : function() {
-      if (!$http.defaults.headers.common[AUTH_TOKEN_NAME]) {
-        var deferred = $q.defer();
-        $timeout(function(){ deferred.reject({status: 666}); }, 0);
-        return deferred.promise;
+    assert : function() {
+      var usedTokenFromCookie = false;
+      var headers = $http.defaults.headers.common;
+      if (!headers[AUTH_TOKEN_NAME]) {
+        var token = $cookies[AUTH_TOKEN_NAME];
+        if (token) {
+          headers[AUTH_TOKEN_NAME] = token;
+          usedTokenFromCookie = true;
+        } else {
+          var deferred = $q.defer();
+          $timeout(function(){ deferred.reject({status: 666}); }, 0);
+          return deferred.promise;
+        }
       }
-      return $http.get(url('b/rest/checkLogin'));
+      return $http.get(url('b/rest/checkLogin')).then(function(result) {
+        if (usedTokenFromCookie) {
+          $rootScope.$broadcast('onAuthenticationSuccess', result.data);
+        }
+      });
+    },
+    checkIfLoggedIn : function() {
+      var headers = $http.defaults.headers.common;
+      if (!headers[AUTH_TOKEN_NAME]) {
+        var token = $cookies[AUTH_TOKEN_NAME];
+        if (token) {
+          headers[AUTH_TOKEN_NAME] = token;
+          return $http.get(url('b/rest/checkLogin')).then(function(result) {
+            $rootScope.$broadcast('onAuthenticationSuccess', result.data);
+          });
+        }
+      }
     },
     logout : function() {
       return $http.post(url('b/rest/logout')).then(function() {
+        delete $cookies[AUTH_TOKEN_NAME];
         delete $http.defaults.headers.common[AUTH_TOKEN_NAME];
         $rootScope.$broadcast('onLogoutSuccess');
         return true;

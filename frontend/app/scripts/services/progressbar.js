@@ -3,6 +3,9 @@
 angular.module('frontendApp').factory('Progressbar', ['$modal', '$rootScope', function($modal, $rootScope) {
   return {
     open : function() {
+      if ($rootScope.$progress) {
+        return;
+      }
       var progress = $rootScope.$progress = $modal.open({
         templateUrl: 'template/loadingbar/loadingbar.html',
         scope: $rootScope,

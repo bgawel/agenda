@@ -6,7 +6,6 @@ angular.module('frontendApp')
                             'Auth',
               function ($scope, $routeParams,  $filter, $location, $modal, Inst, Category, Events, Event, MsgPanel, 
                   Uploader, ServerError, Progressbar, ConfirmDialog, Config, Auth) {
-
     $scope.logout = function() {
       Auth.logout();
       $location.url('login');
@@ -15,6 +14,7 @@ angular.module('frontendApp')
     $scope.loadInst = function() {
       $scope.formInstValidations = false; // if this is not explicitly set, the errors blink for a moment 
       Progressbar.open();
+      changeOption(1);
       $scope.partial = 'panelInst.html';
       $scope.instMsgPanel = {show: false, messages: []};
       $scope.inst = Inst.get({id:$routeParams.instId}, function() {
@@ -79,7 +79,7 @@ angular.module('frontendApp')
     
     $scope.loadNewEvent = function() {
       $scope.formEventValidations = false;
-      $scope.option = 2;
+      changeOption(2);
       var defaultTime = new Date();
       defaultTime.setHours(19);
       defaultTime.setMinutes(0);
@@ -90,7 +90,7 @@ angular.module('frontendApp')
     };
     
     $scope.loadSubmittedEvents = function() {
-      $scope.option = 3;
+      changeOption(3);
       Progressbar.open();
       $scope.partial = 'panelSubmittedEvents.html';
       Events.submitted($routeParams.instId).then(function(data) {
@@ -102,7 +102,7 @@ angular.module('frontendApp')
     $scope.loadExistingEvent = function(eventId) {
       $scope.formEventValidations = false;
       Progressbar.open();
-      loadExistingEventView();
+      loadExistingEventView(eventId);
       $scope.event = Event.get({id: eventId}, function() {
         eventLoaded();
         Progressbar.close();
@@ -135,14 +135,14 @@ angular.module('frontendApp')
     $scope.init = function() {
       $scope.form = {};
       $scope.loadInst();
-      $scope.option = parseInt($routeParams.o);
-      if ($scope.option === 2) {
+      var option = parseInt($routeParams.o);
+      if (option === 2) {
         $scope.loadNewEvent();
-      } else if ($scope.option === 3) {
+      } else if (option === 3) {
         $scope.loadSubmittedEvents();
-      } else {
-        $scope.option = 1;
-      }
+      } else if (option === 4 && $routeParams.e) {
+        $scope.loadExistingEvent($routeParams.e);
+      } 
     };
     $scope.init();
     
@@ -152,13 +152,13 @@ angular.module('frontendApp')
       }
       $scope.eventTitle = $scope.event.title;
     }
-    function loadExistingEventView() {
+    function loadExistingEventView(eventId) {
       initEventPanel();
       $scope.cancelClicked = function() {
         $scope.eventTitle = undefined;
         $scope.loadSubmittedEvents();
       };
-      $scope.option = 4;
+      changeOption(4, eventId);
     }
     function initEventPanel() {
       loadCategories();
@@ -286,7 +286,7 @@ angular.module('frontendApp')
       } else {
         Event.save({picId: $scope.event.picId}, event,
           function(value) {
-            loadExistingEventView();
+            loadExistingEventView(value.id);
             successCallback(value, $scope.i18n.event.addedNew);
           }, errorCallback);
       }
@@ -357,4 +357,13 @@ angular.module('frontendApp')
         $modalInstance.dismiss('cancel');
       };
     };
+    
+    function changeOption(option, eventId) {
+      $scope.option = option;
+      var params = {o: option};
+      if (eventId) {
+        params.e = eventId;
+      }
+      $location.search(params);
+    }
   }]);
