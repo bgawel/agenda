@@ -8,7 +8,7 @@ class ConfigurationController {
     static responseFormats = ['json']
 
     def now() {
-        def config = [dateTime: dateTimeToString(currentDateTime)]
+        def config = [now: dateTimeToString(currentDateTime)]
         respond config
     }
 }

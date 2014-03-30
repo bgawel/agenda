@@ -111,14 +111,18 @@ app.factory('Uploader', ['$fileUploader', '$http', function($fileUploader, $http
   };
 }]);
 
-app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', 
-                     function($rootScope, $http, $q, $timeout, $cookies) {
+app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$window',
+                     function($rootScope, $http, $q, $timeout, $cookies, $window) {
   return {
     login : function(credentials, rememberMe) {
       return $http.post(url('b/rest/login.json'), credentials).then(function(result) {
         $cookies[AUTH_TOKEN_NAME] = $http.defaults.headers.common[AUTH_TOKEN_NAME] = result.data.token;
         if (rememberMe) {
-          $cookies.username = result.data.username;
+          var username = result.data.username;
+          var expiresDate = new Date();
+          expiresDate.setTime(expiresDate.getTime() + (30*24*60*60*1000));
+          var expires = 'expires=' + expiresDate.toGMTString();
+          $window.document.cookie = 'username=' + username + '; ' + expires;
         } else {
           delete $cookies.username;
         }

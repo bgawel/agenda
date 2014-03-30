@@ -2,11 +2,10 @@
 
 angular.module('frontendApp')
   .controller('MainCtrl',
-      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cacheFactory', '$timeout', '$window', '$rootScope',
-       'Menu', 'Events', 'Progressbar', 'Auth',
-      function($scope, $location, $anchorScroll, $q, $filter, $cacheFactory,  $timeout, $window, $rootScope, 
-          Menu, Events, Progressbar, Auth) {
-    
+      ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cookies', '$timeout', '$window', '$rootScope',
+       '$routeParams', 'Menu', 'Events', 'Progressbar', 'Auth',
+      function($scope, $location, $anchorScroll, $q, $filter, $cookies,  $timeout, $window, $rootScope, 
+          $routeParams, Menu, Events, Progressbar, Auth) {
     $scope.toggleRightPanel = function () {
       $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
     };
@@ -15,49 +14,27 @@ angular.module('frontendApp')
     };
     
     var DISPLAY_ALL_ID = 'all';
-    var DATE_ABBR = 'date';
+    var CAL_TYPE = 'cal';
     
     $scope.showMaxChars = 200;
-    
-    var CACHE_NAME = 'mainCache';
-    var CACHE_DAY_KEY = 'mainCache_DAY';
-    var CACHE_CATEGORY_KEY = 'mainCache_CATEGORY';
-    var CACHE_INST_KEY = 'mainCache_INST';
-    var CACHE_CALENDAR_KEY = 'mainCache_CALENDAR';
-    var CACHE_ORDER_KEY = 'mainCache_ORDER';
-    var CACHE_EVENT_KEY = 'mainCache_EVENT';
-    var getCache = function() {
-      var cache = $cacheFactory.get(CACHE_NAME);
-      if (cache === undefined) {
-        cache = $cacheFactory(CACHE_NAME);
-      }
-      return cache;
-    };
-    var initializeInstitutions = function() {
-      return {active: getCache().get(CACHE_INST_KEY)};
-    };
+        
     var initializeOrder = function() {
-      var value = getCache().get(CACHE_ORDER_KEY);
-      if (value === undefined) {
+      var value = $routeParams.s;
+      if (!value) {
         value = 'dateTime';
       }
-      return value;
+      $scope.changeOrder(value);
     };
     var initializeCategoryIndex = function(data) {
-      var index = getCache().get(CACHE_CATEGORY_KEY);
-      if (index === undefined) {
-        index = data.activeIndex;
+      var index;
+      var id = $routeParams.c;
+      if (id) {
+        index = findIndex($scope.categories, 'id', id);
       }
-      return index;
+      return index >= 0 ? index : data.activeIndex;
     };
     var initializeWeekMenuIndexAndCalendar = function(data) {
-      var cache = getCache();
-      var index = cache.get(CACHE_DAY_KEY);
-      if (index === undefined) {
-        index = data.activeIndex;
-      }
       $scope.weekMenu.calendar = {
-          minDate: new Date(),
           opened: false,
           dateOptions:{
             'year-format': '\'yy\'',
@@ -65,25 +42,29 @@ angular.module('frontendApp')
             'show-weeks': false
           }
         };
-      var calendarValue = cache.get(CACHE_CALENDAR_KEY);
+      var index;
+      var calendarValue = $routeParams.cal;
       if (calendarValue) {
-        $scope.weekMenu.calendar.value = calendarValue; // no trigger because dayIndex is undefined
+        $scope.weekMenu.calendar.value = calendarValue;
+        index = findIndex($scope.weekMenu, 'type', CAL_TYPE);
+      } else {
+        var id = $routeParams.d;
+        if (id) {
+          index = findIndex($scope.weekMenu, 'type', id);
+          if (index === undefined) {
+            index = findIndex($scope.weekMenu, 'id', id);
+            if (index === undefined) {
+              var date = parseDate(id);
+              if (date) {
+                $scope.weekMenu.calendar.value = date;
+                index = findIndex($scope.weekMenu, 'type', CAL_TYPE);
+              }
+            }
+          }
+        }
       }
-      return index;
+      return index >= 0 ? index : data.activeIndex;
     };
-    
-    $scope.init = function() {
-      Auth.checkIfLoggedIn();
-      $scope.institutions = initializeInstitutions();
-      $scope.orderEventsBy = initializeOrder();
-      $q.all([Menu.categories(), Menu.week()]).then(function(results) {
-        $scope.categories = results[0].entries;
-        $scope.changeCategory(initializeCategoryIndex(results[0]));
-        $scope.weekMenu = results[1].entries;
-        $scope.changeEventsDay(initializeWeekMenuIndexAndCalendar(results[1]));
-      });
-    };
-    $scope.init();
     
     $scope.changeCategory = function(categoryIndex) {
       var activeCategory = activateCategory(categoryIndex);
@@ -91,48 +72,44 @@ angular.module('frontendApp')
       setInstitutionOfGivenCategoryToAll(activeCategory);
     };
     var activateCategory = function(categoryIndex) {
-      if ($scope.categories.active !== undefined) {
+      if ($scope.categories.active) {
         $scope.categories.active.ngClass = '';
       }
       var activeCategory = $scope.categories[categoryIndex];
       activeCategory.ngClass = 'active';
       activeCategory.index = categoryIndex;
       $scope.categories.active = activeCategory;
+      appendSearchParam('c', activeCategory.id);
       return activeCategory;
     };
     var setCategoryFilter = function(category) {
       $scope.categories.filter = (category.id !== DISPLAY_ALL_ID) ? category : undefined;
     };
     var setInstitutionOfGivenCategoryToAll = function(category) {
-      if ($scope.institutions[category.name] !== undefined) {
+      if ($scope.institutions[category.id]) {
         var index = findIndexOfAllForGivenCategory(category);
-        if (index !== null) {
+        if (index >= 0) {
           $scope.changeInstitution(index);
         } else {
-          console.assert(index !== null, 'Cannot find index of \'all\' institutions. The first institution was set');
+          console.assert(false, 'Cannot find index of \'all\' institutions. The first institution was set');
           $scope.changeInstitution(0);
         }
       }
     };
     var findIndexOfAllForGivenCategory = function(category) {
-      var categoryInstitutions = $scope.institutions[category.name];
-      for (var i = 0; i < categoryInstitutions.length; ++i) {
-        if (categoryInstitutions[i].id === DISPLAY_ALL_ID) {
-          return i;
-        }
-      }
-      return null;
+      return findIndex($scope.institutions[category.id], 'id', DISPLAY_ALL_ID);
     };
     $scope.changeInstitution = function(institutionIndex) {
       setInstitutionFilter(activateInstitution(institutionIndex));
     };
     var activateInstitution = function(institutionIndex) {
-      if ($scope.institutions.active !== undefined) {
+      if ($scope.institutions.active) {
         $scope.institutions.active.ngClass = '';
       }
-      var activeInstitution = $scope.institutions[$scope.categories.active.name][institutionIndex];
+      var activeInstitution = $scope.institutions[$scope.categories.active.id][institutionIndex];
       activeInstitution.ngClass = 'active';
       $scope.institutions.active = activeInstitution;
+      appendSearchParam('i', activeInstitution.id);
       return activeInstitution;
     };
     var setInstitutionFilter = function(institution) {
@@ -149,23 +126,27 @@ angular.module('frontendApp')
       fetchEventsByDay(activeDay, activeCategory, activeInstitution);
     };
     var activateEventsDay = function(dayIndex) {
-      if ($scope.weekMenu.active !== undefined) {
+      if ($scope.weekMenu.active) {
         $scope.weekMenu.active.ngClass = '';
       }
       var activeDay = $scope.weekMenu[dayIndex];
       activeDay.ngClass = 'active';
       activeDay.index = dayIndex;
-      if (activeDay.abbr === DATE_ABBR) {
+      if (activeDay.type === CAL_TYPE) {
         activeDay.id = $filter('date')($scope.weekMenu.calendar.value, 'yyyy-MM-dd');
+        appendSearchParam('cal', activeDay.id);
+        appendSearchParam('d', null);
       } else {
         $scope.weekMenu.calendar.value = null;
+        appendSearchParam('d', activeDay.type ? activeDay.type : activeDay.id);
+        appendSearchParam('cal', null);
       }
       $scope.weekMenu.active = activeDay;
       return activeDay;
     };
     var getActiveInstitution = function() {
       var activeInstitution, activeInstitutionId;
-      if ($scope.institutions.active !== undefined) {
+      if ($scope.institutions.active) {
         activeInstitution = $scope.institutions.active;
         activeInstitutionId = activeInstitution.id;
       }
@@ -177,6 +158,7 @@ angular.module('frontendApp')
         restoreActiveInstitutionOfCategory(institution.value, category);
         fillNewestEventsIfPresent(data);
         fillComingSoonEventsIfPresent(data);
+        $scope.weekMenu.calendar.minDate = data.now;
         $scope.events = data.events;
         $scope.noEventsMsg = !$scope.events.length;
         Progressbar.close();
@@ -184,38 +166,38 @@ angular.module('frontendApp')
       });
     };
     var restoreActiveInstitutionOfCategory = function(institution, category) {
-      if (institution !== undefined) {
-        var wasSet = tryToSetInstitutionOfGivenCategoryToName(category, institution.name);
-        if (!wasSet) {
+      var wasSet;
+      if (institution) {
+        wasSet = tryToSetInstitutionOfGivenCategory(category, institution.id) ||
           insertInstitutionAlthoughNotFound(institution, category);
-        }
       } else {
-        setInstitutionOfGivenCategoryToAll(category);
+        var index = $routeParams.i;
+        wasSet = index && tryToSetInstitutionOfGivenCategory(category, index);
       }
+      !wasSet && setInstitutionOfGivenCategoryToAll(category);
     };
-    var tryToSetInstitutionOfGivenCategoryToName = function(category, name) {
-      var categoryInstitutions = $scope.institutions[category.name];
-      for (var i = 0; i < categoryInstitutions.length; ++i) {
-        if (categoryInstitutions[i].name === name) {
-          $scope.changeInstitution(i);
-          return true;
-        }
+    var tryToSetInstitutionOfGivenCategory = function(category, instId) {
+      var index = findIndex($scope.institutions[category.id], 'id', instId);
+      var found = index >= 0;
+      if (found) {
+        $scope.changeInstitution(index);
       }
-      return false;
+      return found;
     };
     var insertInstitutionAlthoughNotFound = function(institution, category) {
       institution.badge = 0;
       insertInstitutionOfGivenCategoryAfterAll(institution, category);
       $scope.institutions.active = institution;
+      return true;
     };
     var insertInstitutionOfGivenCategoryAfterAll = function(institution, category) {
       var index = findIndexOfAllForGivenCategory(category);
-      $scope.institutions[category.name].splice(index+1, 0, institution);
+      $scope.institutions[category.id].splice(index+1, 0, institution);
     };
     var fillBadgesAndInstitutionsOfCategories = function(badgesInstitutions) {
       angular.forEach($scope.categories, function(category, index) {
         category.badge = badgesInstitutions[index].badge;
-        $scope.institutions[category.name] = badgesInstitutions[index].who;
+        $scope.institutions[category.id] = badgesInstitutions[index].who;
       });
     };
     var fillNewestEventsIfPresent = function(data) {
@@ -247,57 +229,105 @@ angular.module('frontendApp')
       }
     });
     
-    var cacheUserSettings = function() {
-      var cache = getCache();
-      cache.put(CACHE_INST_KEY, $scope.institutions.active);
-      cache.put(CACHE_ORDER_KEY, $scope.orderEventsBy);
-      cache.put(CACHE_CATEGORY_KEY, $scope.categories.active.index);
-      cache.put(CACHE_DAY_KEY, $scope.weekMenu.active.index);
-      cache.put(CACHE_CALENDAR_KEY, $scope.weekMenu.calendar.value);
-      return cache;
+    $scope.changeOrder = function(property) {
+      $scope.orderEventsBy = property;
+      appendSearchParam('s', property);
     };
+    
     $scope.displayEvent = function(eventId, scrollToWhenBack) {
-      var cache = cacheUserSettings();
+      saveFilters();
       if (scrollToWhenBack) {
-        cache.put(CACHE_EVENT_KEY, eventId);
+        $cookies.lastEvent = eventId.toString();
       }
       $location.url('event/' + eventId);
     };
     $scope.reload = function() {
-      getCache().removeAll();
-      $window.location.reload(); // $route.reload() causes problems in unit tests (unexpected GET views.main.html)
+      $location.search({});
+      $timeout(function() { $window.location.reload(); }, 0); // $route.reload() causes problems in unit tests (unexpected GET views.main.html)
     };
     $scope.panel = function(option) {
-      cacheUserSettings();
-      var o = option ? ('?o=' + option): '';
-      $location.url('panel/' + $rootScope.userId + o);
+      saveFilters();
+      $location.url('panel/' + $rootScope.userId);
+      $location.search({o: option});
     };
     $scope.about = function() {
-      cacheUserSettings();
+      saveFilters();
       $location.url('about');
-    };
-    $scope.login = function() {
-      cacheUserSettings();
-      $location.url('login');
     };
     $scope.logout = function() {
       Auth.logout();
     };
+    function saveFilters() {
+      $cookies.search = angular.toJson($location.search());
+    }
+    function restoreFilters() {
+      if ($location.url() === '/') {
+        var filters = $cookies.search;
+        if (filters) {
+          $routeParams = angular.fromJson(filters);
+        }
+      }
+      delete $cookies.search;
+    }
     
     var scrollTo = function(hash) {
-      $timeout(function() {
+     $timeout(function() {
         var old = $location.hash();
         $location.hash(hash);
         $anchorScroll();
         $location.hash(old);  //reset to old to keep any additional routing logic from kicking in, otherwise it renders twice
-      }, 150);  // wait a little to get events rendered, otherwise it doesn't work
+      }, 0);
     };
     var scrollToEventIfNeeded = function() {
-      var cache = getCache();
-      var eventId = cache.get(CACHE_EVENT_KEY);
-      if (eventId !== undefined) {
-        cache.remove(CACHE_EVENT_KEY);
+      var eventId = $cookies.lastEvent;
+      if (eventId) {
+        delete $cookies.lastEvent;
         scrollTo('event' + eventId);
       }
     };
+    
+    function appendSearchParam(paramName, value) {
+      var params = $location.search();
+      if (value) {
+        params[paramName] = value;
+      } else {
+        delete params[paramName];
+      }
+      $location.search(params);
+    }
+    function findIndex(array, property, value) {
+      for (var i = 0; i < array.length; ++i) {
+        if (array[i][property] == value) {  // yes, == instead of ===
+          return i;
+        }
+      }
+    }
+    function parseDate(dateAsString) {
+      var split = dateAsString.split('-');
+      if (split.length === 3) {
+        var year = parseInt(split[0]);
+        var month = parseInt(split[1]) - 1;
+        var day = parseInt(split[2]);
+        var date = new Date();
+        date.setFullYear(year, month, day);
+        if (!isNaN(date.getTime())) {
+          return date;
+        }
+      }
+    }
+    
+    $scope.init = function() {
+      Auth.checkIfLoggedIn();
+      restoreFilters();
+      initializeOrder();
+      $scope.institutions = {};
+      $q.all([Menu.categories(), Menu.week()]).then(function(results) {
+        $scope.categories = results[0].entries;
+        $scope.changeCategory(initializeCategoryIndex(results[0]));
+        $scope.weekMenu = results[1].entries;
+        $scope.changeEventsDay(initializeWeekMenuIndexAndCalendar(results[1]));
+      });
+    };
+    $scope.init();
+    
   }]);

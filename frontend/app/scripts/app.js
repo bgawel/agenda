@@ -15,7 +15,8 @@ angular.module('frontendApp', [
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        controller: 'MainCtrl',
+        reloadOnSearch: false,
       })
       .when('/event/:eventId', {
         templateUrl: 'views/event.html',

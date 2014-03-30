@@ -1,5 +1,8 @@
 package agenda
 
+import static agenda.LocalContext.dateTimeToString
+import static agenda.LocalContext.getCurrentDateTime
+
 class EventProjectionFacadeService {
 
     def eventProjectionService
@@ -8,7 +11,8 @@ class EventProjectionFacadeService {
     def showByDate(requestedDate, categoryId, instId) {
         eventProjectionService.showByDate(requestedDate) +
             [newest: eventRecommendationService.getNewlyAdded(categoryId, instId),
-             soon: eventRecommendationService.getComingSoon(categoryId, instId)]
+             soon: eventRecommendationService.getComingSoon(categoryId, instId),
+             now: dateTimeToString(currentDateTime)]
     }
 
     def showByPdtp(pdtpId) {

@@ -180,7 +180,7 @@ angular.module('frontendApp')
     }
     function loadConfig() {
       Config.now().then(function(data) {
-        $scope.minDate = data.dateTime;
+        $scope.minDate = data.now;
       });
     }
     function createUploader() {

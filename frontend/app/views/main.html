@@ -22,10 +22,10 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li ng-if="$root.userId < 0">
-          <a href ng-click="login()"><span class="glyphicon glyphicon-log-in"></span> {{i18n.login.signin}}</a>
+          <a href ng-click="panel(1)"><span class="glyphicon glyphicon-log-in"></span> {{i18n.login.signin}}</a>
         </li>
         <li ng-if="$root.userId > 0">
-          <a href ng-click="panel()"><span class="glyphicon glyphicon-cog"></span> {{i18n.main.menu.adminPanel}}</a>
+          <a href ng-click="panel(1)"><span class="glyphicon glyphicon-cog"></span> {{i18n.main.menu.adminPanel}}</a>
         </li> 
         <li ng-if="$root.userId > 0">
           <a href ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> {{i18n.login.signout}} <b>{{$root.username}}</b></a>
@@ -49,7 +49,7 @@
       </div>
       <p>{{i18n.main.insts}}:</p>
       <div class="list-group">
-        <a ng-repeat="inst in institutions[categories.active.name]" href class="list-group-item {{inst.ngClass}}"
+        <a ng-repeat="inst in institutions[categories.active.id]" href class="list-group-item {{inst.ngClass}}"
             ng-click="changeInstitution($index)">
           {{inst.name}} <span class="badge">{{inst.badge}}</span>
         </a>
@@ -69,14 +69,14 @@
       <div>
         <div class="nav-by-day">
       	    <ul class="nav nav-tabs">
-              <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch on="day.abbr">
+              <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch on="day.type">
                 <a ng-switch-when="all" ng-click="changeEventsDay($index)" href class="not-day">
                   {{day.name}}
                 </a>
                 <a ng-switch-when="future" ng-click="changeEventsDay($index)" href class="not-day">
                   <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
-                <a ng-switch-when="date" ng-click="openEventsCalendar($event, $index)"
+                <a ng-switch-when="cal" ng-click="openEventsCalendar($event, $index)"
                     datepicker-popup="i18n.calendar.format" href class="not-day calendar"
                     ng-model="weekMenu.calendar.value" is-open="weekMenu.calendar.opened" 
                     min="weekMenu.calendar.minDate" datepicker-options="weekMenu.calendar.dateOptions"
@@ -97,8 +97,8 @@
             {{i18n.main.sort.title}}:
           </p>
           <ul class="nav nav-pills">
-            <li ng-class="{active:(orderEventsBy=='dateTime')}"><a href ng-click="orderEventsBy='dateTime'">{{i18n.main.sort.byTime}}</a></li>
-            <li ng-class="{active:(orderEventsBy=='title')}"><a href ng-click="orderEventsBy='title'">{{i18n.main.sort.byTitle}}</a></li>
+            <li ng-class="{active:(orderEventsBy==='dateTime')}"><a href ng-click="changeOrder('dateTime')">{{i18n.main.sort.byTime}}</a></li>
+            <li ng-class="{active:(orderEventsBy==='title')}"><a href ng-click="changeOrder('title')">{{i18n.main.sort.byTitle}}</a></li>
           </ul>
         </div>
       </div>

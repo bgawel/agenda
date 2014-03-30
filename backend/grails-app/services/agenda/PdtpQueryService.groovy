@@ -51,7 +51,6 @@ class PdtpQueryService {
      */
     def findAllNotFinishedFor(date, time) {
         def dbDate = date.toDate()
-        def dbTime = time.toDate()
         Pdtp.withCriteria {
             le('fromDate', dbDate)
             ge('toDate', dbDate)

@@ -39,15 +39,16 @@ class EventProjectionService {
 
     @Cacheable(value='submittedEvents', key='#instId')
     def submittedEvents(instId) {
-        [events: eventQueryService.findAllByInstitution(instId).collect { makeEntryForSubmittedEvent(it) },
-            id: instId, lastModified: Institution.get(instId).lastUpdated]
+        def eventsOfInst = eventQueryService.findAllByInstitution(instId)
+        [events: eventsOfInst.collect { makeEntryForSubmittedEvent(it) }, id: instId,
+            lastModified: eventsOfInst ? eventsOfInst[0].lastUpdated : Institution.get(instId).lastUpdated]
     }
 
     protected showByDate(now, requestedDate) {
         def events = []
-        if (requestedDate == weekMenuService.futureEntryId) {
+        if (requestedDate == weekMenuService.futureEntryType) {
             events = showByFuture(now)
-        } else if (requestedDate == weekMenuService.allEntryId) {
+        } else if (requestedDate == weekMenuService.allEntryType) {
             events = showByAll(now)
         } else {
             events = showByCalendar(now, requestedDate)
@@ -72,7 +73,7 @@ class EventProjectionService {
         if (eventsDate == today) {
             events = pdtpQueryService.findAllNotFinishedFor(eventsDate, timeOf(now))
                 .collect { makeEntryForShowByCalendar(it) }
-        } else if (today.isBefore(eventsDate)) {
+        } else if (today.isBefore(eventsDate)) {    // this prevents displaying old events
             events = pdtpQueryService.findAllFor(eventsDate).collect { makeEntryForShowByCalendar(it) }
         }
         events
