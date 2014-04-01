@@ -9,7 +9,7 @@ var url = function(path) {
   return serwerUrl + path;
 };
 
-var AUTH_TOKEN_NAME = 'X-XSRF-TOKEN'
+var AUTH_TOKEN_NAME = 'X-XSRF-TOKEN';
 
 app.factory('Menu', ['$http', function($http) {
   return {
@@ -173,7 +173,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
     resetPwd : function(data) {
       return $http.post(url('b/rest/resetPwd.json'), data);
     },
-    setPwd : function(data, token) {
+    setPwd : function(data) {
       return $http.post(url('b/rest/setPwd.json'), data);
     },
     changePwd : function(data) {

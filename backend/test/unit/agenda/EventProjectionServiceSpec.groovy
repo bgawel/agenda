@@ -27,6 +27,7 @@ class EventProjectionServiceSpec extends Specification {
             }
             pdtps
         }
+        service.staticResourceService.makeImageSrc(_) >> 'pic1'
 
         when:
         def result = service.showByDate(now, 'future')
@@ -80,6 +81,7 @@ class EventProjectionServiceSpec extends Specification {
             }
             pdtps
         }
+        service.staticResourceService.makeImageSrc(_) >> 'pic4'
 
         when:
         def events = service.showByDate(now, 'all').events
@@ -97,6 +99,7 @@ class EventProjectionServiceSpec extends Specification {
             assert it[1].hourOfDay == 18
             events[3].pdtps
         }
+        service.staticResourceService.makeImageSrc(_) >> 'pic4'
 
         when:
         def events = service.showByDate(now, '2014-01-02').events
@@ -157,6 +160,7 @@ class EventProjectionServiceSpec extends Specification {
             assert it[2].hourOfDay == 18
             events[0].pdtps[1..-1]
         }
+        service.staticResourceService.makeImageSrc(_) >> 'pic1'
 
         when:
         def event = service.showByPdtp(now, pdtpId)
@@ -195,17 +199,21 @@ class EventProjectionServiceSpec extends Specification {
         1 * service.eventQueryService.findAllByInstitution(1) >> { [events[0], events[3]] }
 
         when:
-        def events = service.submittedEvents(1).events
+        def submitted = service.submittedEvents(1)
 
         then:
+        def events = submitted.events
         events.size() == 2
         events[0].title == 'title1'
         events[0].locdate == '1-place1, 15 sty 2014, 19:00 (4)'
         events[1].title == 'title4'
         events[1].locdate == '4-place1, 12 sty 2014, timeDescription (1)'
+        submitted.id == 1
+        submitted.lastModified == events[0].lastUpdated
     }
 
     def setup() {
+        Institution.metaClass.encodePassword = { null }
         def cat = new Category(name: 'cat1').save()
         def inst1 = new Institution(name: 'name-inst1', email: 'inst1@email.com', password: 'password1',
             address: 'address1', web: 'www.example1.com', telephone: 'tel1', fax: 'fax1').save()
@@ -250,5 +258,6 @@ class EventProjectionServiceSpec extends Specification {
         service.weekMenuService = new WeekMenuService()
         service.institutionMenuService = Mock(InstitutionMenuService)
         service.institutionMenuService.calculateBadgesPerCategory(_) >> ['badgesPerCategory']
+        service.staticResourceService = Mock(StaticResourceService)
     }
 }

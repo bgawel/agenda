@@ -2,6 +2,10 @@
 @import 'panelEvent';
 @import 'panelSubmittedEvents';
 
+.top-bar .logout {
+	padding-top: 5px;
+}
+
 .panel-side-navigation {
   .active {
     font-weight: bold;

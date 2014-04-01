@@ -36,7 +36,7 @@ angular.module('frontendApp')
         signout: 'Wyloguj',
         signup: 'Zarejestruj się',
         hasAccount: 'Nie masz konta?',
-        pros: ['+ Będziesz zarządzać wydarzeniami w panelu administracyjnym', 
+        pros: ['+ Będziesz zarządzać wydarzeniami w panelu administracyjnym',
                '+ Twoja organizacja będzie widoczna na głównej stronie na liście organizatorów',
                '+ Użytkownik będzie mógł wyświetlić dane Twojej organizacji przy wydarzeniu'],
         badCredentials: 'Adres email lub hasło są niepoprawne',
@@ -44,12 +44,12 @@ angular.module('frontendApp')
         statusPwdChanged: 'Hasło zostało zmienione'
       },
       appName: 'kulturalna AGENDA Wrocławia',
-      doneBy: 'DaDa Soft Lab 2014',       
+      doneBy: 'DaDa Soft Lab 2014',
       main : {
         nav : {
           toggle: 'Nawigacja',
           filters: 'Filtry',
-          announcements: 'Zapowiedzi' 
+          announcements: 'Zapowiedzi'
         },
         menu : {
           events: 'Wydarzenia',
@@ -82,7 +82,7 @@ angular.module('frontendApp')
         changeType : {
           title: 'Zmiana typu wydarzenia',
           query: 'Czy na pewno chcesz zmienić typ wydarzenia? Część danych dotycząca terminów zostanie utracona.'
-        } 
+        }
       },
       inst : {
         del : {

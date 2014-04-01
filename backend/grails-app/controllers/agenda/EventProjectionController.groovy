@@ -11,12 +11,10 @@ class EventProjectionController {
     def eventProjectionFacadeService
 
     def byDate() {
-        cache shared:true, validFor:300
         respond eventProjectionFacadeService.showByDate(params.date, params.category, params.inst)
     }
 
     def byEvent() {
-        cache shared:true, validFor:300
         respond eventProjectionFacadeService.showByPdtp(params.id as long)
     }
 

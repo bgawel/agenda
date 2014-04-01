@@ -72,6 +72,6 @@ class RestAdminAuthenticationFilter extends GenericFilterBean {
     @PostConstruct
     void init() {
         SpringSecurityUtils.registerFilter 'restAdminAuthenticationFilter',
-            SecurityFilterPosition.FORM_LOGIN_FILTER.order
+            SecurityFilterPosition.FORM_LOGIN_FILTER.order - 1
     }
 }

@@ -3,6 +3,7 @@ package agenda
 import org.joda.time.DateTime
 
 import spock.lang.Specification
+import agenda.security.SecurityAttackService
 
 class EventResourceServiceIntegrationSpec extends Specification {
 
@@ -42,5 +43,6 @@ class EventResourceServiceIntegrationSpec extends Specification {
         }
         event1.save(flush: true)
         sessionFactory.currentSession.clear()
+        eventResourceService.securityAttackService = Mock(SecurityAttackService)
     }
 }

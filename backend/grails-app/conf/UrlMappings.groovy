@@ -18,6 +18,9 @@ class UrlMappings {
 
         "/confirm/$id"(controller: 'emailConfirmation')
         "/greenmail/$action?/$id?"(controller: 'greenmail')
+        "/console/$action?"(controller: 'console')
+        "/login/$action?"(controller: 'login')
+        "/logout/$action?"(controller: 'logout')
 
         "/"(view:"/index")
         "500"(controller: 'securityAttack', exception: InsufficientAuthenticationException)

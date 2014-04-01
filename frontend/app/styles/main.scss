@@ -14,10 +14,6 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
     padding: 0.2em 0;
 }
 
-/*
- * Style tweaks
- * --------------------------------------------------
- */
 html,
 body {
   overflow-x: hidden; /* Prevent scroll on narrow devices */
@@ -80,39 +76,42 @@ footer {
   	cursor: pointer;
   	color: #999999;
   }
-}
-
-.event img {
-  float: left;
-}
-.event {
-	a.who:hover, a.who:focus {
+  
+  img {
+  		float: left;
+	}
+	
+		a.who:hover, a.who:focus {
 	  text-decoration: none;
 	  outline: none;
 	}  
 	a.who:active {
 	  outline: none;
 	}
-}
-.event .basic-info p {
-  margin: 0
-}
-.event .basic-info {
-  float: left;
-  padding: 4px;
-}
-.event .description {
-  padding-top: 4px;
-  clear: left;
-}
-.event .category {
-  padding-top: 12px;
-}
-.event .time {
-  font-size: 1.0em;
-}
-.event .date {
-  font-size: 1.0em;
+  
+  .basic-info {
+  	float: left;
+  	padding: 4px;
+  	p {
+  		margin: 0
+		}
+	}
+	
+	.description {
+  	padding-top: 4px;
+  	clear: left;
+	}
+
+	.category {
+  	padding-top: 12px;
+	}
+	
+	.time {
+  	font-size: 1.0em;
+	}
+	.date {
+  	font-size: 1.0em;
+	}
 }
 
 .announcement {

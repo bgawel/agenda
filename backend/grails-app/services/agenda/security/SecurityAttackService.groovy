@@ -16,7 +16,7 @@ class SecurityAttackService {
         } catch (InsufficientAuthenticationException e) {
             throw e
         } catch (e) {
-            throw new InsufficientAuthenticationException(e)
+            throw new InsufficientAuthenticationException('Unexpected exception', e)
         }
     }
 

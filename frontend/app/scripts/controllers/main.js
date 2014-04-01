@@ -4,7 +4,7 @@ angular.module('frontendApp')
   .controller('MainCtrl',
       ['$scope', '$location', '$anchorScroll', '$q', '$filter', '$cookies', '$timeout', '$window', '$rootScope',
        '$routeParams', 'Menu', 'Events', 'Progressbar', 'Auth',
-      function($scope, $location, $anchorScroll, $q, $filter, $cookies,  $timeout, $window, $rootScope, 
+      function($scope, $location, $anchorScroll, $q, $filter, $cookies,  $timeout, $window, $rootScope,
           $routeParams, Menu, Events, Progressbar, Auth) {
     $scope.toggleRightPanel = function () {
       $scope.rightPanel = ($scope.rightPanel === 'activeRight') ? '' : 'activeRight';
@@ -174,7 +174,7 @@ angular.module('frontendApp')
         var index = $routeParams.i;
         wasSet = index && tryToSetInstitutionOfGivenCategory(category, index);
       }
-      !wasSet && setInstitutionOfGivenCategoryToAll(category);
+      return !wasSet && setInstitutionOfGivenCategoryToAll(category);
     };
     var tryToSetInstitutionOfGivenCategory = function(category, instId) {
       var index = findIndex($scope.institutions[category.id], 'id', instId);
@@ -271,7 +271,7 @@ angular.module('frontendApp')
     }
     
     var scrollTo = function(hash) {
-     $timeout(function() {
+      $timeout(function() {
         var old = $location.hash();
         $location.hash(hash);
         $anchorScroll();

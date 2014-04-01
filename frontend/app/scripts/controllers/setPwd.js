@@ -12,7 +12,7 @@ angular.module('frontendApp')
       }
       Progressbar.open();
       Auth.setPwd({pwd: $scope.pwd.newPwd, token: $routeParams.token}).then(
-        function(data) {
+        function() {
           Progressbar.close();
           $location.url('/');
         },

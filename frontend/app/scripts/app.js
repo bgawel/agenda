@@ -32,7 +32,7 @@ angular.module('frontendApp', [
       })
       .when('/login', {
         templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'      
+        controller: 'LoginCtrl'
       })
       .when('/signup', {
         templateUrl: 'views/signup.html',
@@ -76,29 +76,29 @@ angular.module('frontendApp', [
       }
     });
     $rootScope.$on('onUnexpectedServerError', function(event, rejection) {
-      var text
+      var text;
       switch (rejection.status) {
         case 401:
         case 403:
-          gotoLoginPage(rejection);
+          gotoLoginPage();
           break;
         case 404:
-          text = I18n.error.status404
+          text = I18n.error.status404;
           break;
         case 0: // status = 0 as well when response to xhr and status - 302 
-          text = I18n.error.status0
+          text = I18n.error.status0;
           break;
         default:
-          text = I18n.error.unexpected
+          text = I18n.error.unexpected;
       }
-      text && $growl.box(null, text, {
-                class: 'danger',
-                sticky: false,
-                timeout: 10000
-              }).open();
+      return text && $growl.box(null, text, {
+          class: 'danger',
+          sticky: false,
+          timeout: 10000
+        }).open();
     });
     
-    var gotoLoginPage = function(rejection) {
+    var gotoLoginPage = function() {
       if ($location.path() !== '/') { // main page check passes through 
         $modalStack.dismissAll();
         var params = $route.current.params;

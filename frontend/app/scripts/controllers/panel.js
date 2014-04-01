@@ -2,9 +2,9 @@
 
 angular.module('frontendApp')
   .controller('PanelCtrl', ['$scope', '$routeParams', '$filter', '$location', '$modal', 'Inst', 'Category', 'Events',
-                            'Event', 'MsgPanel', 'Uploader', 'ServerError', 'Progressbar', 'ConfirmDialog', 'Config', 
+                            'Event', 'MsgPanel', 'Uploader', 'ServerError', 'Progressbar', 'ConfirmDialog', 'Config',
                             'Auth',
-              function ($scope, $routeParams,  $filter, $location, $modal, Inst, Category, Events, Event, MsgPanel, 
+              function ($scope, $routeParams,  $filter, $location, $modal, Inst, Category, Events, Event, MsgPanel,
                   Uploader, ServerError, Progressbar, ConfirmDialog, Config, Auth) {
     $scope.logout = function() {
       Auth.logout();
@@ -60,8 +60,8 @@ angular.module('frontendApp')
         controller: ChangePwdCtrl,
         resolve: {
           Auth: function() { return Auth; },
-          ServerError: function() { return ServerError },
-          Progressbar: function() { return Progressbar }
+          ServerError: function() { return ServerError; },
+          Progressbar: function() { return Progressbar; }
         },
         scope: $scope,
         backdrop: false
@@ -142,7 +142,7 @@ angular.module('frontendApp')
         $scope.loadSubmittedEvents();
       } else if (option === 4 && $routeParams.e) {
         $scope.loadExistingEvent($routeParams.e);
-      } 
+      }
     };
     $scope.init();
     
@@ -254,8 +254,8 @@ angular.module('frontendApp')
       var noError = true;
       uploader.bind('success', function (event, xhr, item, response) {
         $scope.event.picId = response.fileId;
-      }); 
-      uploader.bind('error', function (event, xhr, item, response) {
+      });
+      uploader.bind('error', function () {
         noError = false;
       });
       uploader.bind('completeall', function () {
@@ -317,7 +317,7 @@ angular.module('frontendApp')
         ConfirmDialog.confirmQuestion($scope, $scope.i18n.event.changeType.title, $scope.i18n.event.changeType.query).
           result.then(function () {
             changeEventType(isOneTimeType);
-        });
+          });
       } else {
         changeEventType(isOneTimeType);
       }
@@ -344,7 +344,7 @@ angular.module('frontendApp')
         }
         Progressbar.open();
         Auth.changePwd({pwd: $scope.pwd.oldPwd, newPwd: $scope.pwd.newPwd}).then(
-          function(data) {
+          function() {
             Progressbar.close();
             $modalInstance.close();
           },

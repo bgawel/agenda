@@ -132,6 +132,7 @@ log4j = {
             debug  'org.hibernate.SQL'
             debug  'com.odobo.grails.plugin.springsecurity.rest'
             debug  'agenda.security'
+            all    'org.springframework.security.web'
             //trace   'org.hibernate.type'
         }
         production {
@@ -205,9 +206,10 @@ grails.plugin.springsecurity.password.bcrypt.logrounds = 13
 grails.plugin.springsecurity.roleHierarchy = '''
    ROLE_ADMIN > ROLE_INST
 '''
-grails.plugin.springsecurity.apf.filterProcessesUrl = '/j_083a2_security_check'
-grails.plugin.springsecurity.apf.usernameParameter = 'j_973username'
-grails.plugin.springsecurity.apf.passwordParameter = 'j_279password'
+grails.plugin.springsecurity.apf.filterProcessesUrl = '/j_spring_security_check'
+// if you change username/password parameters, the default logging page won't work
+grails.plugin.springsecurity.apf.usernameParameter = 'j_username'
+grails.plugin.springsecurity.apf.passwordParameter = 'j_password'
 grails.plugin.springsecurity.filterChain.chainMap = [
     '/menu/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
     '/category/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
@@ -216,11 +218,17 @@ grails.plugin.springsecurity.filterChain.chainMap = [
     '/instProj/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
     '/config/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
     '/rest/resetPwd/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/rest/setPwd/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
     '/confirm/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
     '/greenmail/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/console/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/login/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/logout/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
     '/**': 'JOINED_FILTERS'
 ]
-grails.plugin.springsecurity.controllerAnnotations.staticRules = []
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+    '/console/**': ['ROLE_ADMIN']
+]
 
 grails.plugin.springsecurity.rest.login.endpointUrl = '/rest/login.json'
 grails.plugin.springsecurity.rest.logout.endpointUrl = '/rest/logout'

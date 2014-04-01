@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('LoginCtrl', ['$scope', '$routeParams', '$location', '$cookies', '$modal', 'Auth', 'MsgPanel', 
+  .controller('LoginCtrl', ['$scope', '$routeParams', '$location', '$cookies', '$modal', 'Auth', 'MsgPanel',
                             'Progressbar',
                             function ($scope, $routeParams, $location, $cookies, $modal, Auth, MsgPanel, Progressbar) {
     $scope.form = {};
@@ -23,8 +23,8 @@ angular.module('frontendApp')
           $location.search($routeParams);
         },
         function(httpResponse) {
-          httpResponse.status === 403 &&
-            MsgPanel.showError($scope.loginMsgPanel, $scope.i18n.login.badCredentials, $scope.form.login)
+          return httpResponse.status === 403 &&
+            MsgPanel.showError($scope.loginMsgPanel, $scope.i18n.login.badCredentials, $scope.form.login);
         }
       );
     };
@@ -34,8 +34,8 @@ angular.module('frontendApp')
         controller: ResetPwdCtrl,
         resolve: {
           Auth: function() { return Auth; },
-          ServerError: ['ServerError', function(ServerError) { return ServerError }],
-          Progressbar: function() { return Progressbar }
+          ServerError: ['ServerError', function(ServerError) { return ServerError; }],
+          Progressbar: function() { return Progressbar; }
         },
         scope: $scope,
         backdrop: false
@@ -56,7 +56,7 @@ angular.module('frontendApp')
         }
         Progressbar.open();
         Auth.resetPwd({username: $scope.pwd.username}).then(
-          function(data) {
+          function() {
             Progressbar.close();
             $modalInstance.close();
           },

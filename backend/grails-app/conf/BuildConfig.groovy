@@ -72,6 +72,7 @@ grails.project.dependency.resolution = {
         compile ":greenmail:1.3.4"
         compile ":spring-events:1.2"
         compile ":cache-headers:1.1.6"
+        compile ":console:1.3"
         //compile ":mongodb:1.3.1"
 
         // plugins needed at runtime but not for compilation
