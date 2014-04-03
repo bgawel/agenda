@@ -5,15 +5,15 @@ describe('Controller: MainCtrl', function () {
   // load the controller's module
   beforeEach(module('frontendApp'));
 
-  var MainCtrl, scope, $httpBackend, $cacheFactory, $location;
+  var MainCtrl, scope, $httpBackend, $cookies, $location;
   
   var CATEGORY_FILTER_RESPONSE = {
       entries: [{name: 'all', id:'all'}, {name: 'Theater', id:'1'}, {name: 'For Children', id:'2'}],
       activeIndex: 0
     };
   var WEEK_MENU_RESPONSE = {
-      entries: [{name: 'All', abbr:'', id:'all'}, {name: 'today', abbr:'MON', id:'2014-02-03'}, 
-                {name: '', abbr:'date', id:'date'}],
+      entries: [{name: 'All', abbr:'', id:'all', type:'all'}, {name: 'today', abbr:'MON', id:'2014-02-03', type:'today'}, 
+                {name: '', abbr:'', id:'cal', type:'cal'}],
       activeIndex: 1
     };
   var EVENTS_RESPONSE = {
@@ -90,9 +90,11 @@ describe('Controller: MainCtrl', function () {
     };  
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_, _$cacheFactory_, _$location_) {
+  beforeEach(inject(function ($controller, $rootScope, _$httpBackend_, _$cookies_, _$location_, $templateCache) {
+    $templateCache.put('views/main.html', '<i-do-not-know-why-this-is-needed/>');
+    $templateCache.put('views/event.html', '<i-do-not-know-why-this-is-needed/>');
     $httpBackend = _$httpBackend_;
-    $cacheFactory = _$cacheFactory_;
+    $cookies = _$cookies_;
     $location = _$location_;
     scope = $rootScope.$new();
     $httpBackend.expectGET('b/menu/categories.json').respond(CATEGORY_FILTER_RESPONSE);
@@ -162,10 +164,10 @@ describe('Controller: MainCtrl', function () {
      
     var categoryAll = CATEGORY_FILTER_RESPONSE.entries[0];
     var categoryTheater = CATEGORY_FILTER_RESPONSE.entries[1];
-    expect(scope.institutions[categoryAll.name].length).toBe(3);
-    expect(scope.institutions[categoryTheater.name].length).toBe(2);
+    expect(scope.institutions[categoryAll.id].length).toBe(3);
+    expect(scope.institutions[categoryTheater.id].length).toBe(2);
     var activeInstitution = scope.institutions.active;
-    expect(activeInstitution).toBe(scope.institutions[categoryAll.name][0]);
+    expect(activeInstitution).toBe(scope.institutions[categoryAll.id][0]);
     expect(activeInstitution.ngClass).toEqual('active');
     expect(activeInstitution.id).toEqual(EVENTS_RESPONSE.categories[0].who[0].id);
     expect(activeInstitution.name).toEqual(EVENTS_RESPONSE.categories[0].who[0].name);
@@ -355,7 +357,7 @@ describe('Controller: MainCtrl', function () {
     expect(scope.soon).toEqual(EVENTS_RESPONSE.soon);
   });
   
-  it('should cache user settings', function () {
+  it('should save user settings', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
     $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
@@ -366,17 +368,11 @@ describe('Controller: MainCtrl', function () {
      
     scope.displayEvent(1, true);
     
-    var cache = $cacheFactory.get('mainCache');
-    expect(cache.get('mainCache_EVENT')).toEqual(1);
-    expect(cache.get('mainCache_DAY')).toEqual(2);
-    expect(cache.get('mainCache_CATEGORY')).toEqual(0);
-    expect(cache.get('mainCache_INST').id).toEqual('all');
-    expect(cache.get('mainCache_ORDER')).toEqual('dateTime');
-    expect(cache.get('mainCache_CALENDAR')).toEqual(date);
+    expect($cookies.search).toEqual('{"s":"dateTime","c":"all","i":"all","cal":"2014-02-16"}');
     expect($location.path()).toEqual('/event/1');
   });
   
-  it('should initialize model with cached settings', function () {
+  it('should initialize model with saved settings', function () {
     $httpBackend.flush();
     scope.changeCategory(1);
     scope.changeInstitution(1);
@@ -386,18 +382,18 @@ describe('Controller: MainCtrl', function () {
     scope.weekMenu.calendar.value = date;
     scope.$apply();
     $httpBackend.flush();
-    scope.displayEvent(1, false);
     
+    scope.saveFilters();
     $httpBackend.expectGET('b/menu/categories.json').respond(CATEGORY_FILTER_RESPONSE);
     $httpBackend.expectGET('b/menu/week.json').respond(WEEK_MENU_RESPONSE);
     $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=1&inst=1').respond(EVENTS_RESPONSE);
     scope.init();
     $httpBackend.flush();
     
-    expect($cacheFactory.get('mainCache').get('mainCache_EVENT')).toBeUndefined();
+    expect($cookies.search).toBeUndefined();
     expect(scope.categories.active).toBe(scope.categories[1]);
-    expect(scope.institutions.active).toBe(scope.institutions[scope.categories.active.name][1]);
+    expect(scope.institutions.active).toBe(scope.institutions[scope.categories.active.id][1]);
     expect(scope.weekMenu.active).toBe(scope.weekMenu[2]);
-    expect(scope.weekMenu.calendar.value).toEqual(date);
+    expect(scope.weekMenu.calendar.value).toEqual('2014-02-16');
   });
 });

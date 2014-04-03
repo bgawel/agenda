@@ -149,6 +149,8 @@ angular.module('frontendApp')
       if ($scope.institutions.active) {
         activeInstitution = $scope.institutions.active;
         activeInstitutionId = activeInstitution.id;
+      } else {
+        activeInstitutionId = $routeParams.i;
       }
       return {value: activeInstitution, id: activeInstitutionId};
     };
@@ -235,7 +237,7 @@ angular.module('frontendApp')
     };
     
     $scope.displayEvent = function(eventId, scrollToWhenBack) {
-      saveFilters();
+      $scope.saveFilters();
       if (scrollToWhenBack) {
         $cookies.lastEvent = eventId.toString();
       }
@@ -246,18 +248,18 @@ angular.module('frontendApp')
       $timeout(function() { $window.location.reload(); }, 0); // $route.reload() causes problems in unit tests (unexpected GET views.main.html)
     };
     $scope.panel = function(option) {
-      saveFilters();
+      $scope.saveFilters();
       $location.url('panel/' + $rootScope.userId);
       $location.search({o: option});
     };
     $scope.about = function() {
-      saveFilters();
+      $scope.saveFilters();
       $location.url('about');
     };
     $scope.logout = function() {
       Auth.logout();
     };
-    function saveFilters() {
+    $scope.saveFilters = function() {
       $cookies.search = angular.toJson($location.search());
     }
     function restoreFilters() {

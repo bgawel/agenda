@@ -10,7 +10,8 @@ describe('Controller: EventCtrl', function () {
   var EVENT_RESPONSE = {id: 555};
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$controller_, $rootScope, _$routeParams_, _$httpBackend_) {
+  beforeEach(inject(function (_$controller_, $rootScope, _$routeParams_, _$httpBackend_, $templateCache) {
+    $templateCache.put('views/main.html', '<i-do-not-know-why-this-is-needed/>');
     scope = $rootScope.$new();
     $routeParams = _$routeParams_;
     $routeParams.eventId = 666;
@@ -24,7 +25,6 @@ describe('Controller: EventCtrl', function () {
     $httpBackend.flush();
     
     expect(scope.event).toEqual(EVENT_RESPONSE);
-    expect(scope.eventGone).toBeFalsy();
   });
   
   it('should handle error response from server', function () {
@@ -33,6 +33,5 @@ describe('Controller: EventCtrl', function () {
     $httpBackend.flush();
     
     expect(scope.event).toBeUndefined();
-    expect(scope.eventGone).toBeTruthy();
   });
 });

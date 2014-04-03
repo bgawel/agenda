@@ -20,6 +20,8 @@ module.exports = function(config) {
       'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       '.tmp/ui-templates.js',
       'app/ext_components/angular-file-upload.js',
+      'app/bower_components/angular-ui-growl/src/growl.js',
+      'app/bower_components/angular-truncate/dist/angular-truncate.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',

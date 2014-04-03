@@ -132,20 +132,6 @@ angular.module('frontendApp')
       });
     };
     
-    $scope.init = function() {
-      $scope.form = {};
-      $scope.loadInst();
-      var option = parseInt($routeParams.o);
-      if (option === 2) {
-        $scope.loadNewEvent();
-      } else if (option === 3) {
-        $scope.loadSubmittedEvents();
-      } else if (option === 4 && $routeParams.e) {
-        $scope.loadExistingEvent($routeParams.e);
-      }
-    };
-    $scope.init();
-    
     function eventLoaded(value) {
       if (value) {
         $scope.event = value;
@@ -366,4 +352,18 @@ angular.module('frontendApp')
       }
       $location.search(params);
     }
+    
+    $scope.init = function() {
+      $scope.form = {};
+      $scope.loadInst();
+      var option = parseInt($routeParams.o);
+      if (option === 2) {
+        $scope.loadNewEvent();
+      } else if (option === 3) {
+        $scope.loadSubmittedEvents();
+      } else if (option === 4 && $routeParams.e) {
+        $scope.loadExistingEvent($routeParams.e);
+      }
+    };
+    $scope.init();
   }]);

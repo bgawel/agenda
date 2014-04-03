@@ -36,7 +36,8 @@ describe('Controller: PanelCtrl', function () {
   ];
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$controller_, $rootScope, _$httpBackend_, _$routeParams_) {
+  beforeEach(inject(function (_$controller_, $rootScope, _$httpBackend_, _$routeParams_, $templateCache) {
+    $templateCache.put('views/main.html', '<i-do-not-know-why-this-is-needed/>');
     $controller = _$controller_;
     $httpBackend = _$httpBackend_;
     $routeParams = _$routeParams_;
@@ -90,13 +91,11 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     scope.form.inst = {$invalid: false};
     
-    $httpBackend.expectPUT('b/inst/1.json').respond(404);
+    $httpBackend.expectPUT('b/inst/1.json').respond(500);
     scope.saveInst();
     $httpBackend.flush();
     
-    expect(scope.instMsgPanel.show).toBe(true);
-    expect(scope.instMsgPanel.type).toBe('danger');
-    expect(scope.instMsgPanel.messages).toEqual(['Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl']);
+    expect(scope.instMsgPanel.show).toBe(false);
   });
   
   it('should not post inst data if form is invalid having clicked save', function () {
@@ -118,7 +117,7 @@ describe('Controller: PanelCtrl', function () {
     expect(scope.option).toBe(2);
     expect(scope.partial).toBe('panelEvent.html');
     expect(scope.cancelClicked).toBeUndefined();
-    expect(scope.event.id).toBeDefined()
+    expect(scope.event.id).toBeUndefined()
     expect(scope.evtMsgPanel.show).toBe(false);
     expect(scope.categories.length).toBe(3);
     expect(scope.event.pdtps[0].startTime).toBeDefined();
@@ -195,7 +194,7 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
-    $httpBackend.expectPOST('b/event.json').respond({id:2});
+    $httpBackend.expectPOST('b/event.json?').respond({id:2});
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     scope.saveEvent();
     $httpBackend.flush();
@@ -212,13 +211,13 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
-    $httpBackend.expectPOST('b/event.json').respond(500);
+    $httpBackend.expectPOST('b/event.json?').respond(422, {global: 'Not saved'});
     scope.saveEvent();
     $httpBackend.flush();
     
     expect(scope.evtMsgPanel.show).toBe(true);
     expect(scope.evtMsgPanel.type).toBe('danger');
-    expect(scope.evtMsgPanel.messages).toEqual(['Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl']);
+    expect(scope.evtMsgPanel.messages).toEqual(['Not saved']);
   });
   
   it('should post event data and handle unexpected error having clicked save', function () {
@@ -228,13 +227,11 @@ describe('Controller: PanelCtrl', function () {
     $httpBackend.flush();
     scope.form.event = {$invalid: false};
     
-    $httpBackend.expectPOST('b/event.json').respond(404);
+    $httpBackend.expectPOST('b/event.json?').respond(500);
     scope.saveEvent();
     $httpBackend.flush();
     
-    expect(scope.evtMsgPanel.show).toBe(true);
-    expect(scope.evtMsgPanel.type).toBe('danger');
-    expect(scope.evtMsgPanel.messages[0]).toBeDefined();
+    expect(scope.evtMsgPanel.show).toBe(false);
   });
   
   it('should not post event data if form is invalid', function () {
@@ -272,7 +269,7 @@ describe('Controller: PanelCtrl', function () {
     scope.form.event = {$invalid: false};
     var spiedUploader = spyUploader();
 
-    $httpBackend.expectPOST('b/event.json').respond({id:2});
+    $httpBackend.expectPOST('b/event.json?').respond({id:2});
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
     scope.saveEvent();
     scope.uploader.trigger('completeall');
@@ -281,7 +278,7 @@ describe('Controller: PanelCtrl', function () {
     spiedUploader.verify();
   });
   
-  it('should not post event data if could not upload picture, display received response', function () {
+  it('should not post event data if could not upload picture', function () {
     $routeParams.o = '2';
     $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
     $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
@@ -294,27 +291,7 @@ describe('Controller: PanelCtrl', function () {
     
     spiedUploader.verify();
     $httpBackend.verifyNoOutstandingRequest();
-    expect(scope.evtMsgPanel.show).toBe(true);
-    expect(scope.evtMsgPanel.type).toBe('danger');
-    expect(scope.evtMsgPanel.messages[0]).toBe('Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl');
-  });
-  
-  it('should not post event data if could not upload picture, display default response', function () {
-    $routeParams.o = '2';
-    $controller('PanelCtrl', {$scope: scope, $routeParams: $routeParams});
-    $httpBackend.expectGET('b/category/all.json').respond(CATEGORIES_RESPONSE);
-    $httpBackend.flush();
-    scope.form.event = {$invalid: false};
-    var spiedUploader = spyUploader();
-
-    scope.saveEvent();
-    scope.uploader.trigger('error', {}, {}, {});
-    
-    spiedUploader.verify();
-    $httpBackend.verifyNoOutstandingRequest();
-    expect(scope.evtMsgPanel.show).toBe(true);
-    expect(scope.evtMsgPanel.type).toBe('danger');
-    expect(scope.evtMsgPanel.messages[0]).toBe('Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl');
+    expect(scope.evtMsgPanel.show).toBe(false);
   });
   
   it('should initialize model with view of submitted events', function () {
@@ -354,6 +331,7 @@ describe('Controller: PanelCtrl', function () {
     scope.loadExistingEvent(1);
     $httpBackend.flush();
     
+    $routeParams.instId = 666; // just to restore instId removed with loadExistingEvent
     $httpBackend.expectGET('b/evntProj/submitted/666.json').respond(SUBMITTED_RESPONSE);
     scope.cancelClicked();
     $httpBackend.flush();
