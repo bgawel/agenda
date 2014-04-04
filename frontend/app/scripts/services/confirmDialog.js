@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('frontendApp').factory('ConfirmDialog', ['$modal', function($modal) {
-  var GenericCtrl = function ($scope, $modalInstance, headerText, bodyText) {
+  var GenericCtrl = ['$scope', '$modalInstance', 'headerText', 'bodyText',
+                     function ($scope, $modalInstance, headerText, bodyText) {
     $scope.headerText = headerText;
     $scope.bodyText = bodyText;
     
@@ -11,7 +12,7 @@ angular.module('frontendApp').factory('ConfirmDialog', ['$modal', function($moda
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
-  };
+  }];
   var genericResolver = function(headerText, bodyText) {
     return {
       headerText: function() {

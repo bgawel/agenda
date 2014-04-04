@@ -32,11 +32,6 @@ angular.module('frontendApp')
       var modalInstance = $modal.open({
         templateUrl: 'views/resetPwd.html',
         controller: ResetPwdCtrl,
-        resolve: {
-          Auth: function() { return Auth; },
-          ServerError: ['ServerError', function(ServerError) { return ServerError; }],
-          Progressbar: function() { return Progressbar; }
-        },
         scope: $scope,
         backdrop: false
       });
@@ -46,7 +41,8 @@ angular.module('frontendApp')
       });
     };
     
-    var ResetPwdCtrl = function ($scope, $modalInstance, Auth, ServerError, Progressbar) {
+    var ResetPwdCtrl = ['$scope', '$modalInstance', 'Auth', 'ServerError', 'Progressbar',
+                        function ($scope, $modalInstance, Auth, ServerError, Progressbar) {
       $scope.pwdMsgPanel = {show: false, messages:[]};
       $scope.pwd = {username: null};
       $scope.reset = function() {
@@ -68,5 +64,5 @@ angular.module('frontendApp')
       $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
       };
-    };
+    }];
   }]);

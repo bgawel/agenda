@@ -305,17 +305,17 @@ module.exports = function (grunt) {
       server: [
         'compass:server',
         'copy:styles',
-        'html2js'
+        'html2js:dev'
       ],
       test: [
         'compass',
         'copy:styles',
-        'html2js'
+        'html2js:dev'
       ],
       dist: [
         'compass:dist',
         'copy:styles',
-        'html2js',
+        'html2js:dist',
         'imagemin',
         'svgmin',
         'htmlmin'
@@ -361,20 +361,34 @@ module.exports = function (grunt) {
     },
     
     html2js: {
-      options: {
-        base: '.',
-        module: 'ui-templates',
-        rename: function (modulePath) {
-          var moduleName = modulePath.replace('app/views/components/', '')
-            .replace('ui-bootstrap-tpls/', '')
-            .replace('.html', '');
-          return 'template' + '/' + moduleName + '.html';
-        }
-      },
-      main: {
+      dev : {
+        options: {
+          base: '.',
+          module: 'ui-templates',
+          rename: function (modulePath) {
+            var moduleName = modulePath.replace('app/views/components/', '')
+              .replace('ui-bootstrap-tpls/', '')
+              .replace('.html', '');
+            return 'template' + '/' + moduleName + '.html';
+          }
+        },
         src: ['app/views/components/**/*.html', 'app/views/components/ui-bootstrap-tpls/**/*.html'],
-        dest: '.tmp/ui-templates.js'
-      }
+        dest: '<%= yeoman.app %>/scripts/ui-templates.js'
+      },
+      dist : {
+        options: {
+          base: '.',
+          module: 'ui-templates',
+          rename: function (modulePath) {
+            var moduleName = modulePath.replace('app/views/components/', '')
+              .replace('ui-bootstrap-tpls/', '')
+              .replace('.html', '');
+            return 'template' + '/' + moduleName + '.html';
+          }
+        },
+        src: ['app/views/components/**/*.html', 'app/views/components/ui-bootstrap-tpls/**/*.html'],
+        dest: '<%= yeoman.dist %>/scripts/ui-templates.js'
+      },
     }
   });
 

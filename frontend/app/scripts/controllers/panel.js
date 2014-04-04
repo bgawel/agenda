@@ -58,11 +58,6 @@ angular.module('frontendApp')
       var modalInstance = $modal.open({
         templateUrl: 'views/changePwd.html',
         controller: ChangePwdCtrl,
-        resolve: {
-          Auth: function() { return Auth; },
-          ServerError: function() { return ServerError; },
-          Progressbar: function() { return Progressbar; }
-        },
         scope: $scope,
         backdrop: false
       });
@@ -320,7 +315,8 @@ angular.module('frontendApp')
       }
     }
     
-    var ChangePwdCtrl = function ($scope, $modalInstance, Auth, ServerError, Progressbar) {
+    var ChangePwdCtrl = ['$scope', '$modalInstance', 'Auth', 'ServerError', 'Progressbar',
+                         function ($scope, $modalInstance, Auth, ServerError, Progressbar) {
       $scope.pwdMsgPanel = {show: false, messages:[]};
       $scope.pwd = {oldPwd: null, newPwd: null, rePwd: null}; // it has to go through 'pwd', otherwise not propagated to scope
       $scope.change = function() {
@@ -342,7 +338,7 @@ angular.module('frontendApp')
       $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
       };
-    };
+    }];
     
     function changeOption(option, eventId) {
       $scope.option = option;

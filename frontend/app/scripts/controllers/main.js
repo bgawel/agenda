@@ -261,7 +261,7 @@ angular.module('frontendApp')
     };
     $scope.saveFilters = function() {
       $cookies.search = angular.toJson($location.search());
-    }
+    };
     function restoreFilters() {
       if ($location.url() === '/') {
         var filters = $cookies.search;

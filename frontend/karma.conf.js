@@ -18,7 +18,6 @@ module.exports = function(config) {
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-      '.tmp/ui-templates.js',
       'app/ext_components/angular-file-upload.js',
       'app/bower_components/angular-ui-growl/src/growl.js',
       'app/bower_components/angular-truncate/dist/angular-truncate.js',

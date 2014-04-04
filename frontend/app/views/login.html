@@ -4,7 +4,7 @@
     <info-panel panel="loginMsgPanel" form="form.login"></info-panel>
     <h2 class="form-signin-heading">{{i18n.login.heading}}</h2>
     <input type="email" ng-model="username" class="form-control" placeholder="{{i18n.placeholder.email}}" 
-      required autofocus name="username" maxlength="64"/>
+      required autofocus name="username" maxlength="64">
     <div ng-show="formLoginValidations && form.login.username.$invalid">
       <span class="glyphicon glyphicon-exclamation-sign error"></span>
       <span class="error">
@@ -12,7 +12,7 @@
       </span>
     </div>       
     <input type="password" ng-model="password" class="form-control" placeholder="{{i18n.placeholder.pwd}}" required name="password"
-      maxlength="16" ng-clear-fix />
+      maxlength="16" ng-clear-fix >
     <div class="error-password" ng-show="formLoginValidations && form.login.password.$invalid">
       <span class="glyphicon glyphicon-exclamation-sign error"></span>
       <span class="error">

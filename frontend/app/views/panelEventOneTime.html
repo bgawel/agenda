@@ -1,12 +1,12 @@
 <div class="form-group">
   <label for="eventDate{{$index}}" class="col-sm-2 control-label">Kiedy *</label>
   <div class="col-sm-3 input-group" ng-switch on="pdtp.readonly">
-    <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.toDate | date:'dd-MM-yyyy'}}" readonly />
+    <input ng-switch-when="true" type="text" class="form-control" value="{{pdtp.toDate | date:'dd-MM-yyyy'}}" readonly>
     <input ng-switch-default type="text" class="form-control" id="eventDate{{$index}}" name="toDate"
       ng-date-fix datepicker-popup="dd-MM-yyyy" ng-model="pdtp.toDate" is-open="pdtp.opened" 
       ng-server-error ng-server-error-name="pdtps[{{$index}}].toDate"
       min="minDate" datepicker-options="dateOptions" required placeholder="np. 21-12-2014" maxlength="10"
-      current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"/> 
+      current-text="Dziś" toggle-weeks-text="Tygodnie" close-text="Zamknij" clear-text="Wyczyść"> 
     <span ng-switch-default class="input-group-btn">
       <button class="btn btn-default" ng-click="openCalendar($event, pdtp)">
         <i class="glyphicon glyphicon-calendar"></i>
@@ -16,8 +16,8 @@
   <label for="eventTime{{$index}}" class="col-sm-offset-1 col-sm-2 control-label">O godzinie *</label>
   <div class="col-sm-2" id="eventTime{{$index}}" ng-model="pdtp.startTime" ng-switch on="pdtp.readonly">
     <input ng-switch-when="true" type="text" class="form-control"
-      value="{{pdtp.startTime | date:'HH:mm'}}" readonly />
-    <timepicker ng-switch-default show-meridian="isMeridian" name="startTime"/>
+      value="{{pdtp.startTime | date:'HH:mm'}}" readonly >
+    <timepicker ng-switch-default show-meridian="isMeridian" name="startTime"></timepicker>
   </div>
   <div class="col-sm-offset-2 col-sm-5" ng-show="formEventValidations && subForm.toDate.$invalid">
     <span class="glyphicon glyphicon-exclamation-sign error"></span>

@@ -22,7 +22,7 @@
     <![endif]-->
 
     <!--[if lt IE 9]>
-      <script src="bower_components/es5-shim/es5-shim.js"></script>
+      <script src="bower_components/es5-shim/es5-shim.min.js"></script>
       <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
@@ -40,13 +40,8 @@
        ga('send', 'pageview');
     </script>
 
-    <!-- fix for old browsers to upload files -->
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-
-    <script src="bower_components/jquery/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="ext_components/angular-file-upload.js"></script>
-    <script src="ext_components/angular-locale_pl-pl.js"></script>
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
 
         <!-- build:js scripts/plugins.js -->
         <script src="bower_components/sass-bootstrap/js/affix.js"></script>
@@ -61,19 +56,21 @@
         <script src="bower_components/sass-bootstrap/js/tab.js"></script>
         <script src="bower_components/sass-bootstrap/js/tooltip.js"></script>
         <script src="bower_components/sass-bootstrap/js/popover.js"></script>
-		    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-        <script src="bower_components/angular-ui-growl/src/growl.js"></script>
-        <script src="bower_components/angular-truncate/dist/angular-truncate.js"></script>
-        <!-- load custom templates -->
-        <script src="/ui-templates.js"></script>
         <!-- endbuild -->
 
         <!-- build:js scripts/modules.js -->
+        <script src="ext_components/angular-locale_pl-pl.js"></script>
+        <script src="ext_components/angular-file-upload.js"></script>
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="bower_components/angular-ui-growl/src/growl.js"></script>
+        <script src="bower_components/angular-truncate/dist/angular-truncate.js"></script>
         <script src="bower_components/angular-resource/angular-resource.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
         <!-- endbuild -->
+        
+        <script src="scripts/ui-templates.js"></script> <!-- load custom templates -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
@@ -98,7 +95,6 @@
         <script src="scripts/controllers/login.js"></script>
         <script src="scripts/controllers/signup.js"></script>
         <script src="scripts/controllers/about.js"></script>
-
         <script src="scripts/controllers/invalidConfirmation.js"></script>
         <script src="scripts/controllers/signupConfirmation.js"></script>
         <script src="scripts/controllers/setPwd.js"></script>

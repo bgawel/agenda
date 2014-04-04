@@ -9,14 +9,14 @@
     <info-panel panel="pwdMsgPanel" form="form.pwd"></info-panel>
     <form class="form-horizontal form-pwd" role="form" name="form.pwd" ng-form-autofill-fix
         novalidate ng-class="{validate: formPwdValidations}" ng-submit="set()">
-      <input name="username" ng-model="pwd.username" ng-hide="true"/>
+      <input name="username" ng-model="pwd.username" ng-hide="true">
       <div class="form-group">
         <label for="newPwd" class="col-sm-4 control-label">Nowe hasło *</label>
         <div class="col-sm-3">
           <input type="password" class="form-control" id="newPwd" required
             autocomplete="{{pwd.newPwd ? 'on' : 'off'}}" autofocus
             placeholder="min. 5 znaków" name="password" ng-change="pwd.rePwd = undefined;"
-            maxlength="30" ng-model="pwd.newPwd" ng-pattern="/.{5,}/" ng-server-error />
+            maxlength="30" ng-model="pwd.newPwd" ng-pattern="/.{5,}/" ng-server-error >
         </div>
         <div class="col-sm-offset-4 col-sm-4" ng-show="formPwdValidations && form.pwd.password.$invalid">
           <span class="glyphicon glyphicon-exclamation-sign error"></span>
@@ -32,7 +32,7 @@
         <label for="rePwd" class="col-sm-4 control-label">Potwierdź nowe hasło *</label>
         <div class="col-sm-3">
           <input type="password" class="form-control" id="rePwd" required
-            maxlength="30" ng-model="pwd.rePwd" name="rePwd" ng-same-as="pwd.newPwd" />
+            maxlength="30" ng-model="pwd.rePwd" name="rePwd" ng-same-as="pwd.newPwd" >
         </div>
         <div class="col-sm-offset-4 col-sm-4" ng-show="formPwdValidations && form.pwd.rePwd.$invalid">
           <span class="glyphicon glyphicon-exclamation-sign error"></span>

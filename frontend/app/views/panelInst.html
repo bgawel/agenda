@@ -5,7 +5,7 @@
     <label for="detailsName" class="col-sm-2 control-label">Nazwa *</label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="detailsName" required placeholder="nazwa organizatora"
-        maxlength="64" ng-model="inst.name" name="name" ng-server-error />
+        maxlength="64" ng-model="inst.name" name="name" ng-server-error >
     </div>
     <div class="col-sm-offset-2 col-sm-10" ng-show="formInstValidations && form.inst.name.$invalid">
       <span class="glyphicon glyphicon-exclamation-sign error"></span>
@@ -22,7 +22,7 @@
     <div class="col-sm-8">
       <input type="email" class="form-control" id="detailsEmail" required
         placeholder="adres e-mail, który będzie używany do logowania"
-        maxlength="64" ng-model="inst.email" name="username" ng-server-error ng-server-error-name="email"/>
+        maxlength="64" ng-model="inst.email" name="username" ng-server-error ng-server-error-name="email">
     </div>
     <div class="col-sm-offset-2 col-sm-10" ng-show="formInstValidations && form.inst.username.$invalid">
       <span class="glyphicon glyphicon-exclamation-sign error"></span>
@@ -46,14 +46,14 @@
     <label for="detailsAddress" class="col-sm-2 control-label">Adres</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="detailsAddress" name="address"
-      maxlength="128" ng-model="inst.address"/>
+      maxlength="128" ng-model="inst.address">
     </div>
   </div>
   <div class="form-group">
     <label for="detailsWeb" class="col-sm-2 control-label">Strona domowa</label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="detailsWeb" name="web"
-        maxlength="64" ng-model="inst.web" ng-server-error />
+        maxlength="64" ng-model="inst.web" ng-server-error >
     </div>
     <div class="col-sm-offset-2 col-sm-10" ng-show="formInstValidations && form.inst.web.$invalid">
       <span class="glyphicon glyphicon-exclamation-sign error"></span>
@@ -66,7 +66,7 @@
     <label for="detailsTel" class="col-sm-2 control-label">Telefon</label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="detailsTel" name="telephone"
-      maxlength="64" ng-model="inst.telephone"/>
+      maxlength="64" ng-model="inst.telephone">
     </div>
   </div>  
   <div class="form-group">
