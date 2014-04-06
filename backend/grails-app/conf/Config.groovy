@@ -132,7 +132,8 @@ log4j = {
             debug  'org.hibernate.SQL'
             debug  'com.odobo.grails.plugin.springsecurity.rest'
             debug  'agenda.security'
-            all    'org.springframework.security.web'
+            debug  'org.grails.plugin.cachedresources'
+            debug  'org.grails.plugin.resource'
             //trace   'org.hibernate.type'
         }
         production {
@@ -186,6 +187,8 @@ environments {
     }
 }
 
+grails.resources.mappers.hashandcache.enabled = true
+
 grails.gorm.failOnError = true
 
 grails.app.context = '/b'
@@ -206,7 +209,7 @@ grails.plugin.springsecurity.password.bcrypt.logrounds = 13
 grails.plugin.springsecurity.roleHierarchy = '''
    ROLE_ADMIN > ROLE_INST
 '''
-grails.plugin.springsecurity.apf.filterProcessesUrl = '/j_spring_security_check'
+grails.plugin.springsecurity.apf.filterProcessesUrl = '/j_876_security_check'
 // if you change username/password parameters, the default logging page won't work
 grails.plugin.springsecurity.apf.usernameParameter = 'j_username'
 grails.plugin.springsecurity.apf.passwordParameter = 'j_password'
@@ -227,6 +230,7 @@ grails.plugin.springsecurity.filterChain.chainMap = [
     '/**': 'JOINED_FILTERS'
 ]
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+    '/grails/**': ['ROLE_ADMIN'],
     '/console/**': ['ROLE_ADMIN']
 ]
 

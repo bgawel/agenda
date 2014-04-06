@@ -1,0 +1,154 @@
+<div class="navbar navbar-default navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">{{i18n.main.nav.toggle}}</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="" ng-click="reload()">{{i18n.appName}}</a>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="active">
+          <a href="" ng-click="reload()"><span class="glyphicon glyphicon-list-alt"></span> {{i18n.main.menu.events}}</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="" ng-click="panel(2)"><span class="glyphicon glyphicon-pushpin"></span> {{i18n.main.menu.addEvent}}</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-if="$root.userId < 0">
+          <a href="" ng-click="panel(1)"><span class="glyphicon glyphicon-log-in"></span> {{i18n.login.signin}}</a>
+        </li>
+        <li ng-if="$root.userId > 0">
+          <a href="" ng-click="panel(1)"><span class="glyphicon glyphicon-cog"></span> {{i18n.main.menu.adminPanel}}</a>
+        </li> 
+        <li ng-if="$root.userId > 0">
+          <a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> {{i18n.login.signout}} <b>{{$root.username}}</b></a>
+        </li> 
+      </ul>      
+    </div><!-- /.nav-collapse -->
+  </div><!-- /.container -->
+</div><!-- /.navbar -->
+
+<div class="container">
+
+  <div class="row row-offcanvas {{leftPanel}} {{rightPanel}}">
+
+	<div class="col-xs-6 col-sm-2 sidebar-offcanvas left" id="sidebarLeft" role="navigation">
+      <p>{{i18n.main.categories}}:</p>
+      <div class="list-group">
+        <a ng-repeat="category in categories" href="" class="list-group-item {{category.ngClass}}" ng-click="changeCategory($index)">
+          {{category.name}} <span class="badge">{{category.badge}}</span>
+        </a>
+      </div>
+      <p>{{i18n.main.insts}}:</p>
+      <div class="list-group">
+        <a ng-repeat="inst in institutions[categories.active.id]" href="" class="list-group-item {{inst.ngClass}}" ng-click="changeInstitution($index)">
+          {{inst.name}} <span class="badge">{{inst.badge}}</span>
+        </a>
+      </div>
+    </div><!--/span-->
+
+    <div class="middle-panel col-xs-12 col-sm-7">
+      <p class="pull-left visible-xs">
+        <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas" ng-click="toggleLeftPanel()">{{i18n.main.nav.filters}}</button>   
+      </p>
+      <p class="pull-right visible-xs">    
+        <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas" ng-click="toggleRightPanel()">{{i18n.main.nav.announcements}}</button>
+      </p>
+      
+      <div>
+        <div class="nav-by-day">
+      	    <ul class="nav nav-tabs">
+              <li ng-repeat="day in weekMenu" ng-class="day.ngClass" ng-switch="" on="day.type">
+                <a ng-switch-when="all" ng-click="changeEventsDay($index)" href="" class="not-day">
+                  {{day.name}}
+                </a>
+                <a ng-switch-when="future" ng-click="changeEventsDay($index)" href="" class="not-day">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                <a ng-switch-when="cal" ng-click="openEventsCalendar($event, $index)" datepicker-popup="i18n.calendar.format" href="" class="not-day calendar" ng-model="weekMenu.calendar.value" is-open="weekMenu.calendar.opened" min="weekMenu.calendar.minDate" datepicker-options="weekMenu.calendar.dateOptions" current-text="{{i18n.calendar.today}}" toggle-weeks-text="{{i18n.calendar.weeks}}" close-text="{{i18n.action.close}}" clear-text="{{i18n.action.clear}}">
+                  <span class="glyphicon glyphicon-calendar">
+                  </span>
+                  {{weekMenu.calendar.value | date: i18n.calendar.shortFormat}}
+                </a>
+                <a ng-switch-default="" ng-click="changeEventsDay($index)" href="">
+                  <abbr>{{day.abbr}}</abbr><br>{{day.name}}
+                </a>
+              </li>
+            </ul>
+        </div>
+        <div class="nav-sort clearfix">
+          <p class="caption">
+            {{i18n.main.sort.title}}:
+          </p>
+          <ul class="nav nav-pills">
+            <li ng-class="{active:(orderEventsBy==='dateTime')}"><a href="" ng-click="changeOrder('dateTime')">{{i18n.main.sort.byTime}}</a></li>
+            <li ng-class="{active:(orderEventsBy==='title')}"><a href="" ng-click="changeOrder('title')">{{i18n.main.sort.byTitle}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <alert type="'info'" ng-if="noEventsMsg">{{i18n.main.noEvents}}</alert>
+        <div ng-repeat="event in events | filter:{catName: categories.filter.name, whoName: institutions.filter.name}:true | orderBy:orderEventsBy" class="event clearfix" ng-init="maxChars = showMaxChars; more = false">
+          <div class="col-xs-9">
+            <h4 id="event{{event.id}}"><a href="" ng-click="displayEvent(event.id, true)">{{event.title}}</a>, 
+              <small ng-switch="" on="event.whoAbout">
+                <a ng-switch-default="" href="" class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
+                <span ng-switch-when="">{{event.whoName}}</span>
+              </small>
+            </h4>
+            <img ng-if="event.pic" ng-src="{{event.pic}}" width="95" height="84">
+            <div class="basic-info">
+              <p>{{i18n.event.where}}: {{event.place}}</p>
+              <p>{{i18n.event.price}}: {{event.price}}</p>
+              <p ng-if="event.more">{{i18n.event.more}}: <a ng-href="event.more">{{event.more}}</a></p>
+            </div>
+            <div class="description">
+              <p>{{event.desc | characters: maxChars}}</p>
+              <span ng-show="maxChars < event.desc.length" ng-click="maxChars = event.desc.length; more = true" class="text-more-less text-center col-xs-12 glyphicon glyphicon-chevron-down">
+              </span>
+              <span href="" ng-show="more" ng-click="maxChars = showMaxChars; more = false" class="text-more-less text-center col-xs-12 glyphicon glyphicon-chevron-up">
+              </span>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <p class="category text-right">{{event.catName}}</p>
+            <p class="displayDt text-right"><b>{{event.displayDt}}</b></p>
+          </div>
+        </div>     
+      </div>
+    </div>
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas right" id="sidebarRight" role="navigation">
+      <p ng-show="soon.length > 0"><span class="glyphicon glyphicon-eye-open"></span> {{i18n.main.soon}}:</p>
+      <div class="list-group announcement">
+        <a ng-repeat="event in soon" href="" ng-click="displayEvent(event.id)" class="list-group-item">
+          <p>{{event.label}} {{event.title}}</p>
+          <p>{{event.desc}}</p>
+          <p>{{event.more}}</p>
+        </a>
+      </div>
+      <p ng-show="newest.length > 0">{{i18n.main.newest}}:</p>
+      <div class="list-group announcement">
+        <a ng-repeat="event in soon" href="" ng-click="displayEvent(event.id)" class="list-group-item">
+          <p>{{event.label}} {{event.title}}</p>
+          <p>{{event.desc}}</p>
+          <p>{{event.more}}</p>
+        </a>
+      </div>
+    </div><!--/span-->
+  </div><!--/row-->
+
+  <hr>
+
+  <footer>
+    <p class="text-center">&copy; {{i18n.doneBy}} | <a href="" ng-click="about()">{{i18n.main.menu.about}}</a></p>
+  </footer>
+
+</div><!--/.container-->

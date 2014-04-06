@@ -1,0 +1,22 @@
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tytuł</th>
+        <th>Gdzie/kiedy</th>
+        <th>Zmodyfikowano</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="event in submittedEvents">
+        <td>{{$index + 1}}</td>
+        <td>{{event.title}}</td>
+        <td>{{event.locdate}}</td>
+        <td>{{event.mod | date:'dd MMMM yyyy, HH:mm'}}</td>
+        <td><a href="" ng-click="loadExistingEvent(event.id)">Edytuj</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

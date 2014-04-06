@@ -3,8 +3,13 @@
 var app = angular.module('frontendApp');
 
 // TODO bgawel: make it configurable for tests
-var serwerUrl = 'http://localhost:8080/';
-//var serwerUrl = '';
+// local CORS config
+//var serwerUrl = 'http://localhost:8080/b/';
+// local tests, client development config
+//var serwerUrl = 'b/';
+// production config
+var serwerUrl = '';
+
 var url = function(path) {
   return serwerUrl + path;
 };
@@ -14,12 +19,12 @@ var AUTH_TOKEN_NAME = 'X-XSRF-TOKEN';
 app.factory('Menu', ['$http', function($http) {
   return {
     week : function() {
-      return $http.get(url('b/menu/week.json')).then(function(result) {
+      return $http.get(url('menu/week.json')).then(function(result) {
         return result.data;
       });
     },
     categories : function() {
-      return $http.get(url('b/menu/categories.json')).then(function(result) {
+      return $http.get(url('menu/categories.json')).then(function(result) {
         return result.data;
       });
     }
@@ -29,7 +34,7 @@ app.factory('Menu', ['$http', function($http) {
 app.factory('Config', ['$http', function($http) {
   return {
     now : function() {
-      return $http.get(url('b/config/now.json')).then(function(result) {
+      return $http.get(url('config/now.json')).then(function(result) {
         return result.data;
       });
     }
@@ -39,7 +44,7 @@ app.factory('Config', ['$http', function($http) {
 app.factory('Category', ['$http', function($http) {
   return {
     all : function() {
-      return $http.get(url('b/category/all.json')).then(function(result) {
+      return $http.get(url('category/all.json')).then(function(result) {
         return result.data;
       });
     }
@@ -53,19 +58,19 @@ app.factory('Events', ['$http', function($http) {
       // and promise.then() also returns a promise
       // that resolves to whatever value is returned in it's
       // callback argument, we can return that.
-      return $http.get(url('b/evntProj/byDate/' + date + '.json'), {params : {category : category, inst: institution}}).
+      return $http.get(url('evntProj/byDate/' + date + '.json'), {params : {category : category, inst: institution}}).
         then(function(result) {
           return result.data;
         });
     },
     byId : function(eventId) {
-      return $http({method: 'GET', url: url('b/evntProj/byEvent/' + eventId + '.json')}).
+      return $http({method: 'GET', url: url('evntProj/byEvent/' + eventId + '.json')}).
         then(function(result) {
           return result.data;
         });
     },
     submitted : function(instId) {
-      return $http.get(url('b/evntProj/submitted/' + instId + '.json')).then(function(result) {
+      return $http.get(url('evntProj/submitted/' + instId + '.json')).then(function(result) {
         return result.data;
       });
     }
@@ -73,14 +78,14 @@ app.factory('Events', ['$http', function($http) {
 }]);
 
 app.factory('Inst', ['$resource', function($resource) {
-  return $resource(url('b/inst/:id.json'), null,
+  return $resource(url('inst/:id.json'), null,
   {
     update: { method: 'PUT' }
   });
 }]);
 
 app.factory('Event', ['$resource', function($resource) {
-  return $resource(url('b/event/:id.json'), null,
+  return $resource(url('event/:id.json'), null,
   {
     update: { method: 'PUT' }
   });
@@ -89,7 +94,7 @@ app.factory('Event', ['$resource', function($resource) {
 app.factory('Insts', ['$http', function($http) {
   return {
     names : function() {
-      return $http.get(url('b/instProj/names.json')).then(function(result) {
+      return $http.get(url('instProj/names.json')).then(function(result) {
         return result.data;
       });
     }
@@ -103,7 +108,7 @@ app.factory('Uploader', ['$fileUploader', '$http', function($fileUploader, $http
       headers[AUTH_TOKEN_NAME] = $http.defaults.headers.common[AUTH_TOKEN_NAME];
       return $fileUploader.create({
         scope: scope,
-        url: url('b/upload/evntPic'),
+        url: url('upload/evntPic'),
         removeAfterUpload: false,
         headers: headers
       });
@@ -115,7 +120,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
                      function($rootScope, $http, $q, $timeout, $cookies, $window) {
   return {
     login : function(credentials, rememberMe) {
-      return $http.post(url('b/rest/login.json'), credentials).then(function(result) {
+      return $http.post(url('rest/login.json'), credentials).then(function(result) {
         $cookies[AUTH_TOKEN_NAME] = $http.defaults.headers.common[AUTH_TOKEN_NAME] = result.data.token;
         if (rememberMe) {
           var username = result.data.username;
@@ -144,7 +149,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
           return deferred.promise;
         }
       }
-      return $http.get(url('b/rest/checkLogin')).then(function(result) {
+      return $http.get(url('rest/checkLogin')).then(function(result) {
         if (usedTokenFromCookie) {
           $rootScope.$broadcast('onAuthenticationSuccess', result.data);
         }
@@ -156,14 +161,14 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
         var token = $cookies[AUTH_TOKEN_NAME];
         if (token) {
           headers[AUTH_TOKEN_NAME] = token;
-          return $http.get(url('b/rest/checkLogin')).then(function(result) {
+          return $http.get(url('rest/checkLogin')).then(function(result) {
             $rootScope.$broadcast('onAuthenticationSuccess', result.data);
           });
         }
       }
     },
     logout : function() {
-      return $http.post(url('b/rest/logout')).then(function() {
+      return $http.post(url('rest/logout')).then(function() {
         delete $cookies[AUTH_TOKEN_NAME];
         delete $http.defaults.headers.common[AUTH_TOKEN_NAME];
         $rootScope.$broadcast('onLogoutSuccess');
@@ -171,13 +176,13 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
       });
     },
     resetPwd : function(data) {
-      return $http.post(url('b/rest/resetPwd.json'), data);
+      return $http.post(url('rest/resetPwd.json'), data);
     },
     setPwd : function(data) {
-      return $http.post(url('b/rest/setPwd.json'), data);
+      return $http.post(url('rest/setPwd.json'), data);
     },
     changePwd : function(data) {
-      return $http.post(url('b/rest/changePwd.json'), data);
+      return $http.post(url('rest/changePwd.json'), data);
     }
   };
 }]);

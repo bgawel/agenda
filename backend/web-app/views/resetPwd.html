@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h6>Resetowanie hasła</h6>
+</div>
+<form class="form-horizontal form-pwd" role="form" name="form.pwd" ng-form-autofill-fix="" novalidate="" ng-class="{validate: formPwdValidations}" ng-submit="reset()">
+<div class="modal-body">
+  <info-panel panel="pwdMsgPanel" form="form.pwd"></info-panel>
+  <div class="form-group">
+    <span class="col-sm-12 text-center send-link-text">
+      Czy wysłać na poniższy e-mail link umożliwiający ustanowienie nowego hasła?
+    </span>
+    <label for="detailsEmail" class="col-sm-3 control-label">E-mail (login) *</label>
+    <div class="col-sm-9">
+      <input type="email" class="form-control" id="detailsEmail" required="" placeholder="adres e-mail używany do logowania" autofocus="" maxlength="64" ng-model="pwd.username" name="username">
+    </div>
+    <div class="col-sm-offset-3 col-sm-9" ng-show="formPwdValidations && form.pwd.username.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span class="error">
+        Podaj poprawny adres e-mail
+      </span>
+    </div>
+  </div>   
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" autofocus="">Wyślij</button>
+  <button type="button" class="btn btn-warning" ng-click="cancel()">Anuluj</button>
+</div> 
+</form>

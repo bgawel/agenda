@@ -1,0 +1,32 @@
+<div class="container">
+  <form class="form-horizontal form-signin" role="form" ng-submit="login()" ng-form-autofill-fix="" name="form.login" novalidate="" ng-class="{validate: formLoginValidations}">
+    <info-panel panel="loginMsgPanel" form="form.login"></info-panel>
+    <h2 class="form-signin-heading">{{i18n.login.heading}}</h2>
+    <input type="email" ng-model="username" class="form-control" placeholder="{{i18n.placeholder.email}}" required="" autofocus="" name="username" maxlength="64">
+    <div ng-show="formLoginValidations && form.login.username.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span class="error">
+        {{i18n.error.email}}
+      </span>
+    </div>       
+    <input type="password" ng-model="password" class="form-control" placeholder="{{i18n.placeholder.pwd}}" required="" name="password" maxlength="16" ng-clear-fix="">
+    <div class="error-password" ng-show="formLoginValidations && form.login.password.$invalid">
+      <span class="glyphicon glyphicon-exclamation-sign error"></span>
+      <span class="error">
+        {{i18n.error.pwd}}
+      </span>
+    </div>
+    <label class="checkbox">
+      <input type="checkbox" ng-model="rememberMe"> {{i18n.login.rememberMe}}
+      <a href="" class="pull-right" ng-click="resetPwd()">{{i18n.login.remindMe}}</a>
+    </label>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">{{i18n.login.signin}}</button>
+    <div class="not-signedup">
+      <p class="signup">{{i18n.login.hasAccount}} <a href="#/signup">{{i18n.login.signup}}</a></p>
+      <div class="pros">
+        <p ng-repeat="p in i18n.login.pros">{{p}}</p>
+      </div>
+    </div>
+  </form>
+
+</div>
