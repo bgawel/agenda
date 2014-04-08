@@ -1,8 +1,15 @@
-.insts-list {
-	max-height: 343px;
-  overflow-y: auto; 
-  
-  li {
-  	margin-left: -20px;
-  }
+.signup {
+
+	.already-reg {
+		color: #999999;
+	}
+
+	.insts-list {
+		max-height: 343px;
+	  overflow-y: auto; 
+	  
+	  li {
+	  	margin-left: -20px;
+	  }
+	}
 }

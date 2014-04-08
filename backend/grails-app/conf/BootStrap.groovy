@@ -1,10 +1,7 @@
 import static agenda.LocalContext.dateTimeToDateOnly
-import static agenda.LocalContext.dateTimeToTimeOnly
 import static agenda.LocalContext.getCurrentDateTime
+import static agenda.LocalContext.toTimeOnly
 import grails.util.Environment
-
-import org.joda.time.DateTime
-
 import agenda.Category
 import agenda.Event
 import agenda.Institution
@@ -19,6 +16,11 @@ class BootStrap {
     def init = { servletContext ->
         switch(Environment.current) {
             case Environment.DEVELOPMENT:
+                messageSource.useCodeAsDefaultMessage = true
+                initDevelopmentModeData()
+                break
+            // TODO bgawel: tmp
+            case Environment.PRODUCTION:
                 messageSource.useCodeAsDefaultMessage = true
                 initDevelopmentModeData()
                 break
@@ -39,7 +41,7 @@ class BootStrap {
         def inst2 = new Institution(name: 'name-inst2', email: 'inst2@email.com', password: 'password2',
             enabled: true).save()
         def nowDate = dateTimeToDateOnly(currentDateTime)
-        def time = dateTimeToTimeOnly(new DateTime(2014, 1, 1, 18, 0))
+        def time = toTimeOnly(18, 0)
         def description1 = ''
         (1..100).each { index ->
             description1 <<= "desc$index "

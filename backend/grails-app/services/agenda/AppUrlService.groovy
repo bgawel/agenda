@@ -18,6 +18,9 @@ class AppUrlService {
         if (!context) {
             context = request.contextPath
         }
+        if (context.endsWith('/')) {
+            context = context.size() == 1 ? '' : context[0..-2]
+        }
         "$serverURL$context"
     }
 

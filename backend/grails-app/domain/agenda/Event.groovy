@@ -69,8 +69,24 @@ class Event {
     }
 
     static mapping = {
-        version false
+        version true
         pdtps cascade: 'all-delete-orphan'
+    }
+
+    def beforeInsert() {
+        stampOwner()
+    }
+
+    def beforeUpdate() {
+        stampOwner()
+    }
+
+    def beforeDelete() {
+        stampOwner()
+    }
+
+    protected stampOwner() {
+        institution.lastUpdated = new Date()
     }
 
     private static class OneTimeTypeDatesOverlapValidator {

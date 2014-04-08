@@ -4,7 +4,7 @@ angular.module('frontendApp')
   .factory('I18n', function() {
     return {
       error : {
-        unexpected: 'Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - info@agenda.pl',
+        unexpected: 'Ups. Niespodziewany błąd, spróbuj ponownie albo poinformuj nas o błędzie - agenda.wro@gmail.com',
         status0: 'Wystąpił problem połączenia z serwerem',
         status404: 'Przykro nam, ale obiekt nie jest dostępny',
         email: 'Podaj poprawny adres e-mail',

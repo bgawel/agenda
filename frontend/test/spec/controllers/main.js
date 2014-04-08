@@ -97,9 +97,9 @@ describe('Controller: MainCtrl', function () {
     $cookies = _$cookies_;
     $location = _$location_;
     scope = $rootScope.$new();
-    $httpBackend.expectGET('b/menu/categories.json').respond(CATEGORY_FILTER_RESPONSE);
-    $httpBackend.expectGET('b/menu/week.json').respond(WEEK_MENU_RESPONSE);
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-03.json?category=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('menu/categories.json').respond(CATEGORY_FILTER_RESPONSE);
+    $httpBackend.expectGET('menu/week.json').respond(WEEK_MENU_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-03.json?category=all').respond(EVENTS_RESPONSE);
     MainCtrl = $controller('MainCtrl', {$scope: scope});
   }));
 
@@ -210,7 +210,7 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
     
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
@@ -228,12 +228,12 @@ describe('Controller: MainCtrl', function () {
   it('should pick up another day from a calendar', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
     
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-17.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-17.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 17);
     scope.$apply();
     $httpBackend.flush(); 
@@ -244,7 +244,7 @@ describe('Controller: MainCtrl', function () {
   it('should not trigger request if date from a calendar has not changed', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
@@ -258,12 +258,12 @@ describe('Controller: MainCtrl', function () {
   it('should set calendar value to null if changed to other option', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
     
-    $httpBackend.whenGET('b/evntProj/byDate/all.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.whenGET('evntProj/byDate/all.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     scope.changeEventsDay(0);
     $httpBackend.flush();
     
@@ -287,7 +287,7 @@ describe('Controller: MainCtrl', function () {
     expect(scope.institutions.active.name).toBe('Polish Theater');
     expect(scope.institutions.active.badge).toBe(1);
 
-    $httpBackend.whenGET('b/evntProj/byDate/all.json?category=all&inst=1').respond(EVENTS_RESPONSE);
+    $httpBackend.whenGET('evntProj/byDate/all.json?category=all&inst=1').respond(EVENTS_RESPONSE);
     scope.changeEventsDay(0);
     $httpBackend.flush();
     
@@ -344,7 +344,7 @@ describe('Controller: MainCtrl', function () {
              ],
         events: []
     };  
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=1').respond(response);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-16.json?category=all&inst=1').respond(response);
     scope.weekMenu.calendar.value = new Date(2014, 1, 16);
     scope.$apply();
     $httpBackend.flush(); 
@@ -360,7 +360,7 @@ describe('Controller: MainCtrl', function () {
   it('should save user settings', function () {
     $httpBackend.flush();
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-16.json?category=all&inst=all').respond(EVENTS_RESPONSE);
     var date = new Date(2014, 1, 16);
     scope.weekMenu.calendar.value = date;
     scope.$apply();
@@ -377,16 +377,16 @@ describe('Controller: MainCtrl', function () {
     scope.changeCategory(1);
     scope.changeInstitution(1);
     scope.weekMenu.calendar.dayIndex = 2;
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=1&inst=1').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-16.json?category=1&inst=1').respond(EVENTS_RESPONSE);
     var date = new Date(2014, 1, 16);
     scope.weekMenu.calendar.value = date;
     scope.$apply();
     $httpBackend.flush();
     
     scope.saveFilters();
-    $httpBackend.expectGET('b/menu/categories.json').respond(CATEGORY_FILTER_RESPONSE);
-    $httpBackend.expectGET('b/menu/week.json').respond(WEEK_MENU_RESPONSE);
-    $httpBackend.expectGET('b/evntProj/byDate/2014-02-16.json?category=1&inst=1').respond(EVENTS_RESPONSE);
+    $httpBackend.expectGET('menu/categories.json').respond(CATEGORY_FILTER_RESPONSE);
+    $httpBackend.expectGET('menu/week.json').respond(WEEK_MENU_RESPONSE);
+    $httpBackend.expectGET('evntProj/byDate/2014-02-16.json?category=1&inst=1').respond(EVENTS_RESPONSE);
     scope.init();
     $httpBackend.flush();
     

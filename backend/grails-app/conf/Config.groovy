@@ -107,7 +107,7 @@ log4j = {
                 appender new DailyRollingFileAppender(
                     name: 'fileAppender',
                     datePattern: "'.'yyyy-MM-dd",
-                    fileName: './logs/agenda.log',
+                    fileName: 'logs/agenda.log',
                     layout: pattern(conversionPattern: conversionPattern)
                 )
             }
@@ -132,8 +132,8 @@ log4j = {
             debug  'org.hibernate.SQL'
             debug  'com.odobo.grails.plugin.springsecurity.rest'
             debug  'agenda.security'
-            debug  'org.grails.plugin.cachedresources'
-            debug  'org.grails.plugin.resource'
+            //debug  'org.grails.plugin.cachedresources'
+            //debug  'org.grails.plugin.resource'
             //trace   'org.hibernate.type'
         }
         production {
@@ -161,40 +161,6 @@ log4j = {
     }
 }
 
-grails.mail.default.from = 'info@agenda.pl'
-agenda.mail.admin = 'admin@agenda.pl'
-agenda.confirm.invalid.redirect = [url: 'http://127.0.0.1:9000/#/rc/invalid']
-agenda.confirm.invalid.xhrMode = { render status: 410 }
-agenda.signup.adminconfirmed = [url: 'http://127.0.0.1:9000/#/rc/signup/a']
-agenda.signup.userconfirmed = [url: 'http://127.0.0.1:9000/#/rc/signup/u']
-agenda.setpwd.baseUri = 'http://127.0.0.1:9000/#/rc/setPwd'
-agenda.setpwd.confirmed = { render status: 200 }
-environments {
-    test {
-        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-    }
-    development {
-        grails.logging.jul.usebridge = true
-        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-        agenda.signup.adminmustconfirm = true
-    }
-    production {
-        grails.logging.jul.usebridge = false
-        cors.enabled = false
-        greenmail.disabled = true
-        agenda.signup.adminmustconfirm = true
-        // TODO: grails.serverURL = "http://www.changeme.com"
-    }
-}
-
-grails.resources.mappers.hashandcache.enabled = true
-
-grails.gorm.failOnError = true
-
-grails.app.context = '/b'
-
-grails.databinding.dateFormats = ["yyyy-MM-dd'T'HH:mm"]
-
 grails.plugin.springsecurity.rejectIfNoRule = false
 grails.plugin.springsecurity.fii.rejectPublicInvocations = false
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'agenda.Institution'
@@ -213,20 +179,25 @@ grails.plugin.springsecurity.apf.filterProcessesUrl = '/j_876_security_check'
 // if you change username/password parameters, the default logging page won't work
 grails.plugin.springsecurity.apf.usernameParameter = 'j_username'
 grails.plugin.springsecurity.apf.passwordParameter = 'j_password'
+def withoutRestSecurityFilters = 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter'
 grails.plugin.springsecurity.filterChain.chainMap = [
-    '/menu/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/category/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/evntProj/byDate/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/evntProj/byEvent/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/instProj/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/config/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/rest/resetPwd/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/rest/setPwd/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/confirm/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/greenmail/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/console/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/login/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
-    '/logout/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restAdminAuthenticationFilter,-restAuthenticationFilter,-restLogoutFilter',
+    '/menu/**': withoutRestSecurityFilters,
+    '/category/**': withoutRestSecurityFilters,
+    '/evntProj/byDate/**': withoutRestSecurityFilters,
+    '/evntProj/byEvent/**': withoutRestSecurityFilters,
+    '/inst.*': withoutRestSecurityFilters,    // POST without id = sign up
+    '/instProj/**': withoutRestSecurityFilters,
+    '/config/**': withoutRestSecurityFilters,
+    '/pwd/reset.*': withoutRestSecurityFilters,
+    '/pwd/set.*': withoutRestSecurityFilters,
+    '/confirm/**': withoutRestSecurityFilters,
+    '/greenmail/**': withoutRestSecurityFilters,
+    '/console/**': withoutRestSecurityFilters,
+    '/login/**': withoutRestSecurityFilters,
+    '/logout/**': withoutRestSecurityFilters,
+    '/grails/**': withoutRestSecurityFilters,
+    '/views/**': withoutRestSecurityFilters,
+    '/img/**': withoutRestSecurityFilters,
     '/**': 'JOINED_FILTERS'
 ]
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
@@ -234,21 +205,73 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     '/console/**': ['ROLE_ADMIN']
 ]
 
-grails.plugin.springsecurity.rest.login.endpointUrl = '/rest/login.json'
-grails.plugin.springsecurity.rest.logout.endpointUrl = '/rest/logout'
+grails.plugin.springsecurity.rest.login.endpointUrl = '/xhr/login.json'
+grails.plugin.springsecurity.rest.logout.endpointUrl = '/xhr/logout'
 grails.plugin.springsecurity.rest.login.failureStatusCode = 403
 grails.plugin.springsecurity.rest.token.validation.headerName = 'X-XSRF-TOKEN'
-grails.plugin.springsecurity.rest.token.validation.endpointUrl = '/rest/checkLogin'
+grails.plugin.springsecurity.rest.token.validation.endpointUrl = '/xhr/checkLogin.json'
 grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
 grails.plugin.springsecurity.rest.login.useJsonCredentials = true
 grails.plugin.springsecurity.rest.login.usernamePropertyName = 'email'
 grails.plugin.springsecurity.rest.login.passwordPropertyName = 'password'
-cors.headers = [
-    'Access-Control-Allow-Origin': 'http://127.0.0.1:9000',
-    'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with, ' +
-        grails.plugin.springsecurity.rest.token.validation.headerName.toLowerCase()
-]
+
+grails.resources.mappers.hashandcache.enabled = true
+grails.gorm.failOnError = true
+grails.app.context = '/'
+grails.databinding.dateFormats = ["yyyy-MM-dd'T'HH:mm"]
+grails.mail.default.from = 'agenda.wro@gmail.com'
 
 agenda.adminMode = true
-
 agenda.confirm.timeout = 1000*60*60*24*2L // 2 days
+agenda.mail.admin = 'agenda.wro@gmail.com'
+agenda.confirm.invalid.xhrMode = { render status: 410 }
+agenda.confirm.invalid.redirect = [url: '/#/rc/invalid']
+agenda.signup.adminconfirmed = [url: '/#/rc/signup/a']
+agenda.signup.userconfirmed = [url: '/#/rc/signup/u']
+agenda.setpwd.baseUri = { appUrlService -> appUrlService.makeServerUrl() + '/#/rc/setPwd' }
+agenda.setpwd.confirmed = { render status: 200 }
+environments {
+    test {
+        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+    }
+    development {
+        grails.logging.jul.usebridge = true
+        grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+        agenda.image.context = 'images'
+        agenda.image.dir = 'web-app/images'
+        cors.enabled = false
+        if (cors.enabled) {
+            def corsAllowOrigin = 'http://127.0.0.1:9000'
+            agenda.confirm.invalid.redirect = [url: corsAllowOrigin + '/#/rc/invalid']
+            agenda.signup.adminconfirmed = [url: corsAllowOrigin + '/#/rc/signup/a']
+            agenda.signup.userconfirmed = [url: corsAllowOrigin + '#/rc/signup/u']
+            agenda.setpwd.baseUri = { corsAllowOrigin + '/#/rc/setPwd' }
+            cors.headers = [
+                'Access-Control-Allow-Origin': corsAllowOrigin,
+                'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with, ' +
+                    grails.plugin.springsecurity.rest.token.validation.headerName.toLowerCase()
+            ]
+        }
+    }
+    production {
+        grails.logging.jul.usebridge = false
+        cors.enabled = false
+        greenmail.disabled = true
+        agenda.signup.usermustconfirm = true
+        agenda.image.context = 'img'
+        agenda.image.dir = System.getenv('OPENSHIFT_DATA_DIR') + '/images'
+        grails {
+            mail {
+              host = "smtp.gmail.com"
+              port = 465
+              username = "agenda.wro@gmail.com"
+              password = System.getenv('OPENSHIFT_SMTP_PASSWORD')
+              props = ["mail.smtp.auth":"true",
+                       "mail.smtp.socketFactory.port":"465",
+                       "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                       "mail.smtp.socketFactory.fallback":"false"]
+            }
+         }
+         grails.serverURL = 'http://agenda-dadasl.rhcloud.com'
+    }
+}

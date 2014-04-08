@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('SetPwdCtrl', ['$scope', '$routeParams', '$location', 'Progressbar', 'Auth', 'ServerError',
-                             function ($scope, $routeParams, $location, Progressbar, Auth, ServerError) {
+  .controller('SetPwdCtrl', ['$scope', '$routeParams', '$location', '$growl', 'Progressbar', 'Auth', 'ServerError',
+                             function ($scope, $routeParams, $location, $growl, Progressbar, Auth, ServerError) {
     $scope.pwdMsgPanel = {show: false, messages:[]};
     $scope.pwd = {newPwd: null, rePwd: null, username: $routeParams.username};
     $scope.set = function() {
@@ -15,6 +15,10 @@ angular.module('frontendApp')
         function() {
           Progressbar.close();
           $location.url('/');
+          $growl.box(null, $scope.i18n.login.statusPwdChanged, {
+            class: 'success',
+            sticky: true
+          }).open();
         },
         function(httpResponse) {
           if (httpResponse.status === 410) {

@@ -15,6 +15,7 @@ class ResetPwdConfirmationService {
     def grailsApplication
     def emailConfirmationService
     def baseConfirmationService
+    def appUrlService
     private g
     private config
 
@@ -26,7 +27,7 @@ class ResetPwdConfirmationService {
             id: inst.id,
             event: 'resetPwd',
             view: '/emails/resetPwdConfirmationRequest',
-            model: [locale: locale, baseUri: config.baseUri, username: inst.email])
+            model: [locale: locale, baseUri: config.baseUri(appUrlService), username: inst.email])
     }
 
     @Transactional

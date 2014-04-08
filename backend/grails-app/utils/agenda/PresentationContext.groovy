@@ -1,7 +1,11 @@
 package agenda
 
 import static agenda.LocalContext.dateTime
+import static agenda.LocalContext.dateTimeToDateOnly
+import static agenda.LocalContext.dateTimeToTimeOnly
+import static agenda.LocalContext.dateTimeZone
 
+import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
 class PresentationContext {
@@ -35,6 +39,14 @@ class PresentationContext {
 
     static printShortDayOfWeekForJdkDate(jdkDate) {
         printShortDayOfWeek(dateTime(jdkDate))
+    }
+
+    static clientJdkDateTimeToDateOnly(jdkDateTime) {
+        dateTimeToDateOnly(new DateTime(jdkDateTime).withZoneRetainFields(dateTimeZone))
+    }
+
+    static clientJdkDateTimeToTimeOnly(jdkDateTime) {
+        dateTimeToTimeOnly(new DateTime(jdkDateTime).withZoneRetainFields(dateTimeZone))
     }
 
     private PresentationContext() { }

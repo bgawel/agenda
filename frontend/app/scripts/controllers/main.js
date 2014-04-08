@@ -236,11 +236,9 @@ angular.module('frontendApp')
       appendSearchParam('s', property);
     };
     
-    $scope.displayEvent = function(eventId, scrollToWhenBack) {
+    $scope.displayEvent = function(eventId, idPrefix) {
       $scope.saveFilters();
-      if (scrollToWhenBack) {
-        $cookies.lastEvent = eventId.toString();
-      }
+      $cookies.lastEvent = idPrefix + eventId;
       $location.url('event/' + eventId);
     };
     $scope.reload = function() {
@@ -278,13 +276,13 @@ angular.module('frontendApp')
         $location.hash(hash);
         $anchorScroll();
         $location.hash(old);  //reset to old to keep any additional routing logic from kicking in, otherwise it renders twice
-      }, 0);
+      }, 50);
     };
     var scrollToEventIfNeeded = function() {
       var eventId = $cookies.lastEvent;
       if (eventId) {
         delete $cookies.lastEvent;
-        scrollTo('event' + eventId);
+        scrollTo(eventId);
       }
     };
     

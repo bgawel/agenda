@@ -29,19 +29,30 @@ environments {
     }
     production {
         dataSource {
-            dbCreate = "update"
-            url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+            dbCreate = 'create-drop'
+            dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+            driverClassName = 'com.mysql.jdbc.Driver'
+            String host = System.getenv('OPENSHIFT_MYSQL_DB_HOST')
+            String port = System.getenv('OPENSHIFT_MYSQL_DB_PORT')
+            String dbName = System.getenv('OPENSHIFT_APP_NAME')
+            url = "jdbc:mysql://$host:$port/$dbName?useUnicode=yes&characterEncoding=UTF-8"
+            username = System.getenv('OPENSHIFT_MYSQL_DB_USERNAME')
+            password = System.getenv('OPENSHIFT_MYSQL_DB_PASSWORD')
             properties {
-               maxActive = -1
-               minEvictableIdleTimeMillis=1800000
-               timeBetweenEvictionRunsMillis=1800000
-               numTestsPerEvictionRun=3
-               testOnBorrow=true
-               testWhileIdle=true
-               testOnReturn=false
-               validationQuery="SELECT 1"
-               jdbcInterceptors="ConnectionState"
-            }
+                maxActive = 100
+                maxIdle = 25
+                minIdle = 2
+                initialSize = 2
+                minEvictableIdleTimeMillis = 60000
+                timeBetweenEvictionRunsMillis = 60000
+                numTestsPerEvictionRun=3
+                maxWait = 10000
+                testOnBorrow=true
+                testWhileIdle=true
+                testOnReturn=false
+                validationQuery = '/* ping */'
+                jdbcInterceptors='ConnectionState'
+             }
         }
     }
 }

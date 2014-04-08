@@ -1,5 +1,9 @@
 package agenda
 
+import grails.util.Holders
+
+import javax.annotation.PostConstruct
+
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
@@ -8,15 +12,16 @@ class StaticResourceService {
     static transactional = false
 
     def appUrlService
+    private config
 
     def makeImageSrc(imgName) {
         if (imgName) {
-            "${appUrlService.makeServerUrl()}/images/$imgName"
+            "${appUrlService.makeServerUrl()}/${retrieveImageContext()}/$imgName"
         }
     }
 
     def copyToImageDir(imgId, newImgName) {
-        def srcFile = new File(tmpDirPath, imgId)
+        def srcFile = new File(imgId)
         if (!srcFile.exists()) {
             throw new FileNotFoundException("Source file $srcFile does not exist")
         }
@@ -46,7 +51,7 @@ class StaticResourceService {
     }
 
     def makeImageId(path) {
-        path[tmpDirPath.size() + File.separator.size()..-1]
+        path
     }
 
     def getNameFromImageId(imgId) {
@@ -59,15 +64,20 @@ class StaticResourceService {
         }
     }
 
-    private getTmpDirPath() {
-        FileUtils.tempDirectoryPath
-    }
-
     private makeImageFile(imgName) {
         new File("${retrievePathToImageDir()}/$imgName")
     }
 
-    private retrievePathToImageDir() {
-        'web-app/images'
+    private retrieveImageContext() {
+        config.context
+    }
+
+    def retrievePathToImageDir() {
+        config.dir
+    }
+
+    @PostConstruct
+    void init() {
+        config = Holders.grailsApplication.config.agenda.image
     }
 }

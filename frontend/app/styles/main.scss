@@ -104,13 +104,12 @@ footer {
 
 	.category {
   	padding-top: 12px;
+  	color: #999999;
 	}
 	
-	.time {
+	.displayDt {
   	font-size: 1.0em;
-	}
-	.date {
-  	font-size: 1.0em;
+  	color: #999999;
 	}
 }
 
@@ -192,10 +191,6 @@ span.add-info {
     position: absolute;
     top: 0;
     width: 50%; /* 6 columns */
-  }
-  
-  .event .time {
-    font-size: 1.1em;
   }
 }
 

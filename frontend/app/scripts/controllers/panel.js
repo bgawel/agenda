@@ -44,6 +44,7 @@ angular.module('frontendApp')
         .then(function() {
           Progressbar.open();
           $scope.inst.$delete({id: $scope.inst.id}, function() {
+              Auth.logout();
               Progressbar.close();
               ConfirmDialog.confirmInfo($scope, $scope.i18n.inst.del.title, $scope.i18n.inst.del.confirm).result
                 .then(function() {

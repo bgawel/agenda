@@ -107,7 +107,7 @@
         <div ng-repeat="event in events | filter:{catName: categories.filter.name, whoName: institutions.filter.name}:true | orderBy:orderEventsBy" 
             class="event clearfix" ng-init="maxChars = showMaxChars; more = false">
           <div class="col-xs-9">
-            <h4 id="event{{event.id}}"><a href ng-click="displayEvent(event.id, true)">{{event.title}}</a>, 
+            <h4 id="event{{event.id}}"><a href ng-click="displayEvent(event.id, 'event')">{{event.title}}</a>, 
               <small ng-switch on="event.whoAbout">
                 <a ng-switch-default href class="who" popover-placement="bottom" popover="{{event.whoAbout}}">{{event.whoName}}</a>
                 <span ng-switch-when="">{{event.whoName}}</span>
@@ -140,7 +140,7 @@
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas right" id="sidebarRight" role="navigation">
       <p ng-show="soon.length > 0"><span class="glyphicon glyphicon-eye-open"></span> {{i18n.main.soon}}:</p>
       <div class="list-group announcement">
-        <a ng-repeat="event in soon" href ng-click="displayEvent(event.id)" class="list-group-item">
+        <a ng-repeat="event in soon" href ng-click="displayEvent(event.id, 'soon')" id="soon{{event.id}}" class="list-group-item">
           <p>{{event.label}} {{event.title}}</p>
           <p>{{event.desc}}</p>
           <p>{{event.more}}</p>
@@ -148,7 +148,7 @@
       </div>
       <p ng-show="newest.length > 0">{{i18n.main.newest}}:</p>
       <div class="list-group announcement">
-        <a ng-repeat="event in soon" href ng-click="displayEvent(event.id)" class="list-group-item">
+        <a ng-repeat="event in soon" href ng-click="displayEvent(event.id, 'newest')" id="newest{{event.id}}" class="list-group-item">
           <p>{{event.label}} {{event.title}}</p>
           <p>{{event.desc}}</p>
           <p>{{event.more}}</p>

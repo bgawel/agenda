@@ -39,9 +39,8 @@ class EventProjectionService {
 
     @Cacheable(value='submittedEvents', key='#instId')
     def submittedEvents(instId) {
-        def eventsOfInst = eventQueryService.findAllByInstitution(instId)
-        [events: eventsOfInst.collect { makeEntryForSubmittedEvent(it) }, id: instId,
-            lastModified: eventsOfInst ? eventsOfInst[0].lastUpdated : Institution.get(instId).lastUpdated]
+        [events: eventQueryService.findAllByInstitution(instId).collect { makeEntryForSubmittedEvent(it) },
+            id: instId, lastModified: Institution.get(instId).lastUpdated]
     }
 
     protected showByDate(now, requestedDate) {

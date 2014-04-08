@@ -6,6 +6,8 @@ import static agenda.LocalContext.jdkDateTimeToDateOnly
 import static agenda.LocalContext.jdkDateTimeToDateTime
 import static agenda.LocalContext.jdkDateTimeToString
 import static agenda.LocalContext.jdkDateTimeToTimeOnly
+import static agenda.PresentationContext.clientJdkDateTimeToDateOnly
+import static agenda.PresentationContext.clientJdkDateTimeToTimeOnly
 import grails.plugin.cache.CacheEvict
 
 import org.apache.commons.io.FilenameUtils
@@ -104,9 +106,9 @@ class EventResourceService {
                     pdtp.refresh()
                 }
             } else {
-                pdtp.toDate = jdkDateTimeToDateOnly(pdtp.toDate).toDate()
-                pdtp.fromDate = event.oneTimeType ? pdtp.toDate : jdkDateTimeToDateOnly(pdtp.fromDate).toDate()
-                pdtp.startTime = jdkDateTimeToTimeOnly(pdtp.startTime).toDate()
+                pdtp.toDate = clientJdkDateTimeToDateOnly(pdtp.toDate).toDate()
+                pdtp.fromDate = event.oneTimeType ? pdtp.toDate : clientJdkDateTimeToDateOnly(pdtp.fromDate).toDate()
+                pdtp.startTime = clientJdkDateTimeToTimeOnly(pdtp.startTime).toDate()
             }
         }
         readonlyPdtpIds.each {

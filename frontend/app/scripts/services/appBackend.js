@@ -2,12 +2,12 @@
 
 var app = angular.module('frontendApp');
 
-// TODO bgawel: make it configurable for tests
+// TODO bgawel: make it configurable from command line
 // local CORS config
-//var serwerUrl = 'http://localhost:8080/b/';
-// local tests, client development config
+//var serwerUrl = 'http://localhost:8080/';
+// local client development config
 //var serwerUrl = 'b/';
-// production config
+// unit tests & production config
 var serwerUrl = '';
 
 var url = function(path) {
@@ -120,7 +120,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
                      function($rootScope, $http, $q, $timeout, $cookies, $window) {
   return {
     login : function(credentials, rememberMe) {
-      return $http.post(url('rest/login.json'), credentials).then(function(result) {
+      return $http.post(url('xhr/login.json'), credentials).then(function(result) {
         $cookies[AUTH_TOKEN_NAME] = $http.defaults.headers.common[AUTH_TOKEN_NAME] = result.data.token;
         if (rememberMe) {
           var username = result.data.username;
@@ -149,7 +149,7 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
           return deferred.promise;
         }
       }
-      return $http.get(url('rest/checkLogin')).then(function(result) {
+      return $http.get(url('xhr/checkLogin.json')).then(function(result) {
         if (usedTokenFromCookie) {
           $rootScope.$broadcast('onAuthenticationSuccess', result.data);
         }
@@ -161,14 +161,14 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
         var token = $cookies[AUTH_TOKEN_NAME];
         if (token) {
           headers[AUTH_TOKEN_NAME] = token;
-          return $http.get(url('rest/checkLogin')).then(function(result) {
+          return $http.get(url('xhr/checkLogin.json')).then(function(result) {
             $rootScope.$broadcast('onAuthenticationSuccess', result.data);
           });
         }
       }
     },
     logout : function() {
-      return $http.post(url('rest/logout')).then(function() {
+      return $http.post(url('xhr/logout')).then(function() {
         delete $cookies[AUTH_TOKEN_NAME];
         delete $http.defaults.headers.common[AUTH_TOKEN_NAME];
         $rootScope.$broadcast('onLogoutSuccess');
@@ -176,13 +176,13 @@ app.factory('Auth', ['$rootScope', '$http', '$q', '$timeout', '$cookies', '$wind
       });
     },
     resetPwd : function(data) {
-      return $http.post(url('rest/resetPwd.json'), data);
+      return $http.post(url('pwd/reset.json'), data);
     },
     setPwd : function(data) {
-      return $http.post(url('rest/setPwd.json'), data);
+      return $http.post(url('pwd/set.json'), data);
     },
     changePwd : function(data) {
-      return $http.post(url('rest/changePwd.json'), data);
+      return $http.post(url('pwd/change.json'), data);
     }
   };
 }]);

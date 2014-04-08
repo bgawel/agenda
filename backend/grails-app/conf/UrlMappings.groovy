@@ -13,7 +13,7 @@ class UrlMappings {
         '/event'(resources: 'event')
         "/config/$action(.${format})?"(controller: 'configuration')
         "/upload/$action"(controller: 'fileUpload')
-        "/rest/$action(.${format})?"(controller: 'password')
+        "/pwd/$action(.${format})?"(controller: 'password')
 
         "/confirm/$id"(controller: 'emailConfirmation')
         "/greenmail/$action?/$id?"(controller: 'greenmail')
@@ -21,7 +21,7 @@ class UrlMappings {
         "/login/$action?"(controller: 'login')
         "/logout/$action?"(controller: 'logout')
         "/grails"(view:'/grails')
-
+        "/img/$pic"(controller: 'staticResource', action: 'img')
         "/"(view: '/index')
 
         "500"(controller: 'securityAttack', exception: InsufficientAuthenticationException)

@@ -21,7 +21,7 @@ class LocalContext {
         dateTimeToDateOnly(currentDateTime)
     }
     static dateTime(jdkDate) {
-        new DateTime(jdkDate).withZoneRetainFields(dateTimeZone)
+        new DateTime(jdkDate, dateTimeZone)
     }
 
     static dateToString(date) {
@@ -41,11 +41,19 @@ class LocalContext {
     }
 
     static dateTimeToDateOnly(dateTime) {
-        new DateTime(dateTime.year, dateTime.monthOfYear, dateTime.dayOfMonth, 15, 0, dateTimeZone)
+        toDateOnly(dateTime.year, dateTime.monthOfYear, dateTime.dayOfMonth)
+    }
+
+    static toDateOnly(year, month, day) {
+        new DateTime(year, month, day, 15, 0, dateTimeZone)
     }
 
     static dateTimeToTimeOnly(dateTime) {
-        new DateTime(2014, 1, 1, dateTime.hourOfDay, dateTime.minuteOfHour, dateTimeZone)
+        toTimeOnly(dateTime.hourOfDay, dateTime.minuteOfHour)
+    }
+
+    static toTimeOnly(hour, minutes) {
+        new DateTime(2014, 1, 1, hour, minutes, dateTimeZone)
     }
 
     static jdkDateTimeToDateOnly(jdkDateTime) {

@@ -41,7 +41,7 @@ class Institution {
     }
 
     static mapping = {
-        version false
+        version false // version true does not update institution if pdtp is only changed but pdtp stamps an event
         events cascade: 'all-delete-orphan'
     }
 

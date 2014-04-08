@@ -20,7 +20,7 @@ describe('Controller: EventCtrl', function () {
   }));
 
   it('should create "event" model based on data fetched from xhr', function () {
-    $httpBackend.expectGET('b/evntProj/byEvent/' + $routeParams.eventId + '.json').respond(EVENT_RESPONSE);
+    $httpBackend.expectGET('evntProj/byEvent/' + $routeParams.eventId + '.json').respond(EVENT_RESPONSE);
     $controller('EventCtrl', {$scope: scope});
     $httpBackend.flush();
     
@@ -28,7 +28,7 @@ describe('Controller: EventCtrl', function () {
   });
   
   it('should handle error response from server', function () {
-    $httpBackend.expectGET('b/evntProj/byEvent/' + $routeParams.eventId + '.json').respond(404);
+    $httpBackend.expectGET('evntProj/byEvent/' + $routeParams.eventId + '.json').respond(404);
     $controller('EventCtrl', {$scope: scope});
     $httpBackend.flush();
     

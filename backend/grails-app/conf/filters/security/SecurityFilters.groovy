@@ -18,7 +18,7 @@ class SecurityFilters {
             }
         }
 
-        assertInstitution(controller: 'institution', actionExclude: 'save') {
+        assertInstitution(controller: 'institution', action: '*', actionExclude: 'save') {
             before = {
                 assertOwner { params.id }
             }

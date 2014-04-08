@@ -58,7 +58,7 @@ angular.module("template/infoPanel/infoPanel.html", []).run(["$templateCache", f
 
 angular.module("template/loadingbar/loadingbar.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("template/loadingbar/loadingbar.html",
-    "<progressbar class=\"progress-striped active\" value=\"75\" type=\"'info'\"/>");
+    "<progressbar class=\"progress-striped active\" value=\"75\" type=\"'info'\"></progressbar>");
 }]);
 
 angular.module("template/datepicker/datepicker.html", []).run(["$templateCache", function($templateCache) {
@@ -117,11 +117,11 @@ angular.module("template/timepicker/timepicker.html", []).run(["$templateCache",
     "<table class=\"form-inline\">\n" +
     "  <tr>\n" +
     "    <td ng-class=\"{'error': invalidHours}\">\n" +
-    "      <input type=\"text\" ng-model=\"hours\" ng-change=\"updateHours()\" class=\"form-control\" ng-mousewheel=\"incrementHours()\" ng-readonly=\"readonlyInput\" maxlength=\"2\"/>\n" +
+    "      <input type=\"text\" ng-model=\"hours\" ng-change=\"updateHours()\" class=\"form-control\" ng-mousewheel=\"incrementHours()\" ng-readonly=\"readonlyInput\" maxlength=\"2\">\n" +
     "    </td>\n" +
     "    <td>:</td>\n" +
     "    <td ng-class=\"{'error': invalidMinutes}\">\n" +
-    "      <input type=\"text\" ng-model=\"minutes\" ng-change=\"updateMinutes()\" class=\"form-control\" ng-mousewheel=\"incrementMinutes()\" ng-readonly=\"readonlyInput\" maxlength=\"2\"/>\n" +
+    "      <input type=\"text\" ng-model=\"minutes\" ng-change=\"updateMinutes()\" class=\"form-control\" ng-mousewheel=\"incrementMinutes()\" ng-readonly=\"readonlyInput\" maxlength=\"2\">\n" +
     "    </td>    \n" +
     "  </tr>\n" +
     "</table>");

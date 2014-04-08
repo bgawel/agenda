@@ -14,7 +14,7 @@ class PasswordController {
 
     static responseFormats = ['json']
 
-    static allowedMethods = [changePwd: 'POST', resetPwd: 'POST', setPwd: 'POST']
+    static allowedMethods = [change: 'POST', reset: 'POST', set: 'POST']
 
     def changePasswordService
     def resetPwdConfirmationService
@@ -23,7 +23,7 @@ class PasswordController {
     private emailConfirmationController
 
     @Secured(['IS_AUTHENTICATED_FULLY'])
-    def changePwd() {
+    def change() {
         def payload = getJsonBody(request)
         if (changePasswordService.isPasswordValid(payload.pwd)) {
             render status: OK
@@ -33,7 +33,7 @@ class PasswordController {
         }
     }
 
-    def resetPwd() {
+    def reset() {
         def payload = getJsonBody(request)
         def inst = Institution.findByEmail(payload.username)
         if (inst) {
@@ -45,7 +45,7 @@ class PasswordController {
         }
     }
 
-    def setPwd() {
+    def set() {
         def payload = getJsonBody(request)
         params.id = payload.token
         params.password = payload.pwd
