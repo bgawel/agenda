@@ -71,6 +71,7 @@ class Event {
     static mapping = {
         version true
         pdtps cascade: 'all-delete-orphan'
+        institution index: 'Inst_Idx'
     }
 
     def beforeInsert() {

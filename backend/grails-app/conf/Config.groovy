@@ -198,11 +198,13 @@ grails.plugin.springsecurity.filterChain.chainMap = [
     '/grails/**': withoutRestSecurityFilters,
     '/views/**': withoutRestSecurityFilters,
     '/img/**': withoutRestSecurityFilters,
+    '/monitoring*': withoutRestSecurityFilters,
     '/**': 'JOINED_FILTERS'
 ]
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     '/grails/**': ['ROLE_ADMIN'],
-    '/console/**': ['ROLE_ADMIN']
+    '/console/**': ['ROLE_ADMIN'],
+    '/monitoring*': ['ROLE_ADMIN']
 ]
 
 grails.plugin.springsecurity.rest.login.endpointUrl = '/xhr/login.json'

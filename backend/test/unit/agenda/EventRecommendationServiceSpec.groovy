@@ -27,13 +27,13 @@ class EventRecommendationServiceSpec extends Specification {
 
         then:
         events.size() == 4
-        events[0].label == '[01.01-03.01, cat1]'
-        events[0].title == 'title2'
-        !events[0].desc
-        events[0].more == 'more'
-        events[1].label == '[02.01, cat1]'
-        events[1].title == 'title1'
-        events[1].desc == 'description'
+        events[0].label == '[02.01, cat1]'
+        events[0].title == 'title1'
+        events[0].desc == 'description'
+        events[1].label == '[01.01-03.01, cat1]'
+        events[1].title == 'title2'
+        !events[1].desc
+        events[1].more == 'more'
         events[2].desc == 'part1'
         events[3].desc == 'descriptiondescriptiondescriptiodescriptiondescriptiondescriptio...'
     }

@@ -353,8 +353,6 @@ describe('Controller: MainCtrl', function () {
     expect(scope.categories.active.badge).toBe(0);
     expect(scope.institutions.active.name).toBe('Polish Theater');
     expect(scope.institutions.active.badge).toBe(0);
-    expect(scope.newest).toEqual(EVENTS_RESPONSE.newest);
-    expect(scope.soon).toEqual(EVENTS_RESPONSE.soon);
   });
   
   it('should save user settings', function () {

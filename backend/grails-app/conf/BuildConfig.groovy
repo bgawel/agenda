@@ -73,6 +73,7 @@ grails.project.dependency.resolution = {
         compile ":spring-events:1.2"
         compile ":cache-headers:1.1.6"
         compile ":console:1.3"
+        compile ":grails-melody:1.50.0"
         //compile ":mongodb:1.3.1"
 
         // plugins needed at runtime but not for compilation

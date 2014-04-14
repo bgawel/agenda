@@ -157,12 +157,12 @@ angular.module('frontendApp')
     var fetchEventsByDay = function(day, category, institution) {
       Events.byDate(day.id, category.id, institution.id).then(function(data) {
         fillBadgesAndInstitutionsOfCategories(data.categories);
-        restoreActiveInstitutionOfCategory(institution.value, category);
-        fillNewestEventsIfPresent(data);
-        fillComingSoonEventsIfPresent(data);
+        restoreActiveInstitutionOfCategory(institution.value, category);;
         $scope.weekMenu.calendar.minDate = data.now;
         $scope.events = data.events;
         $scope.noEventsMsg = !$scope.events.length;
+        $scope.newest = data.newest;
+        $scope.soon = data.soon
         Progressbar.close();
         scrollToEventIfNeeded();
       });
@@ -201,16 +201,6 @@ angular.module('frontendApp')
         category.badge = badgesInstitutions[index].badge;
         $scope.institutions[category.id] = badgesInstitutions[index].who;
       });
-    };
-    var fillNewestEventsIfPresent = function(data) {
-      if (data.hasOwnProperty('newest')) {
-        $scope.newest = data.newest;
-      }
-    };
-    var fillComingSoonEventsIfPresent = function(data) {
-      if (data.hasOwnProperty('soon')) {
-        $scope.soon = data.soon;
-      }
     };
     
     $scope.openEventsCalendar = function($event, dayIndex) {

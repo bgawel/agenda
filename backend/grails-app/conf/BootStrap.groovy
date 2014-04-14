@@ -12,8 +12,10 @@ import agenda.security.UserRole
 class BootStrap {
 
     def messageSource
+    def securityContextPersistenceFilter
 
     def init = { servletContext ->
+        securityContextPersistenceFilter.repo.allowSessionCreation = false
         switch(Environment.current) {
             case Environment.DEVELOPMENT:
                 messageSource.useCodeAsDefaultMessage = true

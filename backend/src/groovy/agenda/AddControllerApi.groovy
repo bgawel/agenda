@@ -23,6 +23,10 @@ class AddControllerApi {
     }
 
     def respondWithCacheHeaders(controller, entity) {
+        def response = controller.response
+        // http://stackoverflow.com/questions/5017454/make-ie-to-cache-resources-but-always-revalidate
+        response.setHeader('Cache-Control', 'must-revalidate, private')
+        response.setDateHeader('Expires', -1)
         controller.withCacheHeaders {
             etag {
                 // very important toString(), otherwise line 172 in CacheHeadersService evaluates to true

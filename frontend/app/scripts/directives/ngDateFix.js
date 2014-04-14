@@ -8,7 +8,7 @@ angular.module('frontendApp')
       link: function (scope, element, attrs, ctrl) {
         var format = attrs.datepickerPopup;
         ctrl.$parsers.push(function(viewValue) {
-          var newDate = viewValue;
+          var newDate = ctrl.$viewValue; // viewValue is null, why??
           // pass through if date from popup
           if (ctrl.$isEmpty(newDate) || typeof newDate !== 'string' || format !== 'dd-MM-yyyy') {
             return newDate;

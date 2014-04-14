@@ -29,8 +29,8 @@ class EventRecommendationService {
     }
 
     protected getNewlyAdded(now, categoryId, instId) {
-        sort(pdtpQueryService.findAllNewestFrom(dateOf(now), maxNewestToRecommend,
-            validCategoryId(categoryId), validInstId(instId)))
+        pdtpQueryService.findAllNewestFrom(dateOf(now), maxNewestToRecommend,
+            validCategoryId(categoryId), validInstId(instId))
         .collect { makeRecommendationEntry(it) }
     }
 

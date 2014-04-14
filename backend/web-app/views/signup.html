@@ -1,4 +1,4 @@
-<div class="container signup">
+<div class="container">
   <div class="row">
     <ol class="breadcrumb">
       <li><a href="#">Wydarzenia</a></li>
@@ -7,7 +7,7 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <span class="already-reg">Dotychczas zarejestrowali się:</span>
+      Dotychczas zarejestrowali się:
       <div class="well">
         <ul class="insts-list">
           <li ng-repeat="inst in registeredInsts">{{inst.name}}</li>
@@ -65,7 +65,7 @@
         <div class="form-group">
           <label for="detailsRePwd" class="col-sm-2 control-label">Potwierdź hasło *</label>
           <div class="col-sm-3">
-            <input type="password" class="form-control" id="detailsRePwd" required="" maxlength="16" ng-model="inst.repwd" name="repwd" ng-same-as="inst.password">
+            <input type="password" class="form-control" id="detailsRePwd" required="" maxlength="30" ng-model="inst.repwd" name="repwd" ng-same-as="inst.password">
           </div>
           <div class="col-sm-offset-2 col-sm-10" ng-show="formInstValidations && form.inst.repwd.$invalid">
             <span class="glyphicon glyphicon-exclamation-sign error"></span>

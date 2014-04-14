@@ -136,7 +136,7 @@
       </div>
       <p ng-show="newest.length > 0">{{i18n.main.newest}}:</p>
       <div class="list-group announcement">
-        <a ng-repeat="event in soon" href="" ng-click="displayEvent(event.id, 'newest')" id="newest{{event.id}}" class="list-group-item">
+        <a ng-repeat="event in newest" href="" ng-click="displayEvent(event.id, 'newest')" id="newest{{event.id}}" class="list-group-item">
           <p>{{event.label}} {{event.title}}</p>
           <p>{{event.desc}}</p>
           <p>{{event.more}}</p>

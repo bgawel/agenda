@@ -43,6 +43,9 @@ class Institution {
     static mapping = {
         version false // version true does not update institution if pdtp is only changed but pdtp stamps an event
         events cascade: 'all-delete-orphan'
+        email index: 'Email_Idx'
+        enabled index: 'Status_Idx'
+        internal index: 'Status_Idx'
     }
 
     def springSecurityService

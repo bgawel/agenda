@@ -37,5 +37,8 @@ class Pdtp {
 
     static mapping = {
         version false
+        toDate index: 'ToDate_Idx,FromTo_Idx'
+        fromDate index: 'FromTo_Idx'
+        event index: 'Event_Idx'
     }
 }
