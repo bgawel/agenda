@@ -47,25 +47,25 @@ class EventProjectionServiceSpec extends Specification {
         events[0].price == '1-price1'
         events[0].moreToShow
         events[0].dateTime == '2014-01-12T19:00'
-        events[0].displayDt == '12.01(n), 13.01(pn), 14.01(wt) o 19:00'
+        events[0].displayDt == '12.01(N), 13.01(Pn), 14.01(Wt) 19:00'
         events[1].title == 'title2'
         events[1].place == ''
         events[1].price == ''
         events[1].moreToShow
         events[1].dateTime == '2013-12-28T20:00'
-        events[1].displayDt == '28.12(so) - 12.01(n) o timeDescription1'
+        events[1].displayDt == '28.12(So) - 12.01(N) timeDescription1'
         events[2].title == 'title3'
         events[2].place == '3-place1'
         events[2].price == '3-price1'
         !events[2].moreToShow
         events[2].dateTime == '2014-01-12T19:00'
-        events[2].displayDt == '12.01(n) o 19:00, 13.01(pn) o 19:00, 14.01(wt) o 18:00'
+        events[2].displayDt == '12.01(N) 19:00, 13.01(Pn) 19:00, 14.01(Wt) 18:00'
         events[3].title == 'title4'
         events[3].place == '4-place1'
         events[3].price == '4-price1'
         !events[3].moreToShow
         events[3].dateTime == '2014-01-12T19:00'
-        events[3].displayDt == '12.01(n) o timeDescription'
+        events[3].displayDt == '12.01(N) timeDescription'
     }
 
     def "should find events by 'all'"() {
@@ -176,9 +176,9 @@ class EventProjectionServiceSpec extends Specification {
         event.place == '1-place1'
         event.price == '1-price1'
         event.pdtps.size() == 3
-        event.pdtps[0].displayDate == '13 styczeń 2014(pn)'
-        event.pdtps[1].displayDate == '14 styczeń 2014(wt)'
-        event.pdtps[2].displayDate == '15 styczeń 2014(śr)'
+        event.pdtps[0].displayDate == '13 styczeń 2014(Pn)'
+        event.pdtps[1].displayDate == '14 styczeń 2014(Wt)'
+        event.pdtps[2].displayDate == '15 styczeń 2014(Śr)'
         event.pdtps.each {
             assert it.displayTime == '19:00'
             assert it.place == event.place
@@ -259,5 +259,9 @@ class EventProjectionServiceSpec extends Specification {
         service.institutionMenuService = Mock(InstitutionMenuService)
         service.institutionMenuService.calculateBadgesPerCategory(_) >> ['badgesPerCategory']
         service.staticResourceService = Mock(StaticResourceService)
+    }
+
+    def setupSpec() {
+        PresentationContext.locale = new Locale('pl')
     }
 }

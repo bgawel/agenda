@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <ol class="breadcrumb">
-      <li><a href="#">Wydarzenia</a></li>
+      <li><a href="#">{{i18n.main.menu.events}}</a></li>
       <li class="active">{{event.catName}}</li>
     </ol>
   </div>
@@ -16,9 +16,9 @@
         </h4>
         <img ng-if="event.pic" ng-src="{{event.pic}}" width="95" height="84">
         <div class="basic-info">
-          <p>Miejsce: {{event.place}}</p>
-          <p>Cena: {{event.price}}</p>
-          <p ng-if="event.more">Więcej: <a ng-href="event.more">{{event.more}}</a></p>
+          <p>{{i18n.event.where}}: {{event.place}}</p>
+          <p>{{i18n.event.price}}: {{event.price}}</p>
+          <p ng-if="event.more">{{i18n.event.more}}: <a ng-href="event.more">{{event.more}}</a></p>
         </div>
         <div class="description">
           <p>{{event.desc}}</p>
@@ -33,7 +33,7 @@
   <div class="row" ng-show="event.pdtps.length > 0">
     <div class="event clearfix">
       <div class="col-xs-12">
-      <p class="other-pdtps">Pozostałe terminy wydarzenia:</p>
+      <p class="other-pdtps">{{i18n.event.others}}:</p>
       <ul>
         <li ng-repeat="pdtp in event.pdtps">
           <div class="col-xs-3">

@@ -9,8 +9,8 @@ angular.module("template/confirmationdialog/delete.html", []).run(["$templateCac
     "  <h5>{{bodyText}}</h5>\n" +
     "</div>\n" +
     "<div class=\"modal-footer\">\n" +
-    "  <button class=\"btn btn-danger\" ng-click=\"ok()\">Usuń</button>\n" +
-    "  <button class=\"btn btn-warning\" ng-click=\"cancel()\" type=\"button\" autofocus>Anuluj</button>\n" +
+    "  <button class=\"btn btn-danger\" ng-click=\"ok()\">{{i18n.action.remove}}</button>\n" +
+    "  <button class=\"btn btn-warning\" ng-click=\"cancel()\" type=\"button\" autofocus>{{i18n.action.cancel}}</button>\n" +
     "</div>");
 }]);
 
@@ -23,7 +23,7 @@ angular.module("template/confirmationdialog/info.html", []).run(["$templateCache
     "  <h5>{{bodyText}}</h5>\n" +
     "</div>\n" +
     "<div class=\"modal-footer\">\n" +
-    "  <button class=\"btn btn-info\" ng-click=\"ok()\" type=\"button\" autofocus>Ok</button>\n" +
+    "  <button class=\"btn btn-info\" ng-click=\"ok()\" type=\"button\" autofocus>{{i18n.action.ok}}</button>\n" +
     "</div>			");
 }]);
 
@@ -36,8 +36,8 @@ angular.module("template/confirmationdialog/question.html", []).run(["$templateC
     "  <h5>{{bodyText}}</h5>\n" +
     "</div>\n" +
     "<div class=\"modal-footer\">\n" +
-    "  <button class=\"btn btn-info\" ng-click=\"ok()\">Tak</button>\n" +
-    "  <button class=\"btn btn-warning\" ng-click=\"cancel()\" type=\"button\" autofocus>Nie</button>\n" +
+    "  <button class=\"btn btn-info\" ng-click=\"ok()\">{{i18n.action.yes}}</button>\n" +
+    "  <button class=\"btn btn-warning\" ng-click=\"cancel()\" type=\"button\" autofocus>{{i18n.action.no}}</button>\n" +
     "</div>");
 }]);
 

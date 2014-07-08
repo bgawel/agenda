@@ -198,7 +198,7 @@ class EventProjectionService {
             (1..<pdtps.size()).each { i ->
                 dateTime <<= ", ${printDateOfEventForShowByFutureOrAll(pdtps[i])}"
             }
-            dateTime <<= " o ${printJdkTime(firstPdtp.startTime)}"
+            dateTime <<= " ${printJdkTime(firstPdtp.startTime)}"
         } else {
             dateTime <<= printDateTimeOfEventForShowByFutureOrAll(firstPdtp)
             (1..<pdtps.size()).each { i ->
@@ -210,7 +210,7 @@ class EventProjectionService {
 
     private printDateTimeOfEventForShowByFutureOrAll(pdtp) {
         def dateTime = makeDateTimeToDisplayWithDayOfWeek(pdtp) { printShortJdkDate(it) }
-        "${dateTime.displayDate} o ${dateTime.displayTime}"
+        "${dateTime.displayDate} ${dateTime.displayTime}"
     }
 
     private printDateOfEventForShowByFutureOrAll(pdtp) {
@@ -222,7 +222,7 @@ class EventProjectionService {
     }
 
     private makeDateTimeToDisplayWithDayOfWeek(pdtp, dateMaker) {
-        makeDateTimeToDisplay(pdtp) { "${dateMaker(it)}(${printShortDayOfWeekForJdkDate(it).toLowerCase()})" }
+        makeDateTimeToDisplay(pdtp) { "${dateMaker(it)}(${printShortDayOfWeekForJdkDate(it)})" }
     }
 
     private makeEntryForSubmittedEvent(event) {

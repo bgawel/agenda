@@ -214,8 +214,9 @@ grails.plugin.springsecurity.rest.token.validation.headerName = 'X-XSRF-TOKEN'
 grails.plugin.springsecurity.rest.token.validation.endpointUrl = '/xhr/checkLogin.json'
 grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
 grails.plugin.springsecurity.rest.login.useJsonCredentials = true
-grails.plugin.springsecurity.rest.login.usernamePropertyName = 'email'
+grails.plugin.springsecurity.rest.login.usernamePropertyName = 'username'
 grails.plugin.springsecurity.rest.login.passwordPropertyName = 'password'
+grails.plugin.springsecurity.rest.token.storage.grailsCacheName = 'tokenStorage'
 
 grails.resources.mappers.hashandcache.enabled = true
 grails.gorm.failOnError = true
@@ -241,7 +242,7 @@ environments {
         grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
         agenda.image.context = 'images'
         agenda.image.dir = 'web-app/images'
-        cors.enabled = false
+        cors.enabled = true
         if (cors.enabled) {
             def corsAllowOrigin = 'http://127.0.0.1:9000'
             agenda.confirm.invalid.redirect = [url: corsAllowOrigin + '/#/rc/invalid']

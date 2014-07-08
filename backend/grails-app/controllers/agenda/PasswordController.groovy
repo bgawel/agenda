@@ -26,6 +26,7 @@ class PasswordController {
     def change() {
         def payload = getJsonBody(request)
         if (changePasswordService.isPasswordValid(payload.pwd)) {
+            changePasswordService.changePassword(payload.newPwd)
             render status: OK
         } else {
             respond responseBuilderService.makeGlobalMsg('password.changePwd.badPassword'),

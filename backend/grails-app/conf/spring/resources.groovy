@@ -5,7 +5,6 @@ import agenda.PdtpRandomQueryH2Service
 import agenda.PdtpRandomQueryMySqlService
 import agenda.security.RestAdminAuthenticationFilter
 import agenda.security.RestAuthenticationTokenJsonRendererImpl
-import agenda.security.TokenStorageServiceImpl
 
 beans = {
     switch(Environment.current) {
@@ -18,9 +17,9 @@ beans = {
             break
     }
 
-    tokenStorageService(TokenStorageServiceImpl) {
+    /*tokenStorageService(TokenStorageServiceImpl) {
         grailsCacheManager = ref('grailsCacheManager')
-    }
+    }*/
     restAuthenticationTokenJsonRenderer(RestAuthenticationTokenJsonRendererImpl)
     restAdminAuthenticationFilter(RestAdminAuthenticationFilter) {
         restAuthenticationFilter = ref('restAuthenticationFilter')

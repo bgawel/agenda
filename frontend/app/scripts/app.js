@@ -61,7 +61,7 @@ angular.module('frontendApp', [
   }])
   .run(['$location', '$rootScope', 'I18n', '$growl', '$modalStack', '$route',
         function ($location, $rootScope, I18n, $growl, $modalStack, $route) {
-    $rootScope.i18n = I18n;
+    var i18n = $rootScope.i18n = I18n.forLang('en');
     $rootScope.userId = -666;
     $rootScope.$on('onAuthenticationSuccess', function(event, data) {
       $rootScope.userId = data.id;
@@ -83,13 +83,13 @@ angular.module('frontendApp', [
           gotoLoginPage();
           break;
         case 404:
-          text = I18n.error.status404;
+          text = i18n.error.status404;
           break;
         case 0: // status = 0 as well when response to xhr and status - 302 
-          text = I18n.error.status0;
+          text = i18n.error.status0;
           break;
         default:
-          text = I18n.error.unexpected;
+          text = i18n.error.unexpected;
       }
       return text && $growl.box(null, text, {
           class: 'danger',

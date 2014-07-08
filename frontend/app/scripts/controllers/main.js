@@ -157,12 +157,12 @@ angular.module('frontendApp')
     var fetchEventsByDay = function(day, category, institution) {
       Events.byDate(day.id, category.id, institution.id).then(function(data) {
         fillBadgesAndInstitutionsOfCategories(data.categories);
-        restoreActiveInstitutionOfCategory(institution.value, category);;
+        restoreActiveInstitutionOfCategory(institution.value, category);
         $scope.weekMenu.calendar.minDate = data.now;
         $scope.events = data.events;
         $scope.noEventsMsg = !$scope.events.length;
         $scope.newest = data.newest;
-        $scope.soon = data.soon
+        $scope.soon = data.soon;
         Progressbar.close();
         scrollToEventIfNeeded();
       });

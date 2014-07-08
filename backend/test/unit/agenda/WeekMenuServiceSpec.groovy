@@ -45,6 +45,7 @@ class WeekMenuServiceSpec extends Specification {
     }
 
     def setupSpec() {
+        PresentationContext.locale = new Locale('pl')
         messageSource.addMessage('weekMenu.entry.today', PresentationContext.locale, 'Today')
         messageSource.addMessage('weekMenu.entry.calendar', PresentationContext.locale, 'Calendar')
         messageSource.addMessage('weekMenu.entry.all', PresentationContext.locale,  'All')

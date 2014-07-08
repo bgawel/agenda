@@ -10,12 +10,12 @@ import org.joda.time.format.DateTimeFormat
 
 class PresentationContext {
 
-    static final locale = new Locale('pl')
+    static locale
 
-    static final fullDateFormatter = DateTimeFormat.forPattern(/dd MMMM yyyy/).withLocale(locale)
-    static final middleDateFormatter = DateTimeFormat.forPattern(/dd MMM yyyy/).withLocale(locale)
-    static final shortDateFormatter = DateTimeFormat.forPattern(/dd.MM/).withLocale(locale)
-    static final timeFormatter = DateTimeFormat.forPattern(/HH:mm/).withLocale(locale)
+    static fullDateFormatter
+    static middleDateFormatter
+    static shortDateFormatter
+    static timeFormatter
 
     static printFullJdkDate(jdkDate) {
         fullDateFormatter.print(dateTime(jdkDate))
@@ -49,5 +49,18 @@ class PresentationContext {
         dateTimeToTimeOnly(new DateTime(jdkDateTime).withZoneRetainFields(dateTimeZone))
     }
 
-    private PresentationContext() { }
+    static setLocale(locale) {
+        this.locale = locale
+        fullDateFormatter = DateTimeFormat.forPattern(/dd MMMM yyyy/).withLocale(locale)
+        middleDateFormatter = DateTimeFormat.forPattern(/dd MMM yyyy/).withLocale(locale)
+        shortDateFormatter = DateTimeFormat.forPattern(/dd.MM/).withLocale(locale)
+        timeFormatter = DateTimeFormat.forPattern(/HH:mm/).withLocale(locale)
+    }
+
+    static {
+        setLocale(new Locale('en'))
+    }
+
+    private PresentationContext() {
+    }
 }

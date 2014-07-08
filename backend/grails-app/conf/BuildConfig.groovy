@@ -65,8 +65,11 @@ grails.project.dependency.resolution = {
         compile ":joda-time:1.4"
         compile ":session-temp-files:1.0"
         compile ":spring-security-core:2.0-RC2"
-        compile ":spring-security-rest:1.3.0.RC3", { //https://github.com/alvarosanchez/grails-spring-security-rest/issues/14
-            excludes: ['spring-security-core', 'cors']
+        //compile ":spring-security-rest:1.3.0.RC3", { //https://github.com/alvarosanchez/grails-spring-security-rest/issues/14
+        //    excludes: ['spring-security-core', 'cors']
+        //}
+        compile ":spring-security-rest:1.3.3", { //https://github.com/alvarosanchez/grails-spring-security-rest/issues/14
+           excludes: ['spring-security-core', 'cors']
         }
         compile ":email-confirmation:2.0.8"
         compile ":greenmail:1.3.4"

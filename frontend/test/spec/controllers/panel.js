@@ -69,7 +69,6 @@ describe('Controller: PanelCtrl', function () {
     
     expect(scope.instMsgPanel.show).toBe(true);
     expect(scope.instMsgPanel.type).toBe('success');
-    expect(scope.instMsgPanel.messages).toEqual(['Dane zostały zaktualizowane']);
   });
   
   it('should put inst data and handle unsuccessful response having clicked save', function () {
@@ -201,7 +200,6 @@ describe('Controller: PanelCtrl', function () {
     
     expect(scope.evtMsgPanel.show).toBe(true);
     expect(scope.evtMsgPanel.type).toBe('success');
-    expect(scope.evtMsgPanel.messages).toEqual(['Nowe wydarzenie zostało dodane']);
   });
   
   it('should post event data and handle unsuccessful response having clicked save', function () {

@@ -1,8 +1,8 @@
 <div class="container">
   <div class="row">
     <ol class="breadcrumb">
-      <li><a href="#">Wydarzenia</a></li>
-      <li class="active">Ustanowienie nowego hasła</li>
+      <li><a href="#">{{i18n.main.menu.events}}</a></li>
+      <li class="active">{{i18n.setPwd.title}}</li>
     </ol>
   </div>
   <div class="row">
@@ -11,17 +11,17 @@
         novalidate ng-class="{validate: formPwdValidations}" ng-submit="set()">
       <input name="username" ng-model="pwd.username" ng-hide="true">
       <div class="form-group">
-        <label for="newPwd" class="col-sm-4 control-label">Nowe hasło *</label>
+        <label for="newPwd" class="col-sm-4 control-label">{{i18n.login.newPwd}} *</label>
         <div class="col-sm-3">
           <input type="password" class="form-control" id="newPwd" required
             autocomplete="{{pwd.newPwd ? 'on' : 'off'}}" autofocus
-            placeholder="min. 5 znaków" name="password" ng-change="pwd.rePwd = undefined;"
+            placeholder="{{i18n.placeholder.minPwd}}" name="password" ng-change="pwd.rePwd = undefined;"
             maxlength="30" ng-model="pwd.newPwd" ng-pattern="/.{5,}/" ng-server-error >
         </div>
         <div class="col-sm-offset-4 col-sm-4" ng-show="formPwdValidations && form.pwd.password.$invalid">
           <span class="glyphicon glyphicon-exclamation-sign error"></span>
           <span ng-show="form.pwd.password.$error.required || form.pwd.password.$error.pattern" class="error">
-            Podaj hasło: min. 5 znaków
+            {{i18n.error.newPwd}}
           </span>
           <span ng-show="form.pwd.password.$error.server" class="error">
             {{form.pwd.newPwd.$error.errorText}}
@@ -29,7 +29,7 @@
         </div> 
       </div> 
       <div class="form-group">
-        <label for="rePwd" class="col-sm-4 control-label">Potwierdź nowe hasło *</label>
+        <label for="rePwd" class="col-sm-4 control-label">{{i18n.setPwd.confirm}} *</label>
         <div class="col-sm-3">
           <input type="password" class="form-control" id="rePwd" required
             maxlength="30" ng-model="pwd.rePwd" name="rePwd" ng-same-as="pwd.newPwd" >
@@ -37,16 +37,16 @@
         <div class="col-sm-offset-4 col-sm-4" ng-show="formPwdValidations && form.pwd.rePwd.$invalid">
           <span class="glyphicon glyphicon-exclamation-sign error"></span>
           <span ng-show="form.pwd.rePwd.$error.required" class="error">
-            Potwierdź hasło
+            {{i18n.error.confirmNewPwd}}
           </span>
           <span ng-show="form.pwd.rePwd.$error.sameAs" class="error">
-            Podana wartość nie jest równa nowemu hasłu
+            {{i18n.error.newPwdSameAs}}
           </span>      
         </div> 
       </div> 
       <div class="form-group">
         <div class="col-sm-offset-4 col-sm-8">
-          <button type="submit" class="btn btn-primary">Zapisz</button>
+          <button type="submit" class="btn btn-primary">{{i18n.action.save}}</button>
         </div>
       </div>  
     </form>

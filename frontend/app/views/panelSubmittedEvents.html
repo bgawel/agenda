@@ -3,9 +3,9 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Tytuł</th>
-        <th>Gdzie/kiedy</th>
-        <th>Zmodyfikowano</th>
+        <th>{{i18n.event.title}}</th>
+        <th>{{i18n.event.where}}/{{i18n.event.when}}</th>
+        <th>{{i18n.event.mod}}</th>
         <th></th>
       </tr>
     </thead>
@@ -14,8 +14,8 @@
         <td>{{$index + 1}}</td>
         <td>{{event.title}}</td>
         <td>{{event.locdate}}</td>
-        <td>{{event.mod | date:'dd MMMM yyyy, HH:mm'}}</td>
-        <td><a href ng-click="loadExistingEvent(event.id)">Edytuj</a></td>
+        <td>{{event.mod | date:i18n.calendar.format + ', ' + i18n.calendar.time}}</td>
+        <td><a href ng-click="loadExistingEvent(event.id)">{{i18n.action.edit}}</a></td>
       </tr>
     </tbody>
   </table>
