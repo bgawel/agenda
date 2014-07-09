@@ -1,15 +1,15 @@
 <div class="container">
   <div class="row">
     <ol class="breadcrumb">
-      <li><a href="#">Wydarzenia</a></li>
-      <li class="active">Potwierdzenie rejestracji</li>
+      <li><a href="#">{{i18n.main.menu.events}}</a></li>
+      <li class="active">{{i18n.confirm.signup.title}}</li>
     </ol>
   </div>
   <div class="row">
     <h4>
-      <span class="glyphicon glyphicon-ok success-text"></span> Dziękujemy za potwierdzenie rejestracji.
-      <span ng-if="type === 'u'"> Możesz zalogować się <a href="#/login">tutaj</a></span>
-      <span ng-if="type === 'a'"> E-mail z prośbą o potwierdzenie został wysłany do użytkownika</span>
+      <span class="glyphicon glyphicon-ok success-text"></span> {{i18n.confirm.signup.msg}}
+      <span ng-if="type === 'u'"> {{i18n.confirm.signup.login1}} <a href="#/login">{{i18n.confirm.signup.login2}}</a></span>
+      <span ng-if="type === 'a'"> {{i18n.confirm.signup.forward}}</span>
     </h4>
   </div>
 </div>

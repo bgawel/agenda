@@ -2,12 +2,12 @@
   <div class="row top-bar">
     <div class="col-xs-11">
       <ol class="breadcrumb">
-        <li><a href="#">Wydarzenia</a></li>
-        <li class="active">Panel administracyjny - {{inst.name}}</li>
+        <li><a href="#">{{i18n.main.menu.events}}</a></li>
+        <li class="active">{{i18n.panel.title}} - {{inst.name}}</li>
       </ol>
     </div>
     <div class="col-xs-1">
-      <a class="pull-right logout" href="" ng-click="logout()">Wyloguj</a>
+      <a class="pull-right logout" href="" ng-click="logout()">{{i18n.login.signout}}</a>
     </div>
   </div>
   <div class="row">
@@ -16,13 +16,13 @@
         <div class="panel-side-navigation">
           <ul class="nav nav-list">
             <li ng-class="{active:(option===1)}">
-              <a href="" ng-click="option=1; loadInst()">Dane organizatora</a>
+              <a href="" ng-click="option=1; loadInst()">{{i18n.panel.menu.inst}}</a>
             </li>
             <li ng-class="{active:(option===2)}">
-              <a href="" ng-click="option=2; loadNewEvent()">Nowe wydarzenie</a>
+              <a href="" ng-click="option=2; loadNewEvent()">{{i18n.panel.menu.newEvent}}</a>
             </li>
             <li ng-class="{active:(option===3)}">
-              <a href="" ng-click="option=3; loadSubmittedEvents()">Zgłoszone wydarzenia</a>
+              <a href="" ng-click="option=3; loadSubmittedEvents()">{{i18n.panel.menu.issuedEvents}}</a>
               <ul class="nav nav-list" ng-show="option===4">
                 <li class="active">
                   <a href="" ng-click="option=4; reloadSubmittedEvent()">

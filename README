@@ -3,5 +3,8 @@ Agenda - AngularJS + Grails demo
 This RESTful application displays cultural events.
 Institutions that organize events can manage their events in an administration panel.
 
+Live demo: http://agenda-dadasl.rhcloud.com
+============
+
 Contact: agenda.wro@gmail.com
 

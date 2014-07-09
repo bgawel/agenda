@@ -72,7 +72,7 @@
                 <a ng-switch-when="future" ng-click="changeEventsDay($index)" href="" class="not-day">
                   <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
-                <a ng-switch-when="cal" ng-click="openEventsCalendar($event, $index)" datepicker-popup="i18n.calendar.format" href="" class="not-day calendar" ng-model="weekMenu.calendar.value" is-open="weekMenu.calendar.opened" min="weekMenu.calendar.minDate" datepicker-options="weekMenu.calendar.dateOptions" current-text="{{i18n.calendar.today}}" toggle-weeks-text="{{i18n.calendar.weeks}}" close-text="{{i18n.action.close}}" clear-text="{{i18n.action.clear}}">
+                <a ng-switch-when="cal" ng-click="openEventsCalendar($event, $index)" datepicker-popup="{{i18n.calendar.format}}" href="" class="not-day calendar" ng-model="weekMenu.calendar.value" is-open="weekMenu.calendar.opened" min="weekMenu.calendar.minDate" datepicker-options="weekMenu.calendar.dateOptions" current-text="{{i18n.calendar.today}}" toggle-weeks-text="{{i18n.calendar.weeks}}" close-text="{{i18n.action.close}}" clear-text="{{i18n.action.clear}}">
                   <span class="glyphicon glyphicon-calendar">
                   </span>
                   {{weekMenu.calendar.value | date: i18n.calendar.shortFormat}}
@@ -111,7 +111,7 @@
             </div>
             <div class="description">
               <p>{{event.desc | characters: maxChars}}</p>
-              <span ng-show="maxChars < event.desc.length" ng-click="maxChars = event.desc.length; more = true" class="text-more-less text-center col-xs-12 glyphicon glyphicon-chevron-down">
+              <span ng-show="maxChars < event.desc.length" ng-click="maxChars = event.desc.length+1; more = true" class="text-more-less text-center col-xs-12 glyphicon glyphicon-chevron-down">
               </span>
               <span href="" ng-show="more" ng-click="maxChars = showMaxChars; more = false" class="text-more-less text-center col-xs-12 glyphicon glyphicon-chevron-up">
               </span>
@@ -119,7 +119,7 @@
           </div>
           <div class="col-xs-3">
             <p class="category text-right">{{event.catName}}</p>
-            <p class="displayDt text-right"><b>{{event.displayDt}}</b></p>
+            <p class="displayDt text-right"><b>{{event.displayDt}}</b><b ng-if="event.moreToShow">, ...</b></p>
           </div>
         </div>     
       </div>

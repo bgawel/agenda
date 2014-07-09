@@ -15,7 +15,7 @@ angular.module('frontendApp')
         function() {
           Progressbar.close();
           $location.url('/');
-          $growl.box(null, $scope.i18n.login.statusPwdChanged, {
+          $growl.box(null, $scope.i18n.login.pwdChanged, {
             class: 'success',
             sticky: true
           }).open();
