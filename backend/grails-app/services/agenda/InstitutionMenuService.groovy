@@ -1,13 +1,18 @@
 package agenda
 
+import static agenda.PresentationContext.locale
+
+import javax.annotation.PostConstruct
+
 import org.apache.commons.beanutils.BeanComparator
 
 class InstitutionMenuService {
 
     def allEntryId = 'all'
-    def allEntryName = 'Wszyscy'
     def allEntryIndex = 0
     def entryComparator = new BeanComparator('name')
+    def messageSource
+    private allEntryName
 
     def categoryMenuService
 
@@ -77,5 +82,10 @@ class InstitutionMenuService {
 
     private newInstEntry(id, name) {
         [id: id, name: name, badge: 0]
+    }
+
+    @PostConstruct
+    void init() {
+        allEntryName = messageSource.getMessage('inst.menu.all', null, locale)
     }
 }

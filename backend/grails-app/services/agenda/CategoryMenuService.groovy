@@ -1,6 +1,9 @@
 package agenda
 
+import static agenda.PresentationContext.locale
 import grails.plugin.cache.Cacheable
+
+import javax.annotation.PostConstruct
 
 class CategoryMenuService {
 
@@ -9,8 +12,9 @@ class CategoryMenuService {
     def categoryQueryService
 
     def allEntryId = 'all'
-    def allEntryName = 'Wszystko'
     def activeIndex = 0
+    def messageSource
+    private allEntryName
 
     @Cacheable(value='categoryMenu', key='#root.methodName')
     def getCategories() {
@@ -30,5 +34,10 @@ class CategoryMenuService {
 
     private makeEntry(id, name) {
         [id: id, name: name]
+    }
+
+    @PostConstruct
+    void init() {
+        allEntryName = messageSource.getMessage('category.menu.all', null, locale)
     }
 }

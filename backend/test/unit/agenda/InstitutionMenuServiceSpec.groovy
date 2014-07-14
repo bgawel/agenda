@@ -75,8 +75,15 @@ class InstitutionMenuServiceSpec extends Specification {
     }
 
     def setup() {
+        service.messageSource = messageSource
         service.categoryMenuService = Mock(CategoryMenuService)
         1 * service.categoryMenuService.allEntryId >> 'all'
         1 * service.categoryMenuService.categories >> [entries: [[id:'all'], [id:1], [id:2], [id:3], [id:4]]]
+        service.init()
+    }
+
+    def setupSpec() {
+        PresentationContext.locale = new Locale('pl')
+        messageSource.addMessage('inst.menu.all', PresentationContext.locale, 'Wszyscy')
     }
 }

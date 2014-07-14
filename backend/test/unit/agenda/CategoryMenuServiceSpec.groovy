@@ -20,8 +20,14 @@ class CategoryMenuServiceSpec extends Specification {
     }
 
     def setup() {
+        service.messageSource = messageSource
         service.categoryQueryService = Mock(CategoryQueryService)
-        1 * service.categoryQueryService.all >> [
-            new Category(name:'cat1'), new Category(name:'cat2')]
+        1 * service.categoryQueryService.all >> [new Category(name:'cat1'), new Category(name:'cat2')]
+        service.init()
+    }
+
+    def setupSpec() {
+        PresentationContext.locale = new Locale('pl')
+        messageSource.addMessage('category.menu.all', PresentationContext.locale, 'Wszystko')
     }
 }

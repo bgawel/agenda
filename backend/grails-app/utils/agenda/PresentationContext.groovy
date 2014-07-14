@@ -58,7 +58,7 @@ class PresentationContext {
     }
 
     static {
-        setLocale(new Locale('en'))
+        setLocale(Locale.ENGLISH)
     }
 
     private PresentationContext() {
