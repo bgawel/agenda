@@ -17,6 +17,7 @@ beans = {
             break
     }
 
+    // Declared by spring-security-rest plugin
     /*tokenStorageService(TokenStorageServiceImpl) {
         grailsCacheManager = ref('grailsCacheManager')
     }*/

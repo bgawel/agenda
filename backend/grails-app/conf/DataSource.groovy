@@ -50,7 +50,7 @@ environments {
                 testOnBorrow=true
                 testWhileIdle=true
                 testOnReturn=false
-                validationQuery = '/* ping */'
+                validationQuery = '*//* ping *//*'
                 jdbcInterceptors='ConnectionState'
              }
         }

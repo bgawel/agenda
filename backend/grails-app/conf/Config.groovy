@@ -278,3 +278,7 @@ environments {
          grails.serverURL = 'http://agenda-dadasl.rhcloud.com'
     }
 }
+
+plugin.platformCore.events.catchFlushExceptions = true
+
+yo.frontend.dir='../frontend'

@@ -14,7 +14,8 @@ grails.project.fork = [
     // configure settings for the test-app JVM, uses the daemon by default
     test: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
     // configure settings for the run-app JVM
-    run: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, forkReserve:false],
+    // run: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, forkReserve:false],
+    run: false,
     // configure settings for the run-war JVM
     war: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, forkReserve:false],
     // configure settings for the Console UI JVM
@@ -65,9 +66,6 @@ grails.project.dependency.resolution = {
         compile ":joda-time:1.4"
         compile ":session-temp-files:1.0"
         compile ":spring-security-core:2.0-RC2"
-        //compile ":spring-security-rest:1.3.0.RC3", { //https://github.com/alvarosanchez/grails-spring-security-rest/issues/14
-        //    excludes: ['spring-security-core', 'cors']
-        //}
         compile ":spring-security-rest:1.3.3", { //https://github.com/alvarosanchez/grails-spring-security-rest/issues/14
            excludes: ['spring-security-core', 'cors']
         }
@@ -88,6 +86,7 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.2.1"
         runtime ":cached-resources:1.0"
         runtime ":cors:1.1.4"
+        runtime ":yeoman-frontend:0.1-RC1"
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0.1"
         //runtime ":cached-resources:1.1"

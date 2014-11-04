@@ -182,7 +182,7 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/scripts/{,*/}*.js',
             '<%= yeoman.dist %>/styles/{,*/}*.css',
             '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/styles/fonts/*'
+          //  '<%= yeoman.dist %>/styles/fonts/*'
           ]
         }
       }
@@ -232,13 +232,13 @@ module.exports = function (grunt) {
       dist: {
         options: {
           // Optional configurations that you can uncomment to use
-          // removeCommentsFromCDATA: true,
-          // collapseBooleanAttributes: true,
+          removeCommentsFromCDATA: true,
+          collapseBooleanAttributes: true,
           // removeAttributeQuotes: true,
           // removeRedundantAttributes: true,
           // useShortDoctype: true,
           // removeEmptyAttributes: true,
-          // removeOptionalTags: true*/
+          removeOptionalTags: true
         },
         files: [{
           expand: true,
@@ -282,7 +282,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'bower_components/**/*',
             'images/{,*/}*.{webp}',
-            'fonts/*'
+            'styles/fonts/*'
           ]
         }, {
           expand: true,
